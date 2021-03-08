@@ -5,4 +5,8 @@
 
 logs
 target
-#config.yml
+config.yml
+
+#libs
+lib
+libs
