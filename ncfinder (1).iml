@@ -33,6 +33,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Java EE 6-Java EE 6" level="project" />
+    <orderEntry type="library" name="Java EE 6-Java EE 6 (2)" level="project" />
     <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-core:2.0.2" level="project" />
     <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-util:2.0.2" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.10.2" level="project" />
