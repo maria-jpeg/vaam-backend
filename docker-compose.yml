@@ -1,0 +1,46 @@
+version: "3.8"
+services:
+  app:
+    build: .
+    image: project/maven
+    container_name: maven_Project
+    environment:
+      - WILDFLY_USER=admin
+      - WILDFLY_PASS=secret
+      - DB_NAME=projectdb
+      - DB_USER=admin
+      - DB_PASS=secret
+      - DB_URI=db:3306
+    depends_on:
+      - db
+    volumes:
+      - ./config.yml:/home/app/config.yml
+      - ./src:/home/app/src
+    ports:
+      - 8080:8080 # application
+      - 9990:9990 # admin console
+      - 8787:8787 # debugging
+
+  # db:
+  #   container_name: mysqlProject
+  #   image: mysql:latest
+  #   environment:
+  #     - MYSQL_DATABASE=projectdb
+  #     - MYSQL_USER=admin
+  #     - MYSQL_PASSWORD=secret
+  #     - MYSQL_ROOT_PASSWORD=secret
+  #   #        volumes:
+  #   #            - ./workdir/db/init/:/docker-entrypoint-initdb.d/ # init database
+  #   #            - ./workdir/db/data/:/var/lib/mysql/              # data storage
+  #   ports:
+  #     - 3306:3306
+
+  db:
+    container_name: mssqlProject
+    image: mcr.microsoft.com/mssql/server
+    environment:
+        SA_PASSWORD: "Your_password123"
+        ACCEPT_EULA: "Y"
+    ports:
+      - 1433:1433
+      - 1432:1432

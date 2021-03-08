@@ -1,0 +1,34 @@
+
+### Get JWT token
+POST http://localhost:8080/api/login/token
+Content-Type: application/json
+
+{
+  "username": "leo",
+  "password": "123"
+}
+
+### Who am I?
+GET http://localhost:8080/api/login/claims
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiT3BlcmF0b3IiLCJleHAiOjE1OTM3MjcyMjgsImlhdCI6MTU5MzcyNjYyOCwic3ViIjoidXNlcjEiLCJpc3MiOiJxdWlja3N0YXJ0LWp3dC1pc3N1ZXIifQ.b_TEPz15DLO1Csmdi-hh0GNFkZFRKy0l17awyvMqMdY
+
+###
+### Test
+GET http://localhost:8080/api/auth/test
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiT3BlcmF0b3IiLCJleHAiOjE1OTMwOTUwMTUsImlhdCI6MTU5MzA5NDQxNSwic3ViIjoidXNlcjEiLCJpc3MiOiJxdWlja3N0YXJ0LWp3dC1pc3N1ZXIifQ.LLTf7HTMqjqk3qI2hl9WWgkL2vS_KGvlmoHLikmQOWw
+
+###
+### Test 2
+GET http://localhost:8080/api/auth/test2
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiT3BlcmF0b3IiLCJleHAiOjE1OTMwOTUwMTUsImlhdCI6MTU5MzA5NDQxNSwic3ViIjoidXNlcjEiLCJpc3MiOiJxdWlja3N0YXJ0LWp3dC1pc3N1ZXIifQ.LLTf7HTMqjqk3qI2hl9WWgkL2vS_KGvlmoHLikmQOWw
+
+### Logs
+GET http://localhost:8080/api/logs
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiT3BlcmF0b3IiLCJleHAiOjE1ODUzMTE1NzQsImlhdCI6MTU4NTMxMTA3NCwic3ViIjoidXNlcjEiLCJpc3MiOiJxdWlja3N0YXJ0LWp3dC1pc3N1ZXIifQ.hWq2D5oY7RGOGkQ3FtqNa9hmmfU0p5PRXajdkYmaeW8
+
+###
+

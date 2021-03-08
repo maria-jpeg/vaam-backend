@@ -1,0 +1,33 @@
+USE [dbdcdeadcd7ddb447e9f4bab1000bd996d]
+GO
+
+/****** Object:  Table [dbo].[PROCESSES]    Script Date: 03/05/2020 13:26:06 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[PROCESSES](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[description] [varchar](500) NULL,
+	[endDate] [datetime2](7) NULL,
+	[startDate] [datetime2](7) NULL,
+	[name] [varchar](300) NULL,
+	[numberOfActivities] [int] NOT NULL,
+	[numberOfCases] [int] NOT NULL,
+	[parentProcess] [bigint] NULL,
+ CONSTRAINT [PK_PROCESSES] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[PROCESSES]  WITH CHECK ADD  CONSTRAINT [FK_PROCESSES_PROCESSES] FOREIGN KEY([parentProcess])
+REFERENCES [dbo].[PROCESSES] ([id])
+GO
+
+ALTER TABLE [dbo].[PROCESSES] CHECK CONSTRAINT [FK_PROCESSES_PROCESSES]
+GO
+

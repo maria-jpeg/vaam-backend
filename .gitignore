@@ -1,0 +1,8 @@
+# IDE
+.idea
+# macOS
+.DS_Store
+
+logs
+target
+#config.yml
