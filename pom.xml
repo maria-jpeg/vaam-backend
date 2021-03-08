@@ -364,6 +364,7 @@
 
     <reporting>
         <plugins>
+            <!-- COMENTADO POR VAAM
             <plugin>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
                 <version>3.0.0</version>
@@ -371,7 +372,7 @@
                     <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
                     <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
                 </configuration>
-            </plugin>
+            </plugin>-->
             <plugin>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.0.1</version>

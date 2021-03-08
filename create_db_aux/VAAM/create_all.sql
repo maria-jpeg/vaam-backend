@@ -1,3 +1,5 @@
+create database ncfinderdb
+go
 USE [ncfinderdb]
 GO
 
