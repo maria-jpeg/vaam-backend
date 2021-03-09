@@ -1,7 +1,9 @@
 version: "3.8"
 services:
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: docker/app/Dockerfile
     image: project/maven
     container_name: maven_Project
     environment:
@@ -36,8 +38,11 @@ services:
   #     - 3306:3306
 
   db:
+    build:
+      context: .
+      dockerfile: docker/db/Dockerfile
     container_name: mssqlProject
-    image: mcr.microsoft.com/mssql/server
+    image: project/mssql
     environment:
         SA_PASSWORD: "Your_password123"
         ACCEPT_EULA: "Y"
