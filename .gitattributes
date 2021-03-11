@@ -1,0 +1,2 @@
+#obrigar ficheiros .sh com um end of line = LF (unix)
+*.sh        eol=lf

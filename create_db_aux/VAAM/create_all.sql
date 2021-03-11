@@ -1,3 +1,5 @@
+-- noinspection SqlDialectInspectionForFile
+
 create database ncfinderdb
 go
 USE [ncfinderdb]
@@ -300,3 +302,20 @@ GO
 
 ALTER TABLE [dbo].[EVENTS] CHECK CONSTRAINT [FKro808iycxm1vfukekdwla0o1b]
 GO
+
+/*Criacao de dados*/
+INSERT INTO ncfinderdb.dbo.ROLES (name, description) VALUES (N'Administrador', null)
+INSERT INTO ncfinderdb.dbo.ROLES (name, description) VALUES (N'Gestor', null)
+INSERT INTO ncfinderdb.dbo.ROLES (name, description) VALUES (N'Operador', null)
+
+INSERT INTO ncfinderdb.dbo.USERS (username, password, role, name, email, rfid)
+    VALUES (N'admin', N'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3', N'Administrador', N'admin', 'admin@mail.pt', null)
+GO
+
+INSERT INTO ncfinderdb.dbo.USERS (username, password, role, name, email, rfid)
+    VALUES (N'operador', N'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3', N'Operador', N'operador', 'operador@mail.pt', null)
+GO
+INSERT INTO ncfinderdb.dbo.USERS (username, password, role, name, email, rfid)
+    VALUES (N'gestor', N'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3', N'Gestor', N'gestor', 'gestor@mail.pt', null)
+GO
+
