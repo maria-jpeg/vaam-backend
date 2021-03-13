@@ -6,3 +6,4 @@
 logs
 target
 config.yml
+dependency-reduced-pom.xml
