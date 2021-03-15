@@ -3,9 +3,12 @@ package projeto.resources;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.*;
 import io.swagger.util.Json;
+import projeto.api.dtos.compare.FilterInputWrapperDTO;
+import projeto.api.dtos.entities.ActivityDTO;
 import projeto.api.dtos.entities.MouldDTO;
 import projeto.api.dtos.entities.PartDTO;
 import projeto.api.dtos.entities.ProcessDTO;
+import projeto.controller.ActivityBean;
 import projeto.controller.MouldBean;
 import projeto.controller.PartBean;
 import projeto.controller.exceptions.EntityDoesNotExistException;
@@ -14,6 +17,7 @@ import projeto.core.Part;
 import projeto.core.Process;
 
 import javax.annotation.security.RolesAllowed;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -30,10 +34,12 @@ public class MouldServ {
 
     private final MouldBean mouldBean;
     private final PartBean partBean;
+    private final ActivityBean activityBean;
 
-    public MouldServ(MouldBean mouldBean, PartBean partBean) {
+    public MouldServ(MouldBean mouldBean, PartBean partBean,ActivityBean activityBean) {
         this.mouldBean = mouldBean;
         this.partBean = partBean;
+        this.activityBean = activityBean;
     }
 
     @ApiOperation( value = "Get all moulds", response = Json.class)
@@ -68,6 +74,26 @@ public class MouldServ {
         {
             return Response.status(Response.Status.NOT_FOUND) .type( MediaType.TEXT_PLAIN )
                     .entity( ex.getMessage() ) .build();
+        }
+    }
+
+    @ApiOperation( value = "Get activities associated with mould ", response = ActivityDTO.class, responseContainer = "List")
+    @GET
+    @UnitOfWork
+    @Path( "{mouldCode}/activities" )
+    @RolesAllowed({"Operador","Gestor","Administrador"})
+    public Response getActivitiesByMouldCode (@PathParam("mouldCode") String mouldCode)
+    {
+        try
+        {
+            return Response.status(Response.Status.OK)
+                    .entity(activityBean.getActivitiesFromMouldCode(mouldCode))
+                    .build();
+        }
+        catch (EntityDoesNotExistException ex)
+        {
+            return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
+                    .entity(ex.getMessage()).build();
         }
     }
 

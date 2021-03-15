@@ -50,4 +50,14 @@ public class ActivityDAO extends BaseDAO<Activity, ActivityDTO> {
         return entries;
     }
 
+    public List<Activity> getActivityByMouldCode(String code) throws EntityDoesNotExistException
+    {
+        Query<Activity> query = currentSession().createNamedQuery("Activities.getActivitiesFromMouldCode",Activity.class);
+        query.setParameter("mouldCode",code);
+        List<Activity> activities = query.getResultList();
+        if (activities.size() < 1)
+            throw new EntityDoesNotExistException("Não existem atividades associadas ao molde: "+ code+".");
+
+        return activities;
+    }
 }

@@ -6,7 +6,7 @@
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="Hibernate" />
         <datasource-mapping>
-          <factory-entry name="ncfinder" />
+          <factory-entry name="ncfinder" value="3cfbaf6a-6358-4443-b3f7-221bb2d5e293" />
         </datasource-mapping>
         <naming-strategy-map />
       </configuration>

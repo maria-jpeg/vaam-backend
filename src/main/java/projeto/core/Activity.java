@@ -14,7 +14,13 @@ import java.util.List;
 
 @Entity
 @Table(name = "ACTIVITIES")
-
+@NamedQueries({
+        @NamedQuery(name = "Activities.getActivitiesFromMouldCode",
+                query = "select a from Activity a " +
+                        "join Event e on e.activity.id = a.id " +
+                        "join Mould m on m.code = e.mould.code " +
+                        "where m.code =:mouldCode")
+})
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

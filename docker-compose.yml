@@ -8,6 +8,7 @@ services:
     container_name: maven_Project
     volumes:
     - ~/.m2:/root/.m2
+    - ./src:/home/app/src
     depends_on:
       - db
     ports:

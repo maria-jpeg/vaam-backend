@@ -405,4 +405,10 @@ public class ActivityBean extends BaseBean<Activity, ActivityDTO>
         return entryDuration;
     }
 
+    public List<ActivityDTO> getActivitiesFromMouldCode(String mouldCode) throws EntityDoesNotExistException
+    {
+        List<Activity> activities = activityDAO.getActivityByMouldCode(mouldCode);
+        return activities.stream().map(this::toDTO).collect(Collectors.toList());
+    }
+
 }
