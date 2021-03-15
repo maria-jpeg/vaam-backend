@@ -41,8 +41,6 @@ CREATE TABLE [dbo].[ACTIVITIES](
 	[id] [bigint] IDENTITY(1,1) NOT NULL,
 	[name] [varchar](300) NOT NULL,
 	[description] [varchar](1000) NULL,
-	[isTagging] [bit] NULL,
-	[isEndActivity] [bit] NULL,
 	[subprocessId] [bigint] NULL,
  CONSTRAINT [PK_ACTIVITIES] PRIMARY KEY CLUSTERED 
 (
@@ -51,7 +49,7 @@ CREATE TABLE [dbo].[ACTIVITIES](
 ) ON [PRIMARY]
 GO
 
-ALTER TABLE [dbo].[ACTIVITIES]  WITH CHECK ADD  CONSTRAINT [FK_ACTIVITIES_PROCESSES] FOREIGN KEY([subprocessId])
+ALTER TABLE [dbo].[ACTIVITIES]  WITH CHECK ADD CONSTRAINT [FK_ACTIVITIES_PROCESSES] FOREIGN KEY([subprocessId])
 REFERENCES [dbo].[PROCESSES] ([id])
 GO
 
@@ -69,32 +67,13 @@ CREATE TABLE [dbo].[ROLES](
 ) ON [PRIMARY]
 GO
 
-/* ----------------------------------------------------------LOGS---------------------------------------------------------- */
-CREATE TABLE [dbo].[LOGS](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[description] [varchar](255) NULL,
-	[endDate] [datetime2](7) NULL,
-	[fileName] [varchar](255) NULL,
-	[numberOfActivities] [int] NOT NULL,
-	[numberOfCases] [int] NOT NULL,
-	[startDate] [datetime2](7) NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
 /* ----------------------------------------------------------TAGS---------------------------------------------------------- */
 CREATE TABLE [dbo].[TAGS](
 	[rfid] [varchar](100) NOT NULL,
 	[isAvailable] [bit] NOT NULL,
 	[isUser] [bit] NOT NULL,
- CONSTRAINT [PK_TAGS] PRIMARY KEY CLUSTERED 
-(
-	[rfid] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
+ CONSTRAINT [PK_TAGS] PRIMARY KEY CLUSTERED ([rfid] ASC)
+	WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]) ON [PRIMARY]
 GO
 
 ALTER TABLE [dbo].[TAGS] ADD  CONSTRAINT [DF_TAGS_isUser]  DEFAULT ((0)) FOR [isUser]
@@ -108,11 +87,8 @@ CREATE TABLE [dbo].[USERS](
 	[name] [varchar](300) NULL,
 	[email] [varchar](300) NULL,
 	[rfid] [varchar](100) NULL,
- CONSTRAINT [PK_USERS] PRIMARY KEY CLUSTERED 
-(
-	[username] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
+ CONSTRAINT [PK_USERS] PRIMARY KEY CLUSTERED ([username] ASC)
+ WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]) ON [PRIMARY]
 GO
 
 ALTER TABLE [dbo].[USERS]  WITH CHECK ADD  CONSTRAINT [FK_USERS_ROLES] FOREIGN KEY([role])
@@ -135,12 +111,9 @@ CREATE TABLE [dbo].[ACTIVITIES_USERS](
 	[activityId] [bigint] NOT NULL,
 	[startDate] [datetime] NOT NULL,
 	[endDate] [datetime] NULL,
- CONSTRAINT [PK_ACTIVITIES_USERS] PRIMARY KEY CLUSTERED 
-(
-	[username] ASC,
-	[activityId] ASC,
-	[startDate] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+    [workstationId] [bigint] NULL,
+ CONSTRAINT [PK_ACTIVITIES_USERS] PRIMARY KEY CLUSTERED ([username] ASC,[activityId] ASC,[startDate] ASC)
+ WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
 
@@ -160,6 +133,23 @@ GO
 
 ALTER TABLE [dbo].[ACTIVITIES_USERS] CHECK CONSTRAINT [FK_ACTIVITIES_USERS_USERS]
 GO
+/* ----------------------------------------------------------WORKSTATIONS---------------------------------------------------------- */
+create table WORKSTATIONS
+(
+    id               bigint not null
+        constraint WORKSTATIONS_pk
+            primary key nonclustered,
+    name             varchar default 200,
+    activityId       int,
+    isEndWorkstation bit
+)
+    go
+
+create unique index WORKSTATIONS_id_uindex
+    on WORKSTATIONS (id)
+go
+
+
 
 /* ----------------------------------------------------------ESPS---------------------------------------------------------- */
 CREATE TABLE [dbo].[ESPS](
@@ -237,20 +227,14 @@ GO
 /* ----------------------------------------------------------EVENTS---------------------------------------------------------- */
 CREATE TABLE [dbo].[EVENTS](
 	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[caseId] [bigint] NULL,
+    [activityId] [bigint] NULL,
+    [processId] [bigint] NULL,
+    [mouldCode] [varchar](100) NULL,
+    [partCode] [varchar](100) NULL,
+    [startDate] [datetime2](7) NULL,
+    [endDate] [datetime2](7) NULL,
 	[duration] [bigint] NOT NULL,
-	[endDate] [datetime2](7) NULL,
-	[name] [varchar](300) NULL,
-	[resource] [varchar](200) NULL,
-	[role] [varchar](100) NULL,
-	[startDate] [datetime2](7) NULL,
-	[LOG_ID] [bigint] NULL,
-	[partCode] [varchar](100) NULL,
-	[processId] [bigint] NULL,
 	[isEstimatedEnd] [bit] NULL,
-	[mouldCode] [varchar](100) NULL,
-	[username] [varchar](200) NULL,
-	[activityId] [bigint] NULL,
  CONSTRAINT [PK_EVENTS] PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
