@@ -3,10 +3,14 @@ package projeto.data;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import projeto.api.dtos.entities.EventDTO;
+import projeto.api.dtos.entities.MouldDTO;
+import projeto.api.dtos.entities.PartDTO;
 import projeto.controller.exceptions.EntityDoesNotExistException;
 import projeto.controller.exceptions.TransformToEntityException;
 import projeto.core.Activity;
 import projeto.core.Event;
+import projeto.core.Mould;
+import projeto.core.Part;
 
 import java.util.List;
 
@@ -61,6 +65,58 @@ public class EventDAO extends BaseDAO<Event, EventDTO> {
                 entity.getDuration(),
                 entity.getIsEstimatedEnd(),
                 entity.getId()
+        );
+    }
+
+    //DTO que contém os objetos mould e part (VAAM)
+    public EventDTO toFullDTO(Event event)
+    {
+        if(event.getPart() != null){
+            return new EventDTO(
+                    event.getActivity().getId(),
+                    event.getProcess().getId(),
+                    mouldToDTO(event.getMould()),
+                    partToDTO(event.getPart()),
+                    event.getStartDate().toString( "dd-MM-yyyy HH:mm:ss.SSS" ),
+                    event.getEndDate().toString( "dd-MM-yyyy HH:mm:ss.SSS" ),
+                    event.getDuration(),
+                    event.getIsEstimatedEnd(),
+                    event.getId()
+            );
+        }
+        return new EventDTO(
+                event.getActivity().getId(),
+                event.getProcess().getId(),
+                mouldToDTO(event.getMould()),
+                null,
+                event.getStartDate().toString( "dd-MM-yyyy HH:mm:ss.SSS" ),
+                event.getEndDate().toString( "dd-MM-yyyy HH:mm:ss.SSS" ),
+                event.getDuration(),
+                event.getIsEstimatedEnd(),
+                event.getId()
+        );
+    }
+    //para formatar o fullDTO
+    public MouldDTO mouldToDTO(Mould mould){
+        return new MouldDTO(
+                mould.getCode(),
+                mould.getDescription()
+        );
+    }
+
+    //para formatar o fullDTO
+    public PartDTO partToDTO(Part part){
+        if (part.getTag() != null){
+            return new PartDTO(
+                    part.getCode(),
+                    part.getDescription(),
+                    part.getTag().toString()
+            );
+        }
+        return new PartDTO(
+                part.getCode(),
+                part.getDescription(),
+                null
         );
     }
 

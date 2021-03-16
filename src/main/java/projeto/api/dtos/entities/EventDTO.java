@@ -7,10 +7,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.joda.time.DateTime;
 import projeto.api.dtos.DTO;
+import projeto.core.Mould;
+import projeto.core.Part;
+
+import java.io.Serializable;
 
 @NoArgsConstructor
 @Getter @Setter
-public class EventDTO implements DTO {
+public class EventDTO implements DTO
+{
 
     private long id;
     private long activityId;
@@ -21,6 +26,8 @@ public class EventDTO implements DTO {
     private String endDate;
     private long duration;
     private Boolean isEstimatedEnd;
+    private MouldDTO mould;
+    private PartDTO part;
 
     public EventDTO(long activityId, long processId, String mouldCode, String partCode, String startDate, String endDate, long duration, Boolean isEstimatedEnd, long id) {
         this.activityId = activityId;
@@ -45,7 +52,24 @@ public class EventDTO implements DTO {
         this.id = id;
     }
 
-    @Override
+    //EventDTO que também contém os moldes e partes
+    public EventDTO(long activityId, long processId, MouldDTO mould, PartDTO part, String startDate, String endDate, long duration, Boolean isEstimatedEnd,long id)
+    {
+        this.activityId = activityId;
+        this.processId = processId;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.duration = duration;
+        this.isEstimatedEnd = isEstimatedEnd;
+        this.mould = mould;
+        this.part = part;
+        this.mouldCode = mould.getCode();
+        if (part != null)
+            this.partCode = part.getCode();
+        this.id = id;
+    }
+
+    //@Override
     public void reset()
     {
         setStartDate( null );

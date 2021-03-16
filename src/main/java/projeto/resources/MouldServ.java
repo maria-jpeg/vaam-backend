@@ -101,7 +101,7 @@ public class MouldServ {
         }
     }
 
-    @ApiOperation( value = "Get events associated with a mould ", response = ActivityDTO.class, responseContainer = "List")
+    @ApiOperation( value = "Get events associated with a mould ", response = MouldDTO.class, responseContainer = "List")
     @GET
     @UnitOfWork
     @Path( "{mouldCode}/events" )

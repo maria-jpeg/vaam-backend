@@ -27,11 +27,15 @@ public class EventBean extends BaseBean<Event, EventDTO> {
         return eventDAO.toDTO(entity);
     }
 
+    public EventDTO toFullDTO(Event entity){
+        return eventDAO.toFullDTO(entity);
+    }
+
     public List<EventDTO> getEventsFromMouldCode(String mouldCode) throws EntityDoesNotExistException
     {
         List<Event> events = eventDAO.getEventByMouldCode(mouldCode);
 
-        return events.stream().map(this::toDTO).collect(Collectors.toList());
+        return events.stream().map(this::toFullDTO).collect(Collectors.toList());
     }
     /*@Override
     public EventDTO update(EventDTO eventDTO) throws EntityDoesNotExistException {
