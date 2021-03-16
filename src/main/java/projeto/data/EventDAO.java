@@ -1,10 +1,14 @@
 package projeto.data;
 
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import projeto.api.dtos.entities.EventDTO;
 import projeto.controller.exceptions.EntityDoesNotExistException;
 import projeto.controller.exceptions.TransformToEntityException;
+import projeto.core.Activity;
 import projeto.core.Event;
+
+import java.util.List;
 
 public class EventDAO extends BaseDAO<Event, EventDTO> {
 
@@ -58,6 +62,17 @@ public class EventDAO extends BaseDAO<Event, EventDTO> {
                 entity.getIsEstimatedEnd(),
                 entity.getId()
         );
+    }
 
+    public List<Event> getEventByMouldCode(String code) throws EntityDoesNotExistException
+    {
+        Query<Event> query = currentSession().createNamedQuery("Event.getEventsByMouldCode",Event.class);
+        query.setParameter("mouldCode",code);
+        List<Event> events = query.getResultList();
+
+        if (events.size() < 1)
+            throw new EntityDoesNotExistException("Não existem eventos associadas ao molde: "+ code+".");
+
+        return events;
     }
 }

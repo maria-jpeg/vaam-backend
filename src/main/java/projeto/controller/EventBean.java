@@ -1,13 +1,17 @@
 package projeto.controller;
 
 import org.joda.time.DateTime;
+import projeto.api.dtos.entities.ActivityDTO;
 import projeto.api.dtos.entities.EventDTO;
 import projeto.controller.exceptions.EntityDoesNotExistException;
+import projeto.core.Activity;
 import projeto.core.Event;
 import projeto.data.EventDAO;
 import projeto.resources.EventServ;
 
+import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class EventBean extends BaseBean<Event, EventDTO> {
     private static final Logger LOGGER = Logger.getLogger(EventServ.class.getName());
@@ -23,6 +27,12 @@ public class EventBean extends BaseBean<Event, EventDTO> {
         return eventDAO.toDTO(entity);
     }
 
+    public List<EventDTO> getEventsFromMouldCode(String mouldCode) throws EntityDoesNotExistException
+    {
+        List<Event> events = eventDAO.getEventByMouldCode(mouldCode);
+
+        return events.stream().map(this::toDTO).collect(Collectors.toList());
+    }
     /*@Override
     public EventDTO update(EventDTO eventDTO) throws EntityDoesNotExistException {
         Event event = eventDAO.findOrFail(eventDTO.getId());

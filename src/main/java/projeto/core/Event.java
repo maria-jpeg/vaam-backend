@@ -17,6 +17,8 @@ import java.io.Serializable;
 @NamedQueries({
         @NamedQuery(name = "Process.getEventsByProcessID",
                 query = "SELECT e FROM Event e WHERE e.process.id = :processId"),
+        @NamedQuery(name = "Event.getEventsByMouldCode",
+                query = "SELECT e FROM Event e WHERE e.mould.code = :mouldCode"),
         @NamedQuery(name = "Process.getMouldCodesFromProcessId",
                 query = "SELECT DISTINCT e.mould.code FROM Event e WHERE e.process.id = :processId"),
         @NamedQuery(name = "Process.getPartCodesFromProcessId",

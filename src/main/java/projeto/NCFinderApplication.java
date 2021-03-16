@@ -115,7 +115,7 @@ public class NCFinderApplication extends Application<NCFinderConfiguration> {
         ConformanceServ conformanceServ = new ConformanceServ( conformanceBean );
         ResourceServ resourceServ = new ResourceServ( resourceBean, jwtBean );
         EventServ eventServ = new EventServ( eventBean, activityBean, processBean, mouldBean, partBean );
-        MouldServ mouldServ = new MouldServ( mouldBean, partBean ,activityBean);
+        MouldServ mouldServ = new MouldServ( mouldBean, partBean ,activityBean,eventBean);
         PartServ partServ = new PartServ( partBean );
         TagServ tagServ = new TagServ( tagBean );
         WorkstationServ workstationServ = new WorkstationServ( workstationBean, activityBean );
