@@ -4,10 +4,7 @@ import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.*;
 import io.swagger.util.Json;
 import projeto.api.dtos.compare.FilterInputWrapperDTO;
-import projeto.api.dtos.entities.ActivityDTO;
-import projeto.api.dtos.entities.MouldDTO;
-import projeto.api.dtos.entities.PartDTO;
-import projeto.api.dtos.entities.ProcessDTO;
+import projeto.api.dtos.entities.*;
 import projeto.controller.ActivityBean;
 import projeto.controller.EventBean;
 import projeto.controller.MouldBean;
@@ -101,7 +98,7 @@ public class MouldServ {
         }
     }
 
-    @ApiOperation( value = "Get events associated with a mould ", response = MouldDTO.class, responseContainer = "List")
+    @ApiOperation( value = "Get events associated with a mould ", response = EventDTO.class, responseContainer = "List")
     @GET
     @UnitOfWork
     @Path( "{mouldCode}/events" )
