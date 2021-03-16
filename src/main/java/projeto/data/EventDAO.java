@@ -2,15 +2,14 @@ package projeto.data;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
-import projeto.api.dtos.entities.EventDTO;
-import projeto.api.dtos.entities.MouldDTO;
-import projeto.api.dtos.entities.PartDTO;
+import projeto.api.dtos.entities.*;
 import projeto.controller.exceptions.EntityDoesNotExistException;
 import projeto.controller.exceptions.TransformToEntityException;
 import projeto.core.Activity;
 import projeto.core.Event;
 import projeto.core.Mould;
 import projeto.core.Part;
+import projeto.core.Process;
 
 import java.util.List;
 
@@ -73,8 +72,8 @@ public class EventDAO extends BaseDAO<Event, EventDTO> {
     {
         if(event.getPart() != null){
             return new EventDTO(
-                    event.getActivity().getId(),
-                    event.getProcess().getId(),
+                    activityToDTO(event.getActivity()),
+                    processToDTO(event.getProcess()),
                     mouldToDTO(event.getMould()),
                     partToDTO(event.getPart()),
                     event.getStartDate().toString( "dd-MM-yyyy HH:mm:ss.SSS" ),
@@ -85,8 +84,8 @@ public class EventDAO extends BaseDAO<Event, EventDTO> {
             );
         }
         return new EventDTO(
-                event.getActivity().getId(),
-                event.getProcess().getId(),
+                activityToDTO(event.getActivity()),
+                processToDTO(event.getProcess()),
                 mouldToDTO(event.getMould()),
                 null,
                 event.getStartDate().toString( "dd-MM-yyyy HH:mm:ss.SSS" ),
@@ -96,6 +95,28 @@ public class EventDAO extends BaseDAO<Event, EventDTO> {
                 event.getId()
         );
     }
+    //para formatar o fullDTO
+    public ActivityDTO activityToDTO(Activity activity){
+        return new ActivityDTO(
+                activity.getId(),
+                activity.getName(),
+                activity.getDescription()
+        );
+    }
+
+    //para formatar o fullDTO
+    public ProcessDTO processToDTO(Process process){
+        return new ProcessDTO(
+                process.getId(),
+                process.getName(),
+                process.getDescription(),
+                process.getStartDate(),
+                process.getEndDate(),
+                process.getNumberOfCases(),
+                process.getNumberOfActivities()
+        );
+    }
+
     //para formatar o fullDTO
     public MouldDTO mouldToDTO(Mould mould){
         return new MouldDTO(
