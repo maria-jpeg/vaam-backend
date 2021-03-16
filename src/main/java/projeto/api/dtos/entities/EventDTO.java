@@ -1,6 +1,7 @@
 package projeto.api.dtos.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,9 +20,13 @@ public class EventDTO implements DTO
 {
 
     private long id;
-    private long activityId;
-    private long processId;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Long activityId;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Long processId;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String mouldCode;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String partCode;
     private String startDate;
     private String endDate;
@@ -58,20 +63,15 @@ public class EventDTO implements DTO
     //EventDTO que também contém os moldes e partes
     public EventDTO(ActivityDTO activity, ProcessDTO process, MouldDTO mould, PartDTO part, String startDate, String endDate, long duration, Boolean isEstimatedEnd, long id)
     {
-        this.activityId = activity.getId();
-        this.processId = process.getId();
         this.startDate = startDate;
         this.endDate = endDate;
         this.duration = duration;
         this.isEstimatedEnd = isEstimatedEnd;
         this.mould = mould;
         this.part = part;
-        this.mouldCode = mould.getCode();
-        if (part != null)
-            this.partCode = part.getCode();
-        this.id = id;
         this.activity = activity;
         this.process = process;
+        this.id = id;
     }
 
     //@Override
