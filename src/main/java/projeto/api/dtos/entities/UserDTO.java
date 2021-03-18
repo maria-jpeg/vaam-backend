@@ -1,10 +1,12 @@
 package projeto.api.dtos.entities;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 import projeto.api.dtos.DTO;
 
 @Getter @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO implements DTO {
 
     private String username;

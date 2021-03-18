@@ -4,11 +4,16 @@ import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.joda.time.DateTime;
 import projeto.api.dtos.entities.ActivityDTO;
+import projeto.api.dtos.entities.ActivityUserEntryDTO;
+import projeto.api.dtos.entities.UserDTO;
+import projeto.api.dtos.entities.WorkstationDTO;
+import projeto.api.dtos.resources.workhours.ActivityUsersDTO;
 import projeto.controller.exceptions.EntityDoesNotExistException;
 import projeto.controller.exceptions.TransformToEntityException;
-import projeto.core.Activity;
-import projeto.core.ActivityUserEntry;
+import projeto.core.*;
 
+import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 public class ActivityDAO extends BaseDAO<Activity, ActivityDTO> {
@@ -36,6 +41,45 @@ public class ActivityDAO extends BaseDAO<Activity, ActivityDTO> {
                 entity.getId(),
                 entity.getName(),
                 entity.getDescription()
+        );
+    }
+
+    public ActivityUserEntryDTO AUtoDTO(ActivityUserEntry entry)
+    {
+        if (entry.getWorkstation() == null){
+            return new ActivityUserEntryDTO(
+                    UserToDTO(entry.getUser()),
+                    toDTO(entry.getActivity()),
+                    entry.getStartDate(),
+                    entry.getEndDate(),
+                    null
+            );
+        }
+        return new ActivityUserEntryDTO(
+                UserToDTO(entry.getUser()),
+                toDTO(entry.getActivity()),
+                entry.getStartDate(),
+                entry.getEndDate(),
+                WorkstationToDTO(entry.getWorkstation())
+        );
+    }
+
+    public UserDTO UserToDTO(User user){
+        return new UserDTO(
+                user.getUsername(),
+                user.getRole().getName(),
+                user.getName(),
+                user.getEmail()
+        );
+    }
+
+    public WorkstationDTO WorkstationToDTO(Workstation workstation)
+    {
+        return new WorkstationDTO(
+                workstation.getId(),
+                workstation.getName(),
+                workstation.getIsTagging(),
+                workstation.getIsEndWorkstation()
         );
     }
 

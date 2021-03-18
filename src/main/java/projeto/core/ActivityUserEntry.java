@@ -10,9 +10,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "ACTIVITIES_USERS")
+@Table(name = "ACTIVITIES_USERS")//( au.startDate >= :eventStartDate AND au.startDate <= :eventEndDate) AND ( au.endDate >= :eventStartDate AND au.endDate <= :eventEndDate)
 @NamedQueries({
-        @NamedQuery(name = "ActivitiesUsers.getEntriesAssociatedToEventActivity",
+        @NamedQuery(name = "ActivitiesUsers.getEntriesAssociatedToEventActivity",//correção query VAAM? ^
                 query = "SELECT au FROM ActivityUserEntry au WHERE au.activity.id = :activityId AND ( ( au.startDate <= :eventEndDate AND au.endDate >= :eventStartDate) )"),
         @NamedQuery(name = "ActivitiesUsers.getEntriesAssociatedToEventWorkstation",
                 query = "SELECT au FROM ActivityUserEntry au WHERE au.workstation.id = :workstationId AND ( ( au.startDate <= :eventEndDate AND au.endDate >= :eventStartDate) )"),

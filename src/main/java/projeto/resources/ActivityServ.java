@@ -5,6 +5,7 @@ import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.*;
 import projeto.api.dtos.FrequencyDTO;
 import projeto.api.dtos.compare.FilterInputWrapperDTO;
+import projeto.api.dtos.entities.ActivityDTO;
 import projeto.api.dtos.resources.operationalhours.ActivityTotalOperationalHoursDTO;
 import projeto.api.dtos.resources.operationalhours.ActivityWorkstationsDTO;
 import projeto.api.dtos.resources.workhours.ActivityTotalWorkHoursDTO;
@@ -337,6 +338,28 @@ public class ActivityServ
         }
 
 
+    }
+
+    @ApiOperation( value = "Get activity's user and workstation from an event", response = ActivityDTO.class)
+    @GET
+    @UnitOfWork
+    @Path("{activityId}/event/{eventId}")
+    @RolesAllowed({"Operador","Gestor","Administrador"})
+    public Response getActivityUsersAndWorkstations(
+            @PathParam("eventId") long eventId,
+            @PathParam("activityId") long activityId)
+    {
+        try
+        {
+            return Response.status(Response.Status.OK)
+                    .entity(activityBean.getActivityUsersAndWorkstations(activityId,eventId))
+                    .build();
+        }
+        catch (EntityDoesNotExistException ex)
+        {
+            return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
+                    .entity(ex.getMessage()).build();
+        }
     }
 
 }

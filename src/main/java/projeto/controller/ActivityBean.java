@@ -2,14 +2,17 @@ package projeto.controller;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.util.Precision;
+import org.hibernate.query.Query;
 import org.joda.time.DateTime;
 import projeto.api.dtos.DurationDTO;
 import projeto.api.dtos.FrequencyDTO;
 import projeto.api.dtos.entities.ActivityDTO;
+import projeto.api.dtos.entities.ActivityUserEntryDTO;
 import projeto.api.dtos.resources.operationalhours.ActivityTotalOperationalHoursDTO;
 import projeto.api.dtos.resources.operationalhours.ActivityWorkstationsDTO;
 import projeto.api.dtos.resources.operationalhours.WorkstationOperationalHoursDTO;
 import projeto.api.dtos.resources.workhours.ActivityTotalWorkHoursDTO;
+import projeto.api.dtos.resources.workhours.ActivityUsersDTO;
 import projeto.controller.exceptions.EntityDoesNotExistException;
 import projeto.core.Activity;
 import projeto.core.ActivityUserEntry;
@@ -38,6 +41,8 @@ public class ActivityBean extends BaseBean<Activity, ActivityDTO>
     public List<ActivityDTO> toDTOsList(List<Activity> activities) {
         return activities.stream().map(this::toDTO).collect(Collectors.toList());
     }
+
+    public ActivityUserEntryDTO AUtoDTO(ActivityUserEntry entry) { return activityDAO.AUtoDTO(entry); }
 
     /*
     public List<FrequencyDTO> getFrequenciesFromCSV( String path ) throws FileNotFoundException {
@@ -409,6 +414,26 @@ public class ActivityBean extends BaseBean<Activity, ActivityDTO>
     {
         List<Activity> activities = activityDAO.getActivityByMouldCode(mouldCode);
         return activities.stream().map(this::toDTO).collect(Collectors.toList());
+    }
+
+    public List<ActivityUserEntryDTO> getActivityUsersAndWorkstations(long activityId,long eventId) throws EntityDoesNotExistException
+    {
+        Activity activity = findOrFail(activityId);
+        Event event = null;
+        for (Event e:activity.getEvents())
+        {
+            if(e.getId() == eventId){
+                event = e;
+                break;
+            }
+        }
+
+        if (event == null)
+            throw new EntityDoesNotExistException("O evento com o id: "+eventId+" não existe ou não está associado à atividade com id: "+activityId);
+
+        List<ActivityUserEntry> entries = activityDAO.getEntriesAssociatedToEventActivity(activityId, event.getStartDate(), event.getEndDate());
+
+        return entries.stream().map(this::AUtoDTO).collect(Collectors.toList());
     }
 
 }
