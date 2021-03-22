@@ -13,26 +13,28 @@ import projeto.core.Process;
 
 import java.util.List;
 
-public class EventDAO extends BaseDAO<Event, EventDTO> {
+public class EventDAO extends BaseDAO<Event, EventDTO>
+{
 
-    public EventDAO(SessionFactory sessionFactory) {
+    public EventDAO(SessionFactory sessionFactory)
+    {
         super(sessionFactory);
     }
 
     @Override
-    public Event toEntity(EventDTO dto) throws TransformToEntityException, EntityDoesNotExistException {
+    public Event toEntity(EventDTO dto) throws TransformToEntityException, EntityDoesNotExistException
+    {
         Event event;
 
         try {
             event = findOrFail(dto.getId());
-        } catch ( EntityDoesNotExistException e )
-        {
-            throw new TransformToEntityException( e.getMessage() );
+        } catch (EntityDoesNotExistException e) {
+            throw new TransformToEntityException(e.getMessage());
         }
 
         // Fields allowed to change
-        if(dto.getEndDate() != null){
-            event.setEndDate( dto.getEndDate() );
+        if (dto.getEndDate() != null) {
+            event.setEndDate(dto.getEndDate());
         }
 
         return event;
@@ -42,14 +44,14 @@ public class EventDAO extends BaseDAO<Event, EventDTO> {
     @Override
     public EventDTO toDTO(Event entity)
     {
-        if(entity.getPart() != null){
+        if (entity.getPart() != null) {
             return new EventDTO(
                     entity.getActivity().getId(),
                     entity.getProcess().getId(),
                     entity.getMould().getCode(),
                     entity.getPart().getCode(),
-                    entity.getStartDate().toString( "dd-MM-yyyy HH:mm:ss.SSS" ),
-                    entity.getEndDate().toString( "dd-MM-yyyy HH:mm:ss.SSS" ),
+                    entity.getStartDate().toString("dd-MM-yyyy HH:mm:ss.SSS"),
+                    entity.getEndDate().toString("dd-MM-yyyy HH:mm:ss.SSS"),
                     entity.getDuration(),
                     entity.getIsEstimatedEnd(),
                     entity.getId()
@@ -59,8 +61,8 @@ public class EventDAO extends BaseDAO<Event, EventDTO> {
                 entity.getActivity().getId(),
                 entity.getProcess().getId(),
                 entity.getMould().getCode(),
-                entity.getStartDate().toString( "dd-MM-yyyy HH:mm:ss.SSS" ),
-                entity.getEndDate().toString( "dd-MM-yyyy HH:mm:ss.SSS" ),
+                entity.getStartDate().toString("dd-MM-yyyy HH:mm:ss.SSS"),
+                entity.getEndDate().toString("dd-MM-yyyy HH:mm:ss.SSS"),
                 entity.getDuration(),
                 entity.getIsEstimatedEnd(),
                 entity.getId()
@@ -70,14 +72,14 @@ public class EventDAO extends BaseDAO<Event, EventDTO> {
     //DTO que contém os objetos mould e part (VAAM)
     public EventDTO toFullDTO(Event event)
     {
-        if(event.getPart() != null){
+        if (event.getPart() != null) {
             return new EventDTO(
                     activityToDTO(event.getActivity()),
                     processToDTO(event.getProcess()),
                     mouldToDTO(event.getMould()),
                     partToDTO(event.getPart()),
-                    event.getStartDate().toString( "dd-MM-yyyy HH:mm:ss.SSS" ),
-                    event.getEndDate().toString( "dd-MM-yyyy HH:mm:ss.SSS" ),
+                    event.getStartDate().toString("dd-MM-yyyy HH:mm:ss.SSS"),
+                    event.getEndDate().toString("dd-MM-yyyy HH:mm:ss.SSS"),
                     event.getDuration(),
                     event.getIsEstimatedEnd(),
                     event.getId()
@@ -88,15 +90,17 @@ public class EventDAO extends BaseDAO<Event, EventDTO> {
                 processToDTO(event.getProcess()),
                 mouldToDTO(event.getMould()),
                 null,
-                event.getStartDate().toString( "dd-MM-yyyy HH:mm:ss.SSS" ),
-                event.getEndDate().toString( "dd-MM-yyyy HH:mm:ss.SSS" ),
+                event.getStartDate().toString("dd-MM-yyyy HH:mm:ss.SSS"),
+                event.getEndDate().toString("dd-MM-yyyy HH:mm:ss.SSS"),
                 event.getDuration(),
                 event.getIsEstimatedEnd(),
                 event.getId()
         );
     }
+
     //para formatar o fullDTO
-    public ActivityDTO activityToDTO(Activity activity){
+    public ActivityDTO activityToDTO(Activity activity)
+    {
         return new ActivityDTO(
                 activity.getId(),
                 activity.getName(),
@@ -105,7 +109,8 @@ public class EventDAO extends BaseDAO<Event, EventDTO> {
     }
 
     //para formatar o fullDTO
-    public ProcessDTO processToDTO(Process process){
+    public ProcessDTO processToDTO(Process process)
+    {
         return new ProcessDTO(
                 process.getId(),
                 process.getName(),
@@ -118,7 +123,8 @@ public class EventDAO extends BaseDAO<Event, EventDTO> {
     }
 
     //para formatar o fullDTO
-    public MouldDTO mouldToDTO(Mould mould){
+    public MouldDTO mouldToDTO(Mould mould)
+    {
         return new MouldDTO(
                 mould.getCode(),
                 mould.getDescription()
@@ -126,8 +132,9 @@ public class EventDAO extends BaseDAO<Event, EventDTO> {
     }
 
     //para formatar o fullDTO
-    public PartDTO partToDTO(Part part){
-        if (part.getTag() != null){
+    public PartDTO partToDTO(Part part)
+    {
+        if (part.getTag() != null) {
             return new PartDTO(
                     part.getCode(),
                     part.getDescription(),
@@ -143,12 +150,12 @@ public class EventDAO extends BaseDAO<Event, EventDTO> {
 
     public List<Event> getEventByMouldCode(String code) throws EntityDoesNotExistException
     {
-        Query<Event> query = currentSession().createNamedQuery("Event.getEventsByMouldCode",Event.class);
-        query.setParameter("mouldCode",code);
+        Query<Event> query = currentSession().createNamedQuery("Event.getEventsByMouldCode", Event.class);
+        query.setParameter("mouldCode", code);
         List<Event> events = query.getResultList();
 
         if (events.size() < 1)
-            throw new EntityDoesNotExistException("Não existem eventos associadas ao molde: "+ code+".");
+            throw new EntityDoesNotExistException("Não existem eventos associados ao molde: " + code + ".");
 
         return events;
     }

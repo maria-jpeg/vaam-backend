@@ -30,8 +30,8 @@ public class ProcessDTO implements DTO {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.startDate = startDate != null ? startDate.toString( "dd-MM-yyyy HH:mm" ) : null;
-        this.endDate = endDate != null ? endDate.toString( "dd-MM-yyyy HH:mm" ) : null;
+        this.startDate = startDate != null ? startDate.toString( "dd-MM-yyyy HH:mm:ss.SSS" ) : null;
+        this.endDate = endDate != null ? endDate.toString( "dd-MM-yyyy HH:mm:ss.SSS" ) : null;
         this.numberOfCases = numberOfCases;
         this.numberOfActivities = numberOfActivities;
     }
