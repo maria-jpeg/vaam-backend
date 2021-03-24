@@ -1,14 +1,15 @@
 package projeto.controller;
 
 import org.joda.time.DateTime;
-import projeto.api.dtos.entities.ActivityDTO;
-import projeto.api.dtos.entities.EventDTO;
+import projeto.api.dtos.entities.*;
 import projeto.controller.exceptions.EntityDoesNotExistException;
-import projeto.core.Activity;
-import projeto.core.Event;
+import projeto.core.*;
+import projeto.core.Process;
+import projeto.data.ActivityDAO;
 import projeto.data.EventDAO;
 import projeto.resources.EventServ;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -17,10 +18,12 @@ public class EventBean extends BaseBean<Event, EventDTO> {
     private static final Logger LOGGER = Logger.getLogger(EventServ.class.getName());
 
     final private EventDAO eventDAO;
+    final private ActivityDAO activityDAO;
 
-    public EventBean(EventDAO eventDAO) {
+    public EventBean(EventDAO eventDAO,ActivityDAO activityDAO) {
         super(eventDAO);
         this.eventDAO = eventDAO;
+        this.activityDAO = activityDAO;
     }
 
     public EventDTO toDTO(Event entity){
@@ -31,11 +34,54 @@ public class EventBean extends BaseBean<Event, EventDTO> {
         return eventDAO.toFullDTO(entity);
     }
 
+    public ActivityUserEntryDTO activityUserEntryToDTO(ActivityUserEntry entry){
+        return activityDAO.AUtoDTO(entry);
+    }
+
+    public ActivityDTO toActivityDTO(Activity activity){
+        return eventDAO.activityToDTO(activity);
+    }
+
+    public ProcessDTO toProcessDTO(Process process){
+        return eventDAO.processToDTO(process);
+    }
+    public MouldDTO toMouldDTO(Mould mould){
+        return eventDAO.mouldToDTO(mould);
+    }
+    public PartDTO toPartDTO(Part part){
+        return eventDAO.partToDTO(part);
+    }
+
     public List<EventDTO> getEventsFromMouldCode(String mouldCode) throws EntityDoesNotExistException
     {
         List<Event> events = eventDAO.getEventByMouldCode(mouldCode);
 
         return events.stream().map(this::toFullDTO).collect(Collectors.toList());
+    }
+    public List<EventDTO> getEventsByMouldCodeWithUsersAndWorkstations(String mouldCode) throws EntityDoesNotExistException
+    {
+        List<EventDTO> eventDTOSFullUsers = new LinkedList<>();
+        List<Event> events = eventDAO.getEventByMouldCode(mouldCode);
+
+        for (Event e:events)
+        {
+            List<ActivityUserEntry> aue = activityDAO.getEntriesAssociatedToEventActivity(e.getActivity().getId(),e.getStartDate(),e.getEndDate());
+            List<ActivityUserEntryDTO> aueDTO = aue.stream().map(this::activityUserEntryToDTO).collect(Collectors.toList());
+
+            eventDTOSFullUsers.add(new EventDTO(
+                    toActivityDTO(e.getActivity()),
+                    toProcessDTO(e.getProcess()),
+                    toMouldDTO(e.getMould()),
+                    toPartDTO(e.getPart()),
+                    e.getStartDate().toString("dd-MM-yyyy HH:mm:ss.SSS"),
+                    e.getEndDate().toString("dd-MM-yyyy HH:mm:ss.SSS"),
+                    e.getDuration(),
+                    e.getIsEstimatedEnd(),
+                    e.getId(),
+                    aueDTO));
+        }
+
+        return eventDTOSFullUsers;
     }
     /*@Override
     public EventDTO update(EventDTO eventDTO) throws EntityDoesNotExistException {

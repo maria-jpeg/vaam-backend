@@ -11,8 +11,10 @@ import projeto.api.dtos.DTO;
 import projeto.core.Activity;
 import projeto.core.Mould;
 import projeto.core.Part;
+import java.util.List;
 
-import java.io.Serializable;
+import java.util.LinkedList;
+
 
 @NoArgsConstructor
 @Getter @Setter
@@ -36,6 +38,8 @@ public class EventDTO implements DTO
     private PartDTO part;
     private ProcessDTO process;
     private ActivityDTO activity;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private List<ActivityUserEntryDTO> activityUserEntry;
 
     public EventDTO(long activityId, long processId, String mouldCode, String partCode, String startDate, String endDate, long duration, Boolean isEstimatedEnd, long id) {
         this.activityId = activityId;
@@ -72,6 +76,21 @@ public class EventDTO implements DTO
         this.activity = activity;
         this.process = process;
         this.id = id;
+    }
+
+    //EventDTO que também contém os moldes, partes e activityUserEntry
+    public EventDTO(ActivityDTO activity, ProcessDTO process, MouldDTO mould, PartDTO part, String startDate, String endDate, long duration, Boolean isEstimatedEnd, long id, List<ActivityUserEntryDTO> activityUserEntryDTOList)
+    {
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.duration = duration;
+        this.isEstimatedEnd = isEstimatedEnd;
+        this.mould = mould;
+        this.part = part;
+        this.activity = activity;
+        this.process = process;
+        this.id = id;
+        this.activityUserEntry = activityUserEntryDTOList;
     }
 
     //@Override

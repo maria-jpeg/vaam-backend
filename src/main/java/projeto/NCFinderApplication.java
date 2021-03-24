@@ -99,7 +99,7 @@ public class NCFinderApplication extends Application<NCFinderConfiguration> {
         final PartBean partBean = new PartBean( partDAO, tagDAO );
         final ConformanceBean conformanceBean = new ConformanceBean( logBean, processBean, partBean );
         final WorkstationBean workstationBean = new WorkstationBean( workstationDAO );
-        final EventBean eventBean = new EventBean( eventDAO );
+        final EventBean eventBean = new EventBean( eventDAO ,activityDAO);
         final RoleBean roleBean = new RoleBean( roleDAO );
         final TagBean tagBean = new TagBean( tagDAO );
         final ResourceBean resourceBean = new ResourceBean( logBean, processBean, activityBean, userBean, workstationBean, partBean );

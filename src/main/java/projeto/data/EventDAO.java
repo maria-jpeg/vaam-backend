@@ -134,6 +134,8 @@ public class EventDAO extends BaseDAO<Event, EventDTO>
     //para formatar o fullDTO
     public PartDTO partToDTO(Part part)
     {
+        if (part == null)
+            return null;
         if (part.getTag() != null) {
             return new PartDTO(
                     part.getCode(),

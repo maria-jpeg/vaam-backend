@@ -118,4 +118,23 @@ public class MouldServ {
         }
     }
 
+    @ApiOperation( value = "Get events associated with a mould with users and workstations", response = EventDTO.class, responseContainer = "List")
+    @GET
+    @UnitOfWork
+    @Path( "{mouldCode}/eventsUsersWorkstations" )
+    @RolesAllowed({"Operador","Gestor","Administrador"})
+    public Response getEventsByMouldCodeWithUsersAndWorkstations (@PathParam("mouldCode") String mouldCode)
+    {
+        try
+        {
+            return Response.status(Response.Status.OK)
+                    .entity(eventBean.getEventsByMouldCodeWithUsersAndWorkstations(mouldCode))
+                    .build();
+        }
+        catch (EntityDoesNotExistException ex)
+        {
+            return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
+                    .entity(ex.getMessage()).build();
+        }
+    }
 }
