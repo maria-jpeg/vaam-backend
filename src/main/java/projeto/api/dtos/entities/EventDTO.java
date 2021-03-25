@@ -33,6 +33,9 @@ public class EventDTO implements DTO
     private String startDate;
     private String endDate;
     private long duration;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    //Duração média dos eventos com certa atividade
+    private double averageEventDurationForActivityMillis;
     private Boolean isEstimatedEnd;
     private MouldDTO mould;
     private PartDTO part;
@@ -40,6 +43,7 @@ public class EventDTO implements DTO
     private ActivityDTO activity;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<ActivityUserEntryDTO> activityUserEntry;
+
 
     public EventDTO(long activityId, long processId, String mouldCode, String partCode, String startDate, String endDate, long duration, Boolean isEstimatedEnd, long id) {
         this.activityId = activityId;
@@ -78,8 +82,8 @@ public class EventDTO implements DTO
         this.id = id;
     }
 
-    //EventDTO que também contém os moldes, partes e activityUserEntry
-    public EventDTO(ActivityDTO activity, ProcessDTO process, MouldDTO mould, PartDTO part, String startDate, String endDate, long duration, Boolean isEstimatedEnd, long id, List<ActivityUserEntryDTO> activityUserEntryDTOList)
+    //EventDTO que também contém os moldes, partes e activityUserEntry e media activity
+    public EventDTO(ActivityDTO activity, ProcessDTO process, MouldDTO mould, PartDTO part, String startDate, String endDate, long duration, Boolean isEstimatedEnd, long id, List<ActivityUserEntryDTO> activityUserEntryDTOList, double averageEventDurationForActivity)
     {
         this.startDate = startDate;
         this.endDate = endDate;
@@ -91,6 +95,7 @@ public class EventDTO implements DTO
         this.process = process;
         this.id = id;
         this.activityUserEntry = activityUserEntryDTOList;
+        this.averageEventDurationForActivityMillis = averageEventDurationForActivity;
     }
 
     //@Override

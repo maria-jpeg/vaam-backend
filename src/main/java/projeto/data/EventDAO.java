@@ -161,4 +161,27 @@ public class EventDAO extends BaseDAO<Event, EventDTO>
 
         return events;
     }
+
+    public Double getAverageEventDurationByActivity(long activityId)
+            throws EntityDoesNotExistException
+    {
+        Query<Double> query = currentSession().createNamedQuery("Event.getAverageEventDurationByActivity",Double.class);
+        query.setParameter("activityId", activityId);
+        List<Double> avgDuration = query.getResultList();
+
+        if (avgDuration.size()<1)
+            throw new EntityDoesNotExistException("A Activity com id: "+activityId+" não está associada a nenhum evento");
+
+        if (avgDuration.size()>1)
+            throw new EntityDoesNotExistException("Erro? query devolveu mais do que um valor?");
+
+        System.out.println("######################################");
+        for (Double a : avgDuration)
+        {
+            System.out.println(a);
+        }
+        System.out.println("######################################");
+
+        return avgDuration.get(0);
+    }
 }

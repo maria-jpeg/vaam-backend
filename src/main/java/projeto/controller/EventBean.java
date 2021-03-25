@@ -67,7 +67,7 @@ public class EventBean extends BaseBean<Event, EventDTO> {
         {
             List<ActivityUserEntry> aue = activityDAO.getEntriesAssociatedToEventActivity(e.getActivity().getId(),e.getStartDate(),e.getEndDate());
             List<ActivityUserEntryDTO> aueDTO = aue.stream().map(this::activityUserEntryToDTO).collect(Collectors.toList());
-
+            double avgDuration = eventDAO.getAverageEventDurationByActivity(e.getActivity().getId());
             eventDTOSFullUsers.add(new EventDTO(
                     toActivityDTO(e.getActivity()),
                     toProcessDTO(e.getProcess()),
@@ -78,7 +78,8 @@ public class EventBean extends BaseBean<Event, EventDTO> {
                     e.getDuration(),
                     e.getIsEstimatedEnd(),
                     e.getId(),
-                    aueDTO));
+                    aueDTO,
+                    avgDuration));
         }
 
         return eventDTOSFullUsers;

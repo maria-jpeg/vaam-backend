@@ -30,7 +30,9 @@ import java.io.Serializable;
         @NamedQuery(name = "Process.getNumberOfActivities",
                 query = "SELECT DISTINCT e.activity.id  FROM Event e WHERE e.process.id = :processId"),
         @NamedQuery(name = "Process.getNumberOfCases",
-                query = "SELECT DISTINCT e.mould.code FROM Event e WHERE e.process.id = :processId")
+                query = "SELECT DISTINCT e.mould.code FROM Event e WHERE e.process.id = :processId"),
+        @NamedQuery(name = "Event.getAverageEventDurationByActivity",
+                query = "select avg(e.duration) from Event e where e.activity.id =:activityId"),
 })
 
 @NoArgsConstructor @AllArgsConstructor
