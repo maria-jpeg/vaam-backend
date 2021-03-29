@@ -265,6 +265,11 @@
             <artifactId>junit-jupiter-api</artifactId>
             <version>5.7.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.deckfour.xes</groupId>
+            <artifactId>OpenXES</artifactId>
+            <version>2.26</version>
+        </dependency>
 
 
     </dependencies>
