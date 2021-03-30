@@ -4,31 +4,16 @@ services:
     build:
       context: .
       dockerfile: docker/app/Dockerfile
-    image: project/maven
-    container_name: maven_Project
+    image: project/dropwizard
+    container_name: dropwizard_container
     volumes:
-    - ~/.m2:/root/.m2
-    - ./src:/home/app/src
+    - ./target:/home/app/target
+    - ./config.yml:/home/app/config.yml
     depends_on:
       - db
     ports:
       - 8080:8080 # application
-      - 9990:9990 # admin console
       - 8787:8787 # debugging
-
-  # db:
-  #   container_name: mysqlProject
-  #   image: mysql:latest
-  #   environment:
-  #     - MYSQL_DATABASE=projectdb
-  #     - MYSQL_USER=admin
-  #     - MYSQL_PASSWORD=secret
-  #     - MYSQL_ROOT_PASSWORD=secret
-  #   #        volumes:
-  #   #            - ./workdir/db/init/:/docker-entrypoint-initdb.d/ # init database
-  #   #            - ./workdir/db/data/:/var/lib/mysql/              # data storage
-  #   ports:
-  #     - 3306:3306
 
   db:
     build:
