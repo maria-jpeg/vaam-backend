@@ -13,22 +13,16 @@ public class MinerState {
 
 	public MinerState(MiningParameters parameters) {
 		this.parameters = parameters;
-
-		if (!parameters.isUseMultithreading()) {
-			minerPool = MoreExecutors.sameThreadExecutor();
-			satPool = MoreExecutors.sameThreadExecutor();
-		} else {
-			minerPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(), new ThreadFactory() {
-				public Thread newThread(Runnable r) {
-					return new Thread(r, "IM miner pool thread");
-				}
-			});
-			satPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(), new ThreadFactory() {
-				public Thread newThread(Runnable r) {
-					return new Thread(r, "IM sat pool thread");
-				}
-			});
-		}
+		minerPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(), new ThreadFactory() {
+			public Thread newThread(Runnable r) {
+				return new Thread(r, "IM miner pool thread");
+			}
+		});
+		satPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(), new ThreadFactory() {
+			public Thread newThread(Runnable r) {
+				return new Thread(r, "IM sat pool thread");
+			}
+		});
 	}
 
 	public ExecutorService getMinerPool() {
@@ -40,7 +34,7 @@ public class MinerState {
 	}
 
 	public boolean isCancelled() {
-		return canceller.isCancelled();
+		return false;
 	}
 
 	public void shutdownThreadPools() {

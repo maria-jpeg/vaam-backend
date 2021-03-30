@@ -1,7 +1,7 @@
 package projeto.algorithms_process_mining.inductive_miner.loginfo;
 
-import org.processmining.plugins.inductiveminer2.helperclasses.IntDfg;
-import org.processmining.plugins.inductiveminer2.helperclasses.MultiIntSet;
+import projeto.algorithms_process_mining.inductive_miner.helperclasses.IntDfg;
+import projeto.algorithms_process_mining.inductive_miner.helperclasses.MultiIntSet;
 import projeto.algorithms_process_mining.inductive_miner.logs.IMLog;
 
 import gnu.trove.map.TIntObjectMap;

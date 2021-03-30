@@ -14,9 +14,9 @@ import org.processmining.plugins.inductiveminer2.framework.cutfinders.CutFinder;
 import org.processmining.plugins.inductiveminer2.framework.fallthroughs.FallThrough;
 import org.processmining.plugins.inductiveminer2.framework.postprocessor.PostProcessor;
 import org.processmining.plugins.inductiveminer2.helperclasses.XLifeCycleClassifierIgnore;
-import org.processmining.plugins.inductiveminer2.loginfo.IMLog2IMLogInfo;
-import org.processmining.plugins.inductiveminer2.loginfo.IMLogInfo;
-import org.processmining.plugins.inductiveminer2.logs.IMLog;
+import projeto.algorithms_process_mining.inductive_miner.loginfo.IMLog2IMLogInfo;
+import projeto.algorithms_process_mining.inductive_miner.loginfo.IMLogInfo;
+import projeto.algorithms_process_mining.inductive_miner.logs.IMLog;
 
 import gnu.trove.set.TIntSet;
 

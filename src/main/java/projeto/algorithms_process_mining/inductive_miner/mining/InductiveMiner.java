@@ -8,9 +8,9 @@ import projeto.algorithms_process_mining.inductive_miner.efficienttree.Efficient
 import projeto.algorithms_process_mining.inductive_miner.efficienttree.EfficientTreeReduce.ReductionFailedException;
 import projeto.algorithms_process_mining.inductive_miner.efficienttree.InlineTree;
 import projeto.algorithms_process_mining.inductive_miner.efficienttree.UnknownTreeNodeException;
-import org.processmining.plugins.InductiveMiner.mining.cuts.Cut.Operator;
+import projeto.algorithms_process_mining.inductive_miner.mining.cuts.Cut.Operator;
 import org.processmining.plugins.inductiveminer2.framework.basecases.BaseCaseFinder;
-import org.processmining.plugins.inductiveminer2.framework.cutfinders.Cut;
+import projeto.algorithms_process_mining.inductive_miner.cutfinders.Cut;
 import org.processmining.plugins.inductiveminer2.framework.cutfinders.CutFinder;
 import org.processmining.plugins.inductiveminer2.framework.fallthroughs.FallThrough;
 import org.processmining.plugins.inductiveminer2.framework.postprocessor.PostProcessor;
@@ -30,7 +30,7 @@ public class InductiveMiner {
 	 * @param parameters
 	 * @return
 	 */
-	public static EfficientTree mineEfficientTree(IMLog log, MiningParameters parameters«) {
+	public static EfficientTree mineEfficientTree(IMLog log, MiningParameters parameters) {
 		//repair life cycle if necessary
 		if (parameters.isRepairLifeCycles()) {
 			//log = new LifeCycles(parameters.isDebug()).preProcessLog(log);
