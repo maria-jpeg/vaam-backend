@@ -9,7 +9,7 @@ import projeto.algorithms_process_mining.inductive_miner.efficienttree.Efficient
 import projeto.algorithms_process_mining.inductive_miner.efficienttree.EfficientTreeReduceParametersForPetriNet;
 import org.processmining.plugins.InductiveMiner.mining.cuts.IMc.probabilities.Probabilities;
 import org.processmining.plugins.InductiveMiner.mining.logs.XLifeCycleClassifier;
-import org.processmining.plugins.inductiveminer2.framework.basecases.BaseCaseFinder;
+import projeto.algorithms_process_mining.inductive_miner.basecases.BaseCaseFinder;
 import org.processmining.plugins.inductiveminer2.framework.cutfinders.CutFinder;
 import org.processmining.plugins.inductiveminer2.framework.fallthroughs.FallThrough;
 import org.processmining.plugins.inductiveminer2.framework.postprocessor.PostProcessor;
