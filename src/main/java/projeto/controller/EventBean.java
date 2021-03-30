@@ -91,11 +91,12 @@ public class EventBean extends BaseBean<Event, EventDTO> {
 
     public ProcessTree getEventTree(){
         List<Event> events = eventDAO.getAll();
-        InductiveMiner algo = new InductiveMiner();
+        //InductiveMiner algo = new InductiveMiner();
+
         try {
             XESHelper.eventsToIMLog(events);
         }catch (JAXBException ex){
-            System.out.println(ex.getMessage());
+            System.out.println( "EX: "+ex);
         }
         //algo.miner();
         return null;

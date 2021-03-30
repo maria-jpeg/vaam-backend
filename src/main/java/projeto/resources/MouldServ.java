@@ -51,7 +51,6 @@ public class MouldServ {
 
         List<Mould> moulds  = mouldBean.getAll();
         //AQUI IM
-
         eventBean.getEventTree();
 
         return Response.status(Response.Status.OK)

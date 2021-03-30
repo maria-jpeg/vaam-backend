@@ -1,5 +1,8 @@
 package projeto.data;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.deckfour.xes.in.XesXmlParser;
 import org.joda.time.DateTime;
 import org.processmining.plugins.InductiveMiner.mining.logs.IMLog;
@@ -10,11 +13,13 @@ import projeto.core.Event;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.jar.JarException;
 
@@ -22,21 +27,23 @@ public class XESHelper
 {
 
     public static IMLog eventsToIMLog(List<Event> events) throws JAXBException {
-
         //passar evento para xml?
-        JAXBContext jaxbContext = JAXBContext.newInstance(Event.class);
+        JAXBContext jaxbContext = JAXBContext.newInstance(EventPOJOList.class);
         Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+        jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
         StringBuilder xmlString = new StringBuilder();
-
         StringWriter sw = new StringWriter();
 
-        for (Event event : events) {
-            jaxbMarshaller.marshal(event,sw);
-            xmlString.append(sw.toString());
-        }
+        List<EventPOJO> eventPOJOS = EventPOJO.eventListToPojoList(events);
 
-        XesXmlParser parser = new XesXmlParser();
+        EventPOJOList eventPOJOList = new EventPOJOList(eventPOJOS);
+        jaxbMarshaller.marshal(eventPOJOList,sw);
+        xmlString.append(sw.toString());
+
+
+        System.out.println("5");
+        //XesXmlParser parser = new XesXmlParser();
 
         System.out.println(xmlString);
         return null;
@@ -145,4 +152,69 @@ public class XESHelper
 
     }*/
 
+}
+
+//Lista simples de eventos. No lugar de ids tem o nome do objeto associado
+@Getter
+@Setter
+class EventPOJO
+{
+    private String id;
+    private String startDate;
+    private String endDate;
+    private String duration;
+    private String mould;
+    private String part;
+    private String process;
+    private String activity;
+    private String isEstimatedEnd;
+    private String workstation;
+
+    public EventPOJO(Event event)
+    {
+        this.id = Long.toString(event.getId());
+        this.startDate = event.getStartDate().toString( "dd-MM-yyyy HH:mm:ss.SSS" );
+        this.endDate = event.getEndDate().toString( "dd-MM-yyyy HH:mm:ss.SSS" );
+        this.duration = Long.toString(event.getDuration());
+        this.mould = event.getMould().getCode();
+        if (event.getPart() != null){
+            this.part = event.getPart().getCode();
+        }else{
+            this.part = "";
+        }
+        this.process = event.getProcess().getName();
+        this.activity = event.getActivity().getName();
+        if (event.getIsEstimatedEnd() != null){
+            this.isEstimatedEnd = event.getIsEstimatedEnd().toString();
+        }else{
+            this.isEstimatedEnd = "";
+        }
+        if (event.getWorkstation() != null){
+            this.workstation = event.getWorkstation().getName();
+        }else{
+            this.workstation = "";
+        }
+    }
+
+    protected static List<EventPOJO> eventListToPojoList(List<Event> events){
+        List<EventPOJO> pojoList = new LinkedList<>();
+
+        for (Event event : events) {
+            EventPOJO newPojo = new EventPOJO(event);
+            pojoList.add(newPojo);
+        }
+        return pojoList;
+    }
+}
+//Lista de eventos simples para serializar em xml
+@Getter
+@Setter
+@XmlRootElement
+@NoArgsConstructor
+class EventPOJOList{
+    private List<EventPOJO> event;
+
+    public EventPOJOList(List<EventPOJO> events) {
+        this.event = events;
+    }
 }

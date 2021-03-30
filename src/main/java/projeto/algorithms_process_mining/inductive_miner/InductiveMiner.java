@@ -39,6 +39,7 @@ public class InductiveMiner implements ProcessMiningAlgorithm {
     }
 
     public ProcessTree miner(IMLog log){
+       /*
         PackageManager.Canceller canceller = new PackageManager.Canceller() {
             @Override
             public boolean isCancelled() {
@@ -49,6 +50,7 @@ public class InductiveMiner implements ProcessMiningAlgorithm {
 
         ProcessTree pt = Miner.mine(log, null, canceller);
         System.out.println(pt);
+        */
         return null;
     }
 }

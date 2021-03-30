@@ -211,5 +211,32 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: inductive-miner:InductiveMiner:1">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/InductiveMinerDeprecated.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: process-tree:ProcessTree:1">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/ProcessTree.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: prom-framework:ProMFramework:1">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/ProM-Framework.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>
