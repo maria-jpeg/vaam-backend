@@ -9,6 +9,7 @@ services:
     volumes:
     - ./target:/home/app/target
     - ./config.yml:/home/app/config.yml
+    - ./libs:/home/app/libs
     depends_on:
       - db
     ports:

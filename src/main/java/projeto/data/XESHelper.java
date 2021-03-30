@@ -3,7 +3,10 @@ package projeto.data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.deckfour.xes.factory.XFactory;
+import org.deckfour.xes.factory.XFactoryRegistry;
 import org.deckfour.xes.in.XesXmlParser;
+import org.deckfour.xes.model.XLog;
 import org.joda.time.DateTime;
 import org.processmining.plugins.InductiveMiner.mining.logs.IMLog;
 import projeto.controller.Utils;
@@ -14,9 +17,11 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -32,18 +37,29 @@ public class XESHelper
         Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
         jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
-        StringBuilder xmlString = new StringBuilder();
+        //Xmlstring
+        String xmlString = "";
+        //Converter eventos em string xml
         StringWriter sw = new StringWriter();
-
         List<EventPOJO> eventPOJOS = EventPOJO.eventListToPojoList(events);
-
         EventPOJOList eventPOJOList = new EventPOJOList(eventPOJOS);
         jaxbMarshaller.marshal(eventPOJOList,sw);
-        xmlString.append(sw.toString());
+        xmlString = sw.toString();
+        //Passar de xml para XES?
 
+        XesXmlParser parser = new XesXmlParser();
 
-        System.out.println("5");
-        //XesXmlParser parser = new XesXmlParser();
+        //passar string para stream de bytes para o parse
+
+        InputStream xmlStringStream = new ByteArrayInputStream(xmlString.getBytes(StandardCharsets.UTF_8));
+        try {
+            List<XLog> xlog = parser.parse(xmlStringStream);
+            System.out.println("breakpoint");
+        }
+        catch (Exception e) {
+            System.out.println("Erro a tranformar xml em xes."+e);
+        }
+
 
         System.out.println(xmlString);
         return null;

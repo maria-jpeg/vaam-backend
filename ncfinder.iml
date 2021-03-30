@@ -202,15 +202,7 @@
     <orderEntry type="library" name="Maven: com.sun.xml.bind:jaxb-core:3.0.0" level="project" />
     <orderEntry type="library" name="Maven: com.sun.activation:jakarta.activation:2.0.0" level="project" />
     <orderEntry type="library" name="Maven: com.sun.xml.bind:jaxb-impl:3.0.0" level="project" />
-    <orderEntry type="module-library">
-      <library name="Maven: org.deckfour.xes:OpenXES:2.26">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/libs/OpenXES-20181205.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
+    <orderEntry type="library" name="Maven: org.deckfour.xes:OpenXES:2.26" level="project" />
     <orderEntry type="module-library">
       <library name="Maven: inductive-miner:InductiveMiner:1">
         <CLASSES>
