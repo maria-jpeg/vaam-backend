@@ -1,26 +1,49 @@
 package projeto.data;
 
-//import org.deckfour.xes.in.XesXmlParser;
-//import org.deckfour.xes.model.XAttributeMap;
-//import org.deckfour.xes.model.XEvent;
-//import org.deckfour.xes.model.XLog;
-//import org.deckfour.xes.model.XTrace;
+import org.deckfour.xes.in.XesXmlParser;
 import org.joda.time.DateTime;
+import org.processmining.plugins.InductiveMiner.mining.logs.IMLog;
 import projeto.controller.Utils;
 import projeto.controller.exceptions.ParsingException;
 import projeto.core.Event;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.jar.JarException;
 
 public class XESHelper
 {
 
+    public static IMLog eventsToIMLog(List<Event> events) throws JAXBException {
 
-    /*public static List<Event> xesToEvents(String path ) throws Exception
+        //passar evento para xml?
+        JAXBContext jaxbContext = JAXBContext.newInstance(Event.class);
+        Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+
+        StringBuilder xmlString = new StringBuilder();
+
+        StringWriter sw = new StringWriter();
+
+        for (Event event : events) {
+            jaxbMarshaller.marshal(event,sw);
+            xmlString.append(sw.toString());
+        }
+
+        XesXmlParser parser = new XesXmlParser();
+
+        System.out.println(xmlString);
+        return null;
+    }
+
+    /*
+    public static List<Event> xesToEvents(String path ) throws Exception
     {
         return xesToEvents( new FileInputStream( path ) );
     }

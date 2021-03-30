@@ -266,6 +266,64 @@
             <version>5.7.0</version>
         </dependency>
 
+        <!--########################## XML ?#################################### -->
+
+        <dependency>
+            <groupId>com.sun.activation</groupId>
+            <artifactId>javax.activation</artifactId>
+            <version>1.2.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-core</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+
+
+        <!--##########################Locais?#################################### -->
+
+        <dependency>
+            <groupId>org.deckfour.xes</groupId>
+            <artifactId>OpenXES</artifactId>
+            <version>2.26</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/libs/OpenXES-20181205.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>inductive-miner</groupId>
+            <artifactId>InductiveMiner</artifactId>
+            <version>1</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/libs/InductiveMinerDeprecated.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>process-tree</groupId>
+            <artifactId>ProcessTree</artifactId>
+            <version>1</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/libs/ProcessTree.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>prom-framework</groupId>
+            <artifactId>ProMFramework</artifactId>
+            <version>1</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/libs/ProM-Framework.jar</systemPath>
+        </dependency>
+
 
     </dependencies>
 

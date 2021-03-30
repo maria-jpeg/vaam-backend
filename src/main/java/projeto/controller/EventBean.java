@@ -1,14 +1,18 @@
 package projeto.controller;
 
 import org.joda.time.DateTime;
+import org.processmining.processtree.ProcessTree;
+import projeto.algorithms_process_mining.inductive_miner.InductiveMiner;
 import projeto.api.dtos.entities.*;
 import projeto.controller.exceptions.EntityDoesNotExistException;
 import projeto.core.*;
 import projeto.core.Process;
 import projeto.data.ActivityDAO;
 import projeto.data.EventDAO;
+import projeto.data.XESHelper;
 import projeto.resources.EventServ;
 
+import javax.xml.bind.JAXBException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -84,6 +88,19 @@ public class EventBean extends BaseBean<Event, EventDTO> {
 
         return eventDTOSFullUsers;
     }
+
+    public ProcessTree getEventTree(){
+        List<Event> events = eventDAO.getAll();
+        InductiveMiner algo = new InductiveMiner();
+        try {
+            XESHelper.eventsToIMLog(events);
+        }catch (JAXBException ex){
+            System.out.println(ex.getMessage());
+        }
+        //algo.miner();
+        return null;
+    }
+
     /*@Override
     public EventDTO update(EventDTO eventDTO) throws EntityDoesNotExistException {
         Event event = eventDAO.findOrFail(eventDTO.getId());
