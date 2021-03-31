@@ -1,8 +1,13 @@
 package projeto.resources;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.*;
+import org.processmining.plugins.inductiveVisualMiner.helperClasses.IvMModel;
+import org.processmining.processtree.ProcessTree;
 import projeto.algorithms_process_mining.ProcessMiningAlgorithm;
 import projeto.algorithms_process_mining.alpha_algorithm.AlphaAlgorithm;
 import projeto.algorithms_process_mining.heuristic_miner.HeuristicMiner;
@@ -449,10 +454,13 @@ public class ConformanceServ
     @GET
     @UnitOfWork
     @Path("/InductiveMinerTest")
-    public Response getActivitiesResourcesMouldsByProcessID( )
+    public Response getIvMModel( )
     {
-        eventBean.getEventTree();
-        return Response.status(Response.Status.OK).build();
+        //ProcessTree tree = eventBean.getEventTree();
+        IvMModel model = eventBean.getIvMModel();
+
+
+        return Response.status(Response.Status.OK).entity(model.getTree()).build();
     }
 }
 

@@ -31,6 +31,8 @@
     <orderEntry type="library" name="InductiveMiner" level="project" />
     <orderEntry type="library" name="InductiveMinerDeprecated" level="project" />
     <orderEntry type="library" name="Properties" level="project" />
+    <orderEntry type="library" name="InductiveVisualMiner" level="project" />
+    <orderEntry type="library" name="DirectlyFollowsModelMiner" level="project" />
     <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-core:2.0.2" level="project" />
     <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-util:2.0.2" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.10.2" level="project" />
@@ -217,6 +219,8 @@
     <orderEntry type="library" name="Maven: www.processmining.org:Properties:6.9.106" level="project" />
     <orderEntry type="library" name="Maven: www.processmining.org:InductiveMiner:6.10.566" level="project" />
     <orderEntry type="library" name="Maven: www.processmining.org:InductiveMinerDeprecated:6.10.72" level="project" />
+    <orderEntry type="library" name="Maven: www.processmining.org:InductiveVisualMiner:6.10.822" level="project" />
+    <orderEntry type="library" name="Maven: www.processmining.org:DirectlyFollowsModelMiner:6.10.36" level="project" />
     <orderEntry type="library" name="Maven: www.processmining.org:ProcessTree:6.9.98" level="project" />
   </component>
 </module>

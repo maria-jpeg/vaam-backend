@@ -2,6 +2,7 @@ package projeto.controller;
 
 import org.deckfour.xes.model.XLog;
 import org.joda.time.DateTime;
+import org.processmining.plugins.inductiveVisualMiner.helperClasses.IvMModel;
 import org.processmining.processtree.ProcessTree;
 import projeto.algorithms_process_mining.inductive_miner.InductiveMiner;
 import projeto.api.dtos.entities.*;
@@ -98,9 +99,21 @@ public class EventBean extends BaseBean<Event, EventDTO> {
         String csvContent = XESHelper.eventsToCsv(events);
         XLog log = XESHelper.eventsCsvToXes(csvContent);
 
-        algo.miner(log);
+        ProcessTree tree = algo.miner(log);
+        algo.minerEfficientTree(log);
 
-        return null;
+        return tree;
+    }
+
+    public IvMModel getIvMModel(){
+        List<Event> events = eventDAO.getAll();;
+
+        String csvContent = XESHelper.eventsToCsv(events);
+        XLog log = XESHelper.eventsCsvToXes(csvContent);
+
+        IvMModel model = InductiveMiner.minerEfficientTree(log);
+
+        return model;
     }
 
     /*@Override

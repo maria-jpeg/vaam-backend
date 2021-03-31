@@ -484,6 +484,18 @@
             <artifactId>InductiveMinerDeprecated</artifactId>
             <version>6.10.72</version>
         </dependency>
+        <!--InductiveVisualMiner.jar-->
+        <dependency>
+            <groupId>www.processmining.org</groupId>
+            <artifactId>InductiveVisualMiner</artifactId>
+            <version>6.10.822</version>
+        </dependency>
+        <!--DirectlyFollowsModelMiner.jar-->
+        <dependency>
+            <groupId>www.processmining.org</groupId>
+            <artifactId>DirectlyFollowsModelMiner</artifactId>
+            <version>6.10.36</version>
+        </dependency>
 
         <!--ProcessTree-->
         <dependency>
