@@ -396,6 +396,54 @@
             <version>3.0.0</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.univocity/univocity-parsers -->
+        <!-- utilizado pelo Log.jar -->
+        <dependency>
+            <groupId>com.univocity</groupId>
+            <artifactId>univocity-parsers</artifactId>
+            <version>2.1.1</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+        <!-- utilizado pelo Log.jar -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.5</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.googlecode.juniversalchardet/juniversalchardet -->
+        <!-- utilizado pelo Log.jar -->
+        <dependency>
+            <groupId>com.googlecode.juniversalchardet</groupId>
+            <artifactId>juniversalchardet</artifactId>
+            <version>1.0.3</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.ning/compress-lzf -->
+        <!-- utilizado pelo Log.jar -->
+        <dependency>
+            <groupId>com.ning</groupId>
+            <artifactId>compress-lzf</artifactId>
+            <version>1.1</version>
+        </dependency>
+
+
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.util/java-merge-sort -->
+        <!-- utilizado pelo ProM-Framework.jar -->
+        <dependency>
+            <groupId>com.fasterxml.util</groupId>
+            <artifactId>java-merge-sort</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/net.sf.trove4j/trove4j -->
+        <!--Utilizado pelo InductiveMiner/InductiveMinerDeprecated-->
+        <dependency>
+            <groupId>net.sf.trove4j</groupId>
+            <artifactId>trove4j</artifactId>
+            <version>3.0.3</version>
+        </dependency>
 
         <!--##########################Locais?#################################### -->
         <!-- Estas precisam de ser instaladas no repositorio local ver: https://maven.apache.org/guides/mini/guide-3rd-party-jars-local.html-->
@@ -404,29 +452,48 @@
             <artifactId>OpenXES</artifactId>
             <version>2.26</version>
         </dependency>
+        <!--Log jar file-->
+        <dependency>
+            <groupId>www.processmining.org</groupId>
+            <artifactId>Log</artifactId>
+            <version>6.10.392</version>
+        </dependency>
+        <!--ProM-Framework jar file-->
+        <dependency>
+            <groupId>www.processmining.org</groupId>
+            <artifactId>ProM-Framework</artifactId>
+            <version>0.9-alpha</version>
+        </dependency>
+        <!--Properties jar file-->
+        <dependency>
+            <groupId>www.processmining.org</groupId>
+            <artifactId>Properties</artifactId>
+            <version>6.9.106</version>
+        </dependency>
 
+        <!--InductiveMiner.jar Este é o plugin (inductiveminer2)-->
         <dependency>
-            <groupId>inductive-miner</groupId>
+            <groupId>www.processmining.org</groupId>
             <artifactId>InductiveMiner</artifactId>
-            <version>1</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/libs/InductiveMinerDeprecated.jar</systemPath>
+            <version>6.10.566</version>
         </dependency>
+
+        <!--InductiveMinerDeprecated.jar-->
         <dependency>
-            <groupId>process-tree</groupId>
+            <groupId>www.processmining.org</groupId>
+            <artifactId>InductiveMinerDeprecated</artifactId>
+            <version>6.10.72</version>
+        </dependency>
+
+        <!--ProcessTree-->
+        <dependency>
+            <groupId>www.processmining.org</groupId>
             <artifactId>ProcessTree</artifactId>
-            <version>1</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/libs/ProcessTree.jar</systemPath>
+            <version>6.9.98</version>
         </dependency>
-        <dependency>
-            <groupId>prom-framework</groupId>
-            <artifactId>ProMFramework</artifactId>
-            <version>1</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/libs/ProM-Framework.jar</systemPath>
-        </dependency>
+
     </dependencies>
+
     <!--Repositorio local-->
     <repositories>
         <repository>

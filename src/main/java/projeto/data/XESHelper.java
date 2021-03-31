@@ -1,37 +1,27 @@
 package projeto.data;
 
+import com.google.common.collect.ImmutableList;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.deckfour.xes.factory.XFactory;
-import org.deckfour.xes.factory.XFactoryRegistry;
-import org.deckfour.xes.in.XesXmlParser;
 import org.deckfour.xes.model.XLog;
-import org.joda.time.DateTime;
-import org.processmining.plugins.InductiveMiner.mining.logs.IMLog;
-import projeto.controller.Utils;
-import projeto.controller.exceptions.ParsingException;
+import org.processmining.log.csv.CSVFileReferenceUnivocityImpl;
+import org.processmining.log.csv.ICSVReader;
+import org.processmining.log.csv.config.CSVConfig;
+import org.processmining.log.csvimport.CSVConversion;
+import org.processmining.log.csvimport.config.CSVConversionConfig;
 import projeto.core.Event;
-
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.StringWriter;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.jar.JarException;
+import java.io.*;
+import java.util.*;
 
 public class XESHelper
 {
 
-    public static IMLog eventsToIMLog(List<Event> events) throws JAXBException {
+    public static String eventsToXml(List<Event> events) throws JAXBException {
         //passar evento para xml?
         JAXBContext jaxbContext = JAXBContext.newInstance(EventPOJOList.class);
         Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
@@ -47,7 +37,7 @@ public class XESHelper
         xmlString = sw.toString();
         //Passar de xml para XES?
 
-        XesXmlParser parser = new XesXmlParser();
+        /*XesXmlParser parser = new XesXmlParser();
 
         //passar string para stream de bytes para o parse
 
@@ -61,7 +51,68 @@ public class XESHelper
         }
 
 
-        System.out.println(xmlString);
+        //System.out.println(xmlString);
+
+         */
+        return xmlString;
+    }
+
+    public static String eventsToCsv(List<Event> events){
+        StringBuilder csvString = new StringBuilder("id,activity,process,mouldCode,partCode,startDate,endDate,duration,isEstimatedEnd,workstation\n");
+        List<EventPOJO> eventPOJOSList = EventPOJO.eventListToPojoList(events);
+        for (EventPOJO eventPOJO : eventPOJOSList) {
+            csvString.append(eventPOJO.getId()).append(",");
+            csvString.append(eventPOJO.getActivity()).append(",");
+            csvString.append(eventPOJO.getProcess()).append(",");
+            csvString.append(eventPOJO.getMould()).append(",");
+            csvString.append(eventPOJO.getPart()).append(",");
+            csvString.append(eventPOJO.getStartDate()).append(",");
+            csvString.append(eventPOJO.getEndDate()).append(",");
+            csvString.append(eventPOJO.getDuration()).append(",");
+            csvString.append(eventPOJO.getIsEstimatedEnd()).append(",");
+            csvString.append(eventPOJO.getWorkstation()).append("\n");
+        }
+        return csvString.toString();
+    }
+
+    public static XLog eventsCsvToXes(String csvString){
+        File tempFile;
+        CSVFileReferenceUnivocityImpl csvFile;
+        try{
+            //Escrever para ficheiro temp
+            tempFile = File.createTempFile("events-", ".csv");
+            tempFile.deleteOnExit();
+            BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile.getPath(), true));
+            writer.append(csvString);
+            writer.close();
+            //Ler do ficheiro temp e converter
+            csvFile = new CSVFileReferenceUnivocityImpl(tempFile.toPath());
+            CSVConfig config = new CSVConfig(csvFile);
+            ICSVReader reader = csvFile.createReader(config);
+            CSVConversion conversion = new CSVConversion();
+            CSVConversionConfig conversionConfig = new CSVConversionConfig(csvFile, config);
+            conversionConfig.autoDetect();
+
+            //conversionConfig.setCaseColumns(ImmutableList.of("case"));
+            conversionConfig.setCaseColumns(ImmutableList.of("process"));
+            conversionConfig.setEventNameColumns(ImmutableList.of("activity"));
+            conversionConfig.setCompletionTimeColumn("endDate");
+            conversionConfig.setEmptyCellHandlingMode(CSVConversionConfig.CSVEmptyCellHandlingMode.SPARSE);
+            conversionConfig.setErrorHandlingMode(CSVConversionConfig.CSVErrorHandlingMode.ABORT_ON_ERROR);
+            Map<String, CSVConversionConfig.CSVMapping> conversionMap = conversionConfig.getConversionMap();
+            CSVConversionConfig.CSVMapping mapping = conversionMap.get("endDate");
+            mapping.setDataType(CSVConversionConfig.Datatype.TIME);
+            mapping.setPattern("dd-MM-yyyy HH:mm:ss.SSS");
+
+            CSVConversion.ConversionResult<XLog> result = conversion.doConvertCSVToXES(new CSVConversion.NoOpProgressListenerImpl(), csvFile, config,
+                    conversionConfig);
+
+            XLog log = result.getResult();
+            return log;
+
+        }catch (Exception e){
+            System.out.println("Erro a escrever ficheiro: "+e);
+        }
         return null;
     }
 
@@ -196,19 +247,19 @@ class EventPOJO
         if (event.getPart() != null){
             this.part = event.getPart().getCode();
         }else{
-            this.part = "";
+            this.part = "null";
         }
         this.process = event.getProcess().getName();
         this.activity = event.getActivity().getName();
         if (event.getIsEstimatedEnd() != null){
             this.isEstimatedEnd = event.getIsEstimatedEnd().toString();
         }else{
-            this.isEstimatedEnd = "";
+            this.isEstimatedEnd = "null";
         }
         if (event.getWorkstation() != null){
             this.workstation = event.getWorkstation().getName();
         }else{
-            this.workstation = "";
+            this.workstation = "null";
         }
     }
 

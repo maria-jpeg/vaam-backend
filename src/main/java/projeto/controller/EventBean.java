@@ -1,5 +1,6 @@
 package projeto.controller;
 
+import org.deckfour.xes.model.XLog;
 import org.joda.time.DateTime;
 import org.processmining.processtree.ProcessTree;
 import projeto.algorithms_process_mining.inductive_miner.InductiveMiner;
@@ -91,14 +92,14 @@ public class EventBean extends BaseBean<Event, EventDTO> {
 
     public ProcessTree getEventTree(){
         List<Event> events = eventDAO.getAll();
-        //InductiveMiner algo = new InductiveMiner();
+        InductiveMiner algo = new InductiveMiner();
 
-        try {
-            XESHelper.eventsToIMLog(events);
-        }catch (JAXBException ex){
-            System.out.println( "EX: "+ex);
-        }
-        //algo.miner();
+
+        String csvContent = XESHelper.eventsToCsv(events);
+        XLog log = XESHelper.eventsCsvToXes(csvContent);
+
+        algo.miner(log);
+
         return null;
     }
 

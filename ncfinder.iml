@@ -24,10 +24,13 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="InductiveMinerDeprecated" level="project" />
     <orderEntry type="library" name="ProcessTree" level="project" />
     <orderEntry type="library" name="ProM-Framework" level="project" />
     <orderEntry type="library" name="OpenXES-20181205" level="project" />
+    <orderEntry type="library" name="Log" level="project" />
+    <orderEntry type="library" name="InductiveMiner" level="project" />
+    <orderEntry type="library" name="InductiveMinerDeprecated" level="project" />
+    <orderEntry type="library" name="Properties" level="project" />
     <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-core:2.0.2" level="project" />
     <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-util:2.0.2" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.10.2" level="project" />
@@ -202,33 +205,18 @@
     <orderEntry type="library" name="Maven: com.sun.xml.bind:jaxb-core:3.0.0" level="project" />
     <orderEntry type="library" name="Maven: com.sun.activation:jakarta.activation:2.0.0" level="project" />
     <orderEntry type="library" name="Maven: com.sun.xml.bind:jaxb-impl:3.0.0" level="project" />
+    <orderEntry type="library" name="Maven: com.univocity:univocity-parsers:2.1.1" level="project" />
+    <orderEntry type="library" name="Maven: commons-io:commons-io:2.5" level="project" />
+    <orderEntry type="library" name="Maven: com.googlecode.juniversalchardet:juniversalchardet:1.0.3" level="project" />
+    <orderEntry type="library" name="Maven: com.ning:compress-lzf:1.1" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.util:java-merge-sort:1.0.2" level="project" />
+    <orderEntry type="library" name="Maven: net.sf.trove4j:trove4j:3.0.3" level="project" />
     <orderEntry type="library" name="Maven: org.deckfour.xes:OpenXES:2.26" level="project" />
-    <orderEntry type="module-library">
-      <library name="Maven: inductive-miner:InductiveMiner:1">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/libs/InductiveMinerDeprecated.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="Maven: process-tree:ProcessTree:1">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/libs/ProcessTree.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="Maven: prom-framework:ProMFramework:1">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/libs/ProM-Framework.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
+    <orderEntry type="library" name="Maven: www.processmining.org:Log:6.10.392" level="project" />
+    <orderEntry type="library" name="Maven: www.processmining.org:ProM-Framework:0.9-alpha" level="project" />
+    <orderEntry type="library" name="Maven: www.processmining.org:Properties:6.9.106" level="project" />
+    <orderEntry type="library" name="Maven: www.processmining.org:InductiveMiner:6.10.566" level="project" />
+    <orderEntry type="library" name="Maven: www.processmining.org:InductiveMinerDeprecated:6.10.72" level="project" />
+    <orderEntry type="library" name="Maven: www.processmining.org:ProcessTree:6.9.98" level="project" />
   </component>
 </module>

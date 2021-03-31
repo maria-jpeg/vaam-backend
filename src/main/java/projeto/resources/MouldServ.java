@@ -50,8 +50,6 @@ public class MouldServ {
     public Response getMoulds() {
 
         List<Mould> moulds  = mouldBean.getAll();
-        //AQUI IM
-        eventBean.getEventTree();
 
         return Response.status(Response.Status.OK)
                 .entity(mouldBean.toDTOsList(moulds))

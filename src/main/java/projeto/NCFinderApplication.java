@@ -112,7 +112,7 @@ public class NCFinderApplication extends Application<NCFinderConfiguration> {
         LogServ logServ = new LogServ( logBean );
         ProcessServ processServ = new ProcessServ( processBean, activityBean, userBean, workstationBean);
         WorkflowNetworkServ workflowNetworkServ = new WorkflowNetworkServ( logBean, processBean );
-        ConformanceServ conformanceServ = new ConformanceServ( conformanceBean );
+        ConformanceServ conformanceServ = new ConformanceServ( conformanceBean,eventBean );
         ResourceServ resourceServ = new ResourceServ( resourceBean, jwtBean );
         EventServ eventServ = new EventServ( eventBean, activityBean, processBean, mouldBean, partBean );
         MouldServ mouldServ = new MouldServ( mouldBean, partBean ,activityBean,eventBean);

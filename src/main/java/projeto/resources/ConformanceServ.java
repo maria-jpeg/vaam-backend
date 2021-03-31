@@ -12,6 +12,7 @@ import projeto.api.dtos.conformance.FiltersDTO;
 import projeto.api.dtos.conformance.deviations.ConformanceNetworkDeviationsDTO;
 import projeto.api.dtos.conformance.performance.ConformanceNetworkPerformanceDTO;
 import projeto.controller.ConformanceBean;
+import projeto.controller.EventBean;
 import projeto.controller.ProcessBean;
 import projeto.controller.exceptions.EntityDoesNotExistException;
 import projeto.controller.exceptions.MyException;
@@ -40,7 +41,10 @@ public class ConformanceServ
 {
     private final ConformanceBean conformanceBean;
 
-    public ConformanceServ(ConformanceBean conformanceBean) { this.conformanceBean = conformanceBean; }
+    //im testing
+    private final EventBean eventBean;
+
+    public ConformanceServ(ConformanceBean conformanceBean, EventBean eventBean) { this.conformanceBean = conformanceBean; this.eventBean = eventBean; }
 
     /*@ApiOperation( value = "Conformance of the Performance with Alpha Miner of a log giving other log", response = ConformanceNetworkPerformanceDTO.class)
     @ApiResponses(value = {@ApiResponse(code = 404, message = "Log or Log model not found") })
@@ -441,5 +445,14 @@ public class ConformanceServ
         }
     }
 
+    @ApiOperation( value = "Endpoint for testing")
+    @GET
+    @UnitOfWork
+    @Path("/InductiveMinerTest")
+    public Response getActivitiesResourcesMouldsByProcessID( )
+    {
+        eventBean.getEventTree();
+        return Response.status(Response.Status.OK).build();
+    }
 }
 
