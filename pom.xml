@@ -519,7 +519,7 @@
     <repositories>
         <repository>
             <id>localrepository</id>
-            <url>file://${project.basedir}\localrepository</url>
+            <url>file://localrepository</url>
         </repository>
     </repositories>
     <!-- =========================================================================================================== -->
