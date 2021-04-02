@@ -445,6 +445,7 @@
             <version>3.0.3</version>
         </dependency>
 
+
         <!--##########################Locais?#################################### -->
         <!-- Estas precisam de ser instaladas no repositorio local ver: https://maven.apache.org/guides/mini/guide-3rd-party-jars-local.html-->
         <dependency>
@@ -464,6 +465,7 @@
             <artifactId>ProM-Framework</artifactId>
             <version>0.9-alpha</version>
         </dependency>
+
         <!--Properties jar file-->
         <dependency>
             <groupId>www.processmining.org</groupId>
@@ -503,6 +505,14 @@
             <artifactId>ProcessTree</artifactId>
             <version>6.9.98</version>
         </dependency>
+        <!--Graphviz.jar-->
+        <dependency>
+            <groupId>www.processmining.org</groupId>
+            <artifactId>GraphViz</artifactId>
+            <version>6.10.299</version>
+        </dependency>
+
+
 
     </dependencies>
 

@@ -1,11 +1,13 @@
 package projeto.controller;
 
 import org.deckfour.xes.model.XLog;
-import org.joda.time.DateTime;
+import org.processmining.plugins.graphviz.dot.Dot;
 import org.processmining.plugins.inductiveVisualMiner.helperClasses.IvMModel;
+import org.processmining.plugins.inductiveVisualMiner.plugins.GraphvizProcessTree;
 import org.processmining.processtree.ProcessTree;
 import projeto.algorithms_process_mining.inductive_miner.InductiveMiner;
 import projeto.api.dtos.entities.*;
+import projeto.api.dtos.inductiveminer.IvMModelDTO;
 import projeto.controller.exceptions.EntityDoesNotExistException;
 import projeto.core.*;
 import projeto.core.Process;
@@ -91,7 +93,8 @@ public class EventBean extends BaseBean<Event, EventDTO> {
         return eventDTOSFullUsers;
     }
 
-    public ProcessTree getEventTree(){
+    public String getEventTree() throws GraphvizProcessTree.NotYetImplementedException
+    {
         List<Event> events = eventDAO.getAll();
         InductiveMiner algo = new InductiveMiner();
 
@@ -100,12 +103,16 @@ public class EventBean extends BaseBean<Event, EventDTO> {
         XLog log = XESHelper.eventsCsvToXes(csvContent);
 
         ProcessTree tree = algo.miner(log);
-        algo.minerEfficientTree(log);
+        //TreeLayoutBuilderWrapper wrapper = new TreeLayoutBuilderWrapper(tree,null);
+        //wrapper.getJGraph();
 
-        return tree;
+
+        Dot dot = GraphvizProcessTree.convert(tree);
+
+        return dot.toString();
     }
 
-    public IvMModel getIvMModel(){
+    public IvMModelDTO getIvMModel(){
         List<Event> events = eventDAO.getAll();;
 
         String csvContent = XESHelper.eventsToCsv(events);
@@ -113,7 +120,8 @@ public class EventBean extends BaseBean<Event, EventDTO> {
 
         IvMModel model = InductiveMiner.minerEfficientTree(log);
 
-        return model;
+        IvMModelDTO modelDTO = new IvMModelDTO(model);
+        return modelDTO;
     }
 
     /*@Override

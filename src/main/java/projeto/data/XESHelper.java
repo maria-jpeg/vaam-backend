@@ -20,7 +20,7 @@ import java.util.*;
 
 public class XESHelper
 {
-
+    /*
     public static String eventsToXml(List<Event> events) throws JAXBException {
         //passar evento para xml?
         JAXBContext jaxbContext = JAXBContext.newInstance(EventPOJOList.class);
@@ -35,27 +35,10 @@ public class XESHelper
         EventPOJOList eventPOJOList = new EventPOJOList(eventPOJOS);
         jaxbMarshaller.marshal(eventPOJOList,sw);
         xmlString = sw.toString();
-        //Passar de xml para XES?
 
-        /*XesXmlParser parser = new XesXmlParser();
-
-        //passar string para stream de bytes para o parse
-
-        InputStream xmlStringStream = new ByteArrayInputStream(xmlString.getBytes(StandardCharsets.UTF_8));
-        try {
-            List<XLog> xlog = parser.parse(xmlStringStream);
-            System.out.println("breakpoint");
-        }
-        catch (Exception e) {
-            System.out.println("Erro a tranformar xml em xes."+e);
-        }
-
-
-        //System.out.println(xmlString);
-
-         */
         return xmlString;
     }
+    */
 
     public static String eventsToCsv(List<Event> events){
         StringBuilder csvString = new StringBuilder("id,activity,process,mouldCode,partCode,startDate,endDate,duration,isEstimatedEnd,workstation\n");
@@ -81,7 +64,7 @@ public class XESHelper
         try{
             //Escrever para ficheiro temp
             tempFile = File.createTempFile("events-", ".csv");
-            tempFile.deleteOnExit();
+
             BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile.getPath(), true));
             writer.append(csvString);
             writer.close();
@@ -96,18 +79,30 @@ public class XESHelper
             //conversionConfig.setCaseColumns(ImmutableList.of("case"));
             conversionConfig.setCaseColumns(ImmutableList.of("process"));
             conversionConfig.setEventNameColumns(ImmutableList.of("activity"));
+
+            conversionConfig.setStartTimeColumn("startDate");
             conversionConfig.setCompletionTimeColumn("endDate");
             conversionConfig.setEmptyCellHandlingMode(CSVConversionConfig.CSVEmptyCellHandlingMode.SPARSE);
             conversionConfig.setErrorHandlingMode(CSVConversionConfig.CSVErrorHandlingMode.ABORT_ON_ERROR);
             Map<String, CSVConversionConfig.CSVMapping> conversionMap = conversionConfig.getConversionMap();
-            CSVConversionConfig.CSVMapping mapping = conversionMap.get("endDate");
-            mapping.setDataType(CSVConversionConfig.Datatype.TIME);
-            mapping.setPattern("dd-MM-yyyy HH:mm:ss.SSS");
+
+
+            CSVConversionConfig.CSVMapping mappingStartDate = conversionMap.get("startDate");
+            mappingStartDate.setDataType(CSVConversionConfig.Datatype.TIME);
+            mappingStartDate.setPattern("dd-MM-yyyy HH:mm:ss.SSS");
+
+            CSVConversionConfig.CSVMapping mappingEndDate = conversionMap.get("endDate");
+            mappingEndDate.setDataType(CSVConversionConfig.Datatype.TIME);
+            mappingEndDate.setPattern("dd-MM-yyyy HH:mm:ss.SSS");
 
             CSVConversion.ConversionResult<XLog> result = conversion.doConvertCSVToXES(new CSVConversion.NoOpProgressListenerImpl(), csvFile, config,
                     conversionConfig);
 
+
+            tempFile.delete();
+
             XLog log = result.getResult();
+
             return log;
 
         }catch (Exception e){
@@ -273,6 +268,7 @@ class EventPOJO
         return pojoList;
     }
 }
+/*
 //Lista de eventos simples para serializar em xml
 @Getter
 @Setter
@@ -285,3 +281,4 @@ class EventPOJOList{
         this.event = events;
     }
 }
+*/

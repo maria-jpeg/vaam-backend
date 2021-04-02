@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.*;
 import org.processmining.plugins.inductiveVisualMiner.helperClasses.IvMModel;
+import org.processmining.plugins.inductiveVisualMiner.plugins.GraphvizProcessTree;
 import org.processmining.processtree.ProcessTree;
 import projeto.algorithms_process_mining.ProcessMiningAlgorithm;
 import projeto.algorithms_process_mining.alpha_algorithm.AlphaAlgorithm;
@@ -16,6 +17,7 @@ import projeto.api.dtos.conformance.CasePerformanceDTO;
 import projeto.api.dtos.conformance.FiltersDTO;
 import projeto.api.dtos.conformance.deviations.ConformanceNetworkDeviationsDTO;
 import projeto.api.dtos.conformance.performance.ConformanceNetworkPerformanceDTO;
+import projeto.api.dtos.inductiveminer.IvMModelDTO;
 import projeto.controller.ConformanceBean;
 import projeto.controller.EventBean;
 import projeto.controller.ProcessBean;
@@ -456,11 +458,19 @@ public class ConformanceServ
     @Path("/InductiveMinerTest")
     public Response getIvMModel( )
     {
-        //ProcessTree tree = eventBean.getEventTree();
-        IvMModel model = eventBean.getIvMModel();
+        try{
+            String dotString = eventBean.getEventTree();
+            return Response.status(Response.Status.OK).entity(dotString).build();
+
+        }catch (GraphvizProcessTree.NotYetImplementedException e)
+        {
+            System.out.println("Not Yet implemented "+e);
+        }
+        //IvMModelDTO model = eventBean.getIvMModel();
 
 
-        return Response.status(Response.Status.OK).entity(model.getTree()).build();
+
+        return Response.status(Response.Status.BAD_REQUEST).build();
     }
 }
 
