@@ -14,7 +14,7 @@ import java.util.Set;
 
 public class InductiveMiner {
 
-    public ProcessTree miner(XLog xLog){
+    public static ProcessTree miner(XLog xLog){
 
         //https://svn.win.tue.nl/repos/prom/Packages/InductiveMinerDeprecated/Trunk/src/org/processmining/plugins/InductiveMiner/plugins/IM.java
 

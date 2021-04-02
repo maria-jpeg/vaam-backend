@@ -7,7 +7,7 @@ import org.processmining.plugins.inductiveVisualMiner.plugins.GraphvizProcessTre
 import org.processmining.processtree.ProcessTree;
 import projeto.algorithms_process_mining.inductive_miner.InductiveMiner;
 import projeto.api.dtos.entities.*;
-import projeto.api.dtos.inductiveminer.IvMModelDTO;
+import projeto.api.dtos.inductiveminer.DotDTO;
 import projeto.controller.exceptions.EntityDoesNotExistException;
 import projeto.core.*;
 import projeto.core.Process;
@@ -16,7 +16,6 @@ import projeto.data.EventDAO;
 import projeto.data.XESHelper;
 import projeto.resources.EventServ;
 
-import javax.xml.bind.JAXBException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -93,35 +92,17 @@ public class EventBean extends BaseBean<Event, EventDTO> {
         return eventDTOSFullUsers;
     }
 
-    public String getEventTree() throws GraphvizProcessTree.NotYetImplementedException
+    public DotDTO getEventTree() throws GraphvizProcessTree.NotYetImplementedException
     {
         List<Event> events = eventDAO.getAll();
-        InductiveMiner algo = new InductiveMiner();
-
 
         String csvContent = XESHelper.eventsToCsv(events);
         XLog log = XESHelper.eventsCsvToXes(csvContent);
 
-        ProcessTree tree = algo.miner(log);
-        //TreeLayoutBuilderWrapper wrapper = new TreeLayoutBuilderWrapper(tree,null);
-        //wrapper.getJGraph();
-
-
+        ProcessTree tree = InductiveMiner.miner(log);
         Dot dot = GraphvizProcessTree.convert(tree);
-
-        return dot.toString();
-    }
-
-    public IvMModelDTO getIvMModel(){
-        List<Event> events = eventDAO.getAll();;
-
-        String csvContent = XESHelper.eventsToCsv(events);
-        XLog log = XESHelper.eventsCsvToXes(csvContent);
-
-        IvMModel model = InductiveMiner.minerEfficientTree(log);
-
-        IvMModelDTO modelDTO = new IvMModelDTO(model);
-        return modelDTO;
+        DotDTO dotDTO = new DotDTO(dot.getNodes(),dot.getEdges());
+        return dotDTO;
     }
 
     /*@Override

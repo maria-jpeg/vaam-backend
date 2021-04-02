@@ -1,14 +1,9 @@
 package projeto.resources;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.*;
-import org.processmining.plugins.inductiveVisualMiner.helperClasses.IvMModel;
 import org.processmining.plugins.inductiveVisualMiner.plugins.GraphvizProcessTree;
-import org.processmining.processtree.ProcessTree;
 import projeto.algorithms_process_mining.ProcessMiningAlgorithm;
 import projeto.algorithms_process_mining.alpha_algorithm.AlphaAlgorithm;
 import projeto.algorithms_process_mining.heuristic_miner.HeuristicMiner;
@@ -17,7 +12,7 @@ import projeto.api.dtos.conformance.CasePerformanceDTO;
 import projeto.api.dtos.conformance.FiltersDTO;
 import projeto.api.dtos.conformance.deviations.ConformanceNetworkDeviationsDTO;
 import projeto.api.dtos.conformance.performance.ConformanceNetworkPerformanceDTO;
-import projeto.api.dtos.inductiveminer.IvMModelDTO;
+import projeto.api.dtos.inductiveminer.DotDTO;
 import projeto.controller.ConformanceBean;
 import projeto.controller.EventBean;
 import projeto.controller.ProcessBean;
@@ -456,21 +451,16 @@ public class ConformanceServ
     @GET
     @UnitOfWork
     @Path("/InductiveMinerTest")
-    public Response getIvMModel( )
+    public Response getProcessTree( )
     {
         try{
-            String dotString = eventBean.getEventTree();
-            return Response.status(Response.Status.OK).entity(dotString).build();
+            DotDTO dotDTO = eventBean.getEventTree();
+            return Response.status(Response.Status.OK).entity(dotDTO).build();
 
         }catch (GraphvizProcessTree.NotYetImplementedException e)
         {
-            System.out.println("Not Yet implemented "+e);
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
-        //IvMModelDTO model = eventBean.getIvMModel();
-
-
-
-        return Response.status(Response.Status.BAD_REQUEST).build();
     }
 }
 
