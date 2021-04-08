@@ -3,6 +3,7 @@ package projeto.resources;
 
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.*;
+import org.processmining.plugins.directlyfollowsgraph.DirectlyFollowsGraph;
 import org.processmining.plugins.inductiveVisualMiner.plugins.GraphvizProcessTree;
 import projeto.algorithms_process_mining.ProcessMiningAlgorithm;
 import projeto.algorithms_process_mining.alpha_algorithm.AlphaAlgorithm;
@@ -455,7 +456,9 @@ public class ConformanceServ
     {
         try{
             DotDTO dotDTO = eventBean.getEventTree();
-            return Response.status(Response.Status.OK).entity(dotDTO).build();
+            DirectlyFollowsGraph graph = eventBean.getDFG();
+            //return Response.status(Response.Status.OK).entity(dotDTO).build();
+            return Response.status(Response.Status.OK).entity(graph).build();
 
         }catch (GraphvizProcessTree.NotYetImplementedException e)
         {

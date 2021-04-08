@@ -6,6 +6,7 @@ import io.swagger.annotations.*;
 import projeto.algorithms_process_mining.ProcessMiningAlgorithm;
 import projeto.algorithms_process_mining.alpha_algorithm.AlphaAlgorithm;
 import projeto.algorithms_process_mining.heuristic_miner.HeuristicMiner;
+import projeto.algorithms_process_mining.inductive_miner.InductiveMiner;
 import projeto.api.dtos.workflow_network.WorkflowNetworkDTO;
 import projeto.controller.LogBean;
 import projeto.controller.ProcessBean;
@@ -126,6 +127,29 @@ public class WorkflowNetworkServ
 
     }
 
+    @ApiOperation( value = "Get the workflow network with Inductive Miner of a process", response = WorkflowNetworkDTO.class)
+    @ApiResponses(value = {@ApiResponse(code = 404, message = "Process not found") })
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @UnitOfWork
+    @Path( "inductive-miner/processes/{processId}" )
+    //@RolesAllowed({"Operador","Gestor","Administrador"})
+    public Response getWorkflowNetworkInductiveMinerProcess(
+            @PathParam("processId") long processId,
+            @ApiParam(value = "threshold value between 0 and 1 | used to consider relations in the footprint if  the heuristic value >= threshold")
+            @QueryParam("threshold")
+            @Min( value = 0, message = "- threshold must be between 0 and 1")
+            @Max( value = 1, message = "- threshold must be between 0 and 1")
+                    Float threshold )
+    {
+        if( threshold == null )
+            threshold = 0.8F;
+
+        InductiveMiner algorithm = new InductiveMiner(threshold);
+        return getWorkflowNetworkByProcessId( processId, algorithm );
+
+    }
+
 
     private Response getWorkflowNetworkByProcessId( long processId, ProcessMiningAlgorithm algorithm )
     {
@@ -140,6 +164,5 @@ public class WorkflowNetworkServ
         }
 
     }
-
 }
 
