@@ -1,6 +1,7 @@
 package projeto.controller;
 
 import org.deckfour.xes.model.XLog;
+import org.processmining.plugins.directlyfollowsgraph.DirectlyFollowsGraph;
 import org.processmining.plugins.graphviz.dot.Dot;
 import org.processmining.plugins.inductiveVisualMiner.helperClasses.IvMModel;
 import org.processmining.plugins.inductiveVisualMiner.plugins.GraphvizProcessTree;
@@ -103,6 +104,16 @@ public class EventBean extends BaseBean<Event, EventDTO> {
         Dot dot = GraphvizProcessTree.convert(tree);
         DotDTO dotDTO = new DotDTO(dot.getNodes(),dot.getEdges());
         return dotDTO;
+    }
+
+    public DirectlyFollowsGraph getDFG(){
+        List<Event> events = eventDAO.getAll();
+
+        String csvContent = XESHelper.eventsToCsv(events);
+        XLog log = XESHelper.eventsCsvToXes(csvContent);
+
+        DirectlyFollowsGraph dfg = InductiveMiner.mineDFG(log);
+        return dfg;
     }
 
     /*@Override
