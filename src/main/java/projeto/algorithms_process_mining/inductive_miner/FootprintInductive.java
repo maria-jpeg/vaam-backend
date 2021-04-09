@@ -19,8 +19,6 @@ public class FootprintInductive extends FootprintMatrix {
 
     private InductiveMiner inductiveMiner;
 
-    protected Long[][] footprint;
-
     private DirectlyFollowsGraph dfg;
 
     public FootprintInductive(InductiveMiner algorithm, List<Event> events, LinkedHashSet<String> eventNames, boolean statistics) {
@@ -34,7 +32,6 @@ public class FootprintInductive extends FootprintMatrix {
         super.eventNames = new LinkedHashSet<>(Arrays.asList(dfg.getAllActivities()));
 
         //Get start and end activities from dfg
-
         for (Integer startActivity : dfg.getStartActivities()) {
             super.startEvents.put(startActivity,(int) dfg.getStartActivities().getCardinalityOf(startActivity));
         }
@@ -42,9 +39,7 @@ public class FootprintInductive extends FootprintMatrix {
             super.endEvents.put(endActivity,(int) dfg.getEndActivities().getCardinalityOf(endActivity));
         }
 
-        //extractStartEndEvents(events);
-
-        //FootprintStatistics footprintStatistics = new FootprintStatistics(this);
+        footprintStatistics.setFrequencyFromDfg(dfg);
     }
 
     private XLog getEventLog(List<Event> events){

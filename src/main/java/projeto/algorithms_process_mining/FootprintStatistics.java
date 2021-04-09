@@ -5,6 +5,7 @@ import lombok.Getter;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.util.Precision;
+import org.processmining.plugins.directlyfollowsgraph.DirectlyFollowsGraph;
 import projeto.api.dtos.DurationDTO;
 import projeto.api.dtos.workflow_network.NodeStats;
 import projeto.api.dtos.workflow_network.RelationMapDTO;
@@ -63,6 +64,17 @@ public class FootprintStatistics
         }
         // WARNING !!!
         // Arrays.fill( taskDurations, new DescriptiveStatistics() );
+    }
+
+    public void setFrequencyFromDfg(DirectlyFollowsGraph dfg){
+
+        for (int i = 0; i < numberOfEvents; i++)
+        {
+            for (int j = 0; j < numberOfEvents; j++)
+            {
+                frequency[i][j] = (int)dfg.getDirectlyFollowsGraph().getEdgeWeight(i,j);
+            }
+        }
     }
 
     public void processFollowedEvents(Event currentEvent, Event nextEvent, int currentEventNum, int nextEventNum )
