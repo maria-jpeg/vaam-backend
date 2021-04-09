@@ -5,6 +5,7 @@ import projeto.algorithms_process_mining.ProcessMiningAlgorithm;
 import projeto.api.dtos.workflow_network.WorkflowNetworkDTO;
 import projeto.core.Event;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -16,7 +17,7 @@ import java.util.Set;
 public class AlphaAlgorithm implements ProcessMiningAlgorithm
 {
 
-    public WorkflowNetworkDTO discoverWorkflowNetwork(List<List<Event>> eventsListSet, Set<String> eventNamesList )
+    public WorkflowNetworkDTO discoverWorkflowNetwork(List<List<Event>> eventsListSet, LinkedHashSet<String> eventNamesList )
     {
         // Generate footprint matrix from eventsLog
         FootprintAlpha footprint = new FootprintAlpha(this, eventsListSet, eventNamesList, true );
@@ -24,17 +25,17 @@ public class AlphaAlgorithm implements ProcessMiningAlgorithm
         return new WorkflowNetworkDTO( footprint );
     }
 
-    public FootprintMatrix getFootprintStatistics(List<List<Event>> eventsListSet, Set<String> eventNamesList )
+    public FootprintMatrix getFootprintStatistics(List<List<Event>> eventsListSet, LinkedHashSet<String> eventNamesList )
     {
         return new FootprintAlpha(this, eventsListSet, eventNamesList, true );
     }
 
-    public FootprintMatrix getFootprint(List<List<Event>> eventsListSet, Set<String> eventNamesList)
+    public FootprintMatrix getFootprint(List<List<Event>> eventsListSet, LinkedHashSet<String> eventNamesList)
     {
         return new FootprintAlpha(this, eventsListSet, eventNamesList, false );
     }
 
-    public FootprintMatrix getCasesFootprint(List<List<Event>> eventsListSet, Set<String> eventNamesList )
+    public FootprintMatrix getCasesFootprint(List<List<Event>> eventsListSet, LinkedHashSet<String> eventNamesList )
     {
         return new FootprintCases(this, eventsListSet, eventNamesList, true );
     }

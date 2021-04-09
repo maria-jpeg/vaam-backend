@@ -5,6 +5,7 @@ import projeto.algorithms_process_mining.FootprintMatrix;
 import projeto.core.Event;
 
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -22,7 +23,7 @@ public class FootprintAlpha extends FootprintMatrix
     protected RelationType[][] footprint;
 
 
-    public FootprintAlpha(AlphaAlgorithm algorithm, List<List<Event>> eventsListSet, Set<String> eventNames, boolean statistics )
+    public FootprintAlpha(AlphaAlgorithm algorithm, List<List<Event>> eventsListSet, LinkedHashSet<String> eventNames, boolean statistics )
     {
         super( algorithm, eventNames, statistics );
 

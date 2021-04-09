@@ -6,6 +6,7 @@ import projeto.algorithms_process_mining.ProcessMiningAlgorithm;
 import projeto.api.dtos.workflow_network.WorkflowNetworkDTO;
 import projeto.core.Event;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -25,7 +26,7 @@ public class HeuristicMiner implements ProcessMiningAlgorithm
 
     public HeuristicMiner() { setDefaultThreshold(); }
 
-    public WorkflowNetworkDTO discoverWorkflowNetwork(List<List<Event>> eventsListSet, Set<String> eventNamesList )
+    public WorkflowNetworkDTO discoverWorkflowNetwork(List<List<Event>> eventsListSet, LinkedHashSet<String> eventNamesList )
     {
         //System.out.println( "HeuristicMiner" );
 
@@ -35,12 +36,12 @@ public class HeuristicMiner implements ProcessMiningAlgorithm
         return new WorkflowNetworkDTO( footprint );
     }
 
-    public FootprintMatrix getFootprintStatistics(List<List<Event>> eventsListSet, Set<String> eventNamesList )
+    public FootprintMatrix getFootprintStatistics(List<List<Event>> eventsListSet, LinkedHashSet<String> eventNamesList )
     {
         return new FootprintHeuristic(this, eventsListSet, eventNamesList, true );
     }
 
-    public FootprintMatrix getFootprint(List<List<Event>> eventsListSet, Set<String> eventNamesList )
+    public FootprintMatrix getFootprint(List<List<Event>> eventsListSet, LinkedHashSet<String> eventNamesList )
     {
         return new FootprintHeuristic(this, eventsListSet, eventNamesList, false );
     }

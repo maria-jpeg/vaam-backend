@@ -3,16 +3,13 @@ package projeto.algorithms_process_mining;
 import lombok.Getter;
 import projeto.core.Event;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 public abstract class FootprintMatrix implements AlgorithmInfo
 {
     protected ProcessMiningAlgorithm algorithm;
-    protected Set<String> eventNames;
+    protected LinkedHashSet<String> eventNames;
     protected Map<String, Integer> eventNamesMapper = new HashMap<>();
     protected HashMap<Integer, Integer> startEvents = new HashMap<>();
     protected HashMap<Integer, Integer> endEvents = new HashMap<>();
@@ -20,7 +17,7 @@ public abstract class FootprintMatrix implements AlgorithmInfo
     protected boolean statistics;
     protected FootprintStatistics footprintStatistics;
 
-    public FootprintMatrix(ProcessMiningAlgorithm algorithm, Set<String> eventNames, boolean statistics )
+    public FootprintMatrix(ProcessMiningAlgorithm algorithm, LinkedHashSet<String> eventNames, boolean statistics )
     {
         this.algorithm = algorithm;
         this.eventNames = eventNames;

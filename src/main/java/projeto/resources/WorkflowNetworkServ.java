@@ -154,7 +154,13 @@ public class WorkflowNetworkServ
     private Response getWorkflowNetworkByProcessId( long processId, ProcessMiningAlgorithm algorithm )
     {
         try {
-            WorkflowNetworkDTO workflowNetwork = processBean.getWorkFlowNetworkFromProcess( processId, algorithm );
+            WorkflowNetworkDTO workflowNetwork;
+            if (algorithm.getClass() == InductiveMiner.class){
+                workflowNetwork = processBean.getWorkFlowNetworkFromProcess( processId, (InductiveMiner) algorithm );
+            }
+            else{
+                workflowNetwork = processBean.getWorkFlowNetworkFromProcess( processId, algorithm );
+            }
             return Response.ok( workflowNetwork ).build();
         }
         catch ( EntityDoesNotExistException ex)

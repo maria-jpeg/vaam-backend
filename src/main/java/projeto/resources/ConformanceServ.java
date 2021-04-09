@@ -350,7 +350,7 @@ public class ConformanceServ
                         .entity( "Nós (nodes) do processo modelo são obrigatórios" ) .build();
 
             // Check if nodes are unique
-            Set<String> uniqueEventNames = new LinkedHashSet<>(); // LinkedHashSet
+            LinkedHashSet<String> uniqueEventNames = new LinkedHashSet<>(); // LinkedHashSet
             for (String e : eventNames)
             {
                 //System.out.println( e );

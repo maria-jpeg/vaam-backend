@@ -117,7 +117,7 @@ public class ConformanceBean
     {
         // Extract events from logs
 //        List<Event> referenceEventLogs = processBean.getEventsByProcessID( referenceModelProcessId );
-          Set<String> eventNames = new HashSet<>();
+        LinkedHashSet<String> eventNames = new LinkedHashSet<>();
 
         //Extract Event Names
         if(processBean.findById(processId).getSubProcess() != null){ //é processo de molde
@@ -273,7 +273,7 @@ public class ConformanceBean
     /** Get events information
      *  By mould(s) or date range
      */
-    public CasePerformanceDTO getEventsByMouldPerformance( HashMap<String, List<Event>> eventsByMouldCode , Set<String> eventNames )
+    public CasePerformanceDTO getEventsByMouldPerformance( HashMap<String, List<Event>> eventsByMouldCode , LinkedHashSet<String> eventNames )
     {
 
         if( eventsByMouldCode.size() == 0 )
@@ -292,7 +292,7 @@ public class ConformanceBean
 
     }
 
-    public CasePerformanceDTO getEventsByPartPerformance( HashMap<String, List<Event>> eventsByPartCode , Set<String> eventNames )
+    public CasePerformanceDTO getEventsByPartPerformance( HashMap<String, List<Event>> eventsByPartCode , LinkedHashSet<String> eventNames )
     {
 
         if( eventsByPartCode.size() == 0 )
@@ -460,8 +460,8 @@ public class ConformanceBean
         // Extract events from processes
         List<Event> eventsProcess = processBean.getEventsByProcessID(processId);
         List<Event> referenceEventsProcess = processBean.getEventsByProcessID(referenceModelProcessId);
-        Set<String> eventNames = new HashSet<>();
-        Set<String> referenceEventNames = new HashSet<>();
+        LinkedHashSet<String> eventNames = new LinkedHashSet<>();
+        LinkedHashSet<String> referenceEventNames = new LinkedHashSet<>();
 
         HashMap<String, List<Event>> eventsSortedHashMap;
         HashMap<String, List<Event>> referenceEventsSortedHashMap;

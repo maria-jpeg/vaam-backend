@@ -2,6 +2,7 @@ package projeto.controller;
 
 import org.joda.time.DateTime;
 import projeto.algorithms_process_mining.ProcessMiningAlgorithm;
+import projeto.algorithms_process_mining.inductive_miner.InductiveMiner;
 import projeto.api.dtos.entities.ProcessDTO;
 import projeto.api.dtos.workflow_network.WorkflowNetworkDTO;
 import projeto.controller.exceptions.EntityDoesNotExistException;
@@ -382,7 +383,7 @@ public class ProcessBean extends BaseBean<Process, ProcessDTO>{
     public WorkflowNetworkDTO getWorkFlowNetworkFromProcess(long processId, ProcessMiningAlgorithm algorithm ) throws EntityDoesNotExistException
     {
         List<Event> processEvents = processDAO.getEventsByProcessID( processId );
-        Set<String> eventsNames = new HashSet<>();
+        LinkedHashSet<String> eventsNames = new LinkedHashSet<>();
 
         HashMap<String, List<Event>> eventsListHashMap;
 
@@ -394,6 +395,20 @@ public class ProcessBean extends BaseBean<Process, ProcessDTO>{
 
         return algorithm.discoverWorkflowNetwork(
                 new ArrayList<>( eventsListHashMap.values() ), eventsNames );
+
+
+    }
+
+    public WorkflowNetworkDTO getWorkFlowNetworkFromProcess(long processId, InductiveMiner inductiveMiner ) throws EntityDoesNotExistException
+    {
+        List<Event> processEvents = processDAO.getEventsByProcessID( processId );
+        LinkedHashSet<String> eventsNames = new LinkedHashSet<>();
+        for (Event processEvent : processEvents) {
+            eventsNames.add(processEvent.getActivity().getName());
+        }
+        List<List<Event>> listOfListOfevents = new LinkedList<>();
+        listOfListOfevents.add(processEvents);
+        return inductiveMiner.discoverWorkflowNetwork(listOfListOfevents, eventsNames );
 
 
     }

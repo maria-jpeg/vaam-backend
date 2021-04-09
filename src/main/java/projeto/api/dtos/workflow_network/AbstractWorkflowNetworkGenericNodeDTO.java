@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import projeto.algorithms_process_mining.FootprintMatrix;
+import projeto.algorithms_process_mining.inductive_miner.InductiveMiner;
 import projeto.api.dtos.NodeFrequencyDTO;
 
 import java.util.ArrayList;
@@ -23,8 +24,14 @@ public abstract class AbstractWorkflowNetworkGenericNodeDTO< NT, RMT extends Rel
     {
 
         // Get Start and End events
-        this.startEvents = buildStartFrequencies( footprint );
-        this.endEvents = buildStartEndFrequencies( footprint );
+        //If it is inductive miner do something else
+        if (footprint.getAlgorithm().getClass() == InductiveMiner.class){
+            this.startEvents = buildStartFrequencies( footprint );
+            this.endEvents = buildEndFrequencies( footprint );
+        }else{
+            this.startEvents = buildStartFrequencies( footprint );
+            this.endEvents = buildStartEndFrequencies( footprint );
+        }
 
         // Information about algorithm used to derive the model
         this.info = footprint.getInfo();
@@ -81,4 +88,19 @@ public abstract class AbstractWorkflowNetworkGenericNodeDTO< NT, RMT extends Rel
 
     }
 
+    //For im
+    protected List<NodeFrequencyDTO> buildEndFrequencies ( FootprintMatrix footprint )
+    {
+        HashMap<Integer, Integer> events = footprint.getEndEvents();
+        List<NodeFrequencyDTO> nodeFrequencies = new ArrayList<>();
+
+        for( Map.Entry<Integer, Integer> event : events.entrySet() )
+        {
+            nodeFrequencies.add(
+                    new NodeFrequencyDTO( event.getKey(), event.getValue() )
+            );
+
+        }
+        return nodeFrequencies;
+    }
 }

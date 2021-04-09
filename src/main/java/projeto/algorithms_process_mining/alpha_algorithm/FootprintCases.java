@@ -2,6 +2,7 @@ package projeto.algorithms_process_mining.alpha_algorithm;
 
 import projeto.core.Event;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -11,7 +12,7 @@ import java.util.Set;
 public class FootprintCases extends FootprintAlpha
 {
 
-    public FootprintCases(AlphaAlgorithm algorithm, List<List<Event>> eventsListSet, Set<String> eventNames, boolean statistics) {
+    public FootprintCases(AlphaAlgorithm algorithm, List<List<Event>> eventsListSet, LinkedHashSet<String> eventNames, boolean statistics) {
         super(algorithm, eventsListSet, eventNames, statistics);
     }
 
