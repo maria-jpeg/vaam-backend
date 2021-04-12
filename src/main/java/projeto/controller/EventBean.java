@@ -106,16 +106,6 @@ public class EventBean extends BaseBean<Event, EventDTO> {
         return dotDTO;
     }
 
-    public DirectlyFollowsGraph getDFG(){
-        List<Event> events = eventDAO.getAll();
-
-        String csvContent = XESHelper.eventsToCsv(events);
-        XLog log = XESHelper.eventsCsvToXes(csvContent);
-
-        DirectlyFollowsGraph dfg = InductiveMiner.mineDFG(log);
-        return dfg;
-    }
-
     /*@Override
     public EventDTO update(EventDTO eventDTO) throws EntityDoesNotExistException {
         Event event = eventDAO.findOrFail(eventDTO.getId());

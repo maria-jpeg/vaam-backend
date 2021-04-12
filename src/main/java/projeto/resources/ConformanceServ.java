@@ -456,9 +456,8 @@ public class ConformanceServ
     {
         try{
             DotDTO dotDTO = eventBean.getEventTree();
-            DirectlyFollowsGraph graph = eventBean.getDFG();
-            //return Response.status(Response.Status.OK).entity(dotDTO).build();
-            return Response.status(Response.Status.OK).entity(graph).build();
+
+            return Response.status(Response.Status.OK).entity(dotDTO).build();
 
         }catch (GraphvizProcessTree.NotYetImplementedException e)
         {
