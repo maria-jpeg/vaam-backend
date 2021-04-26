@@ -11,9 +11,9 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "ACTIVITIES_USERS")//( au.startDate >= :eventStartDate AND au.startDate <= :eventEndDate) AND ( au.endDate >= :eventStartDate AND au.endDate <= :eventEndDate)
-@NamedQueries({
+@NamedQueries({                  //antigo errado -> ( au.startDate <= :eventEndDate AND au.endDate >= :eventStartDate)
         @NamedQuery(name = "ActivitiesUsers.getEntriesAssociatedToEventActivity",//correção query VAAM? ^
-                query = "SELECT au FROM ActivityUserEntry au WHERE au.activity.id = :activityId AND ( ( au.startDate <= :eventEndDate AND au.endDate >= :eventStartDate) )"),
+                query = "SELECT au FROM ActivityUserEntry au WHERE au.activity.id = :activityId AND ( ( au.startDate >= :eventStartDate AND au.startDate <= :eventEndDate) AND ( au.endDate >= :eventStartDate AND au.endDate <= :eventEndDate) )"),
         @NamedQuery(name = "ActivitiesUsers.getEntriesAssociatedToEventWorkstation",
                 query = "SELECT au FROM ActivityUserEntry au WHERE au.workstation.id = :workstationId AND ( ( au.startDate <= :eventEndDate AND au.endDate >= :eventStartDate) )"),
         @NamedQuery(name = "ActivitiesUsers.getEntriesAssociatedToUsername",
