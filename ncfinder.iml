@@ -209,7 +209,7 @@
     <orderEntry type="library" name="Maven: com.sun.activation:jakarta.activation:2.0.0" level="project" />
     <orderEntry type="library" name="Maven: com.sun.xml.bind:jaxb-impl:3.0.0" level="project" />
     <orderEntry type="library" name="Maven: com.univocity:univocity-parsers:2.1.1" level="project" />
-    <orderEntry type="library" name="Maven: commons-io:commons-io:2.5" level="project" />
+    <orderEntry type="library" name="Maven: commons-io:commons-io:2.8.0" level="project" />
     <orderEntry type="library" name="Maven: com.googlecode.juniversalchardet:juniversalchardet:1.0.3" level="project" />
     <orderEntry type="library" name="Maven: com.ning:compress-lzf:1.1" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.util:java-merge-sort:1.0.2" level="project" />
