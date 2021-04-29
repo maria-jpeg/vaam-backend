@@ -9,13 +9,14 @@ if [ "$1" = '/opt/mssql/bin/sqlservr' ]; then
       sleep 15s
       #run the setup script to create the DB and the schema in the DB
       /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i setup.sql
-      /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/1_roles.sql
-      /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/2_users.sql
-      /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/3_processes.sql
-      /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/4_activities.sql
-      /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/5_moulds.sql
-      /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/6_events.sql
-      /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/7_activities_users.sql
+      /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/1_ROLES.sql
+      /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/2_USERS.sql
+      /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/3_PROCESSES.sql
+      /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/4_ACTIVITIES.sql
+      /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/5_MOULDS.sql
+      /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/6_WORKSTATIONS.sql
+      /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/7_EVENTS.sql
+      /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/8_ACTIVITIES_USERS.sql
       # Note that the container has been initialized so future starts won't wipe changes to the data
       touch /tmp/app-initialized
     }
