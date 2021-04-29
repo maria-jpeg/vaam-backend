@@ -511,7 +511,11 @@
             <version>6.10.299</version>
         </dependency>
 
-
+        <dependency>
+            <groupId>org.apache.commons.collections15</groupId>
+            <artifactId>collections-generic</artifactId>
+            <version>4.01</version>
+        </dependency>
 
     </dependencies>
 

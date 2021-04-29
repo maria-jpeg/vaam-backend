@@ -224,5 +224,6 @@
     <orderEntry type="library" name="Maven: www.processmining.org:DirectlyFollowsModelMiner:6.10.36" level="project" />
     <orderEntry type="library" name="Maven: www.processmining.org:ProcessTree:6.9.98" level="project" />
     <orderEntry type="library" name="Maven: www.processmining.org:GraphViz:6.10.299" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons.collections15:collections-generic:4.01" level="project" />
   </component>
 </module>
