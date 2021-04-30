@@ -510,13 +510,33 @@
             <artifactId>GraphViz</artifactId>
             <version>6.10.299</version>
         </dependency>
-
+        <!--Usado pelo inductive visual miner?-->
         <dependency>
             <groupId>org.apache.commons.collections15</groupId>
             <artifactId>collections-generic</artifactId>
             <version>4.01</version>
         </dependency>
-
+        <dependency>
+            <groupId>www.processmining.org</groupId>
+            <artifactId>Widgets</artifactId>
+            <version>6.10.241</version>
+        </dependency>
+        <dependency>
+            <groupId>www.processmining.org</groupId>
+            <artifactId>AcceptingPetriNet</artifactId>
+            <version>6.9.188</version>
+        </dependency>
+        <dependency>
+            <groupId>www.processmining.org</groupId>
+            <artifactId>PetriNets</artifactId>
+            <version>6.10.158 </version>
+        </dependency>
+        <!--ProM-Models Usado pelas PetriNets-->
+        <dependency>
+            <groupId>www.processmining.org</groupId>
+            <artifactId>ProM-Models</artifactId>
+            <version>6.10.40</version>
+        </dependency>
     </dependencies>
 
     <!--Repositorio local-->

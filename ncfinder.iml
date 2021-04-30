@@ -34,6 +34,10 @@
     <orderEntry type="library" name="InductiveVisualMiner" level="project" />
     <orderEntry type="library" name="DirectlyFollowsModelMiner" level="project" />
     <orderEntry type="library" name="GraphViz" level="project" />
+    <orderEntry type="library" name="Widgets" level="project" />
+    <orderEntry type="library" name="AcceptingPetriNet" level="project" />
+    <orderEntry type="library" name="PetriNets" level="project" />
+    <orderEntry type="library" name="ProM-Models" level="project" />
     <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-core:2.0.2" level="project" />
     <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-util:2.0.2" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.10.2" level="project" />
@@ -225,5 +229,9 @@
     <orderEntry type="library" name="Maven: www.processmining.org:ProcessTree:6.9.98" level="project" />
     <orderEntry type="library" name="Maven: www.processmining.org:GraphViz:6.10.299" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons.collections15:collections-generic:4.01" level="project" />
+    <orderEntry type="library" name="Maven: www.processmining.org:Widgets:6.10.241" level="project" />
+    <orderEntry type="library" name="Maven: www.processmining.org:AcceptingPetriNet:6.9.188" level="project" />
+    <orderEntry type="library" name="Maven: www.processmining.org:PetriNets:6.10.158" level="project" />
+    <orderEntry type="library" name="Maven: www.processmining.org:ProM-Models:6.10.40" level="project" />
   </component>
 </module>
