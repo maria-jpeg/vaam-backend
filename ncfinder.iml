@@ -38,6 +38,7 @@
     <orderEntry type="library" name="AcceptingPetriNet" level="project" />
     <orderEntry type="library" name="PetriNets" level="project" />
     <orderEntry type="library" name="ProM-Models" level="project" />
+    <orderEntry type="library" name="lpsolve55j" level="project" />
     <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-core:2.0.2" level="project" />
     <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-util:2.0.2" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.10.2" level="project" />
@@ -233,5 +234,8 @@
     <orderEntry type="library" name="Maven: www.processmining.org:AcceptingPetriNet:6.9.188" level="project" />
     <orderEntry type="library" name="Maven: www.processmining.org:PetriNets:6.10.158" level="project" />
     <orderEntry type="library" name="Maven: www.processmining.org:ProM-Models:6.10.40" level="project" />
+    <orderEntry type="library" name="Maven: www.processmining.org:EfficientStorage:6.9.126" level="project" />
+    <orderEntry type="library" name="Maven: www.processmining.org:PNetReplayer:6.9.179" level="project" />
+    <orderEntry type="library" name="Maven: lpsolver:lpsolver:5.5.0.15" level="project" />
   </component>
 </module>

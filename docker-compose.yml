@@ -5,6 +5,8 @@ services:
       context: .
       dockerfile: docker/app/Dockerfile
     image: project/dropwizard
+    environment:
+      - LD_LIBRARY_PATH=/usr/lib/lp_solve/
     container_name: dropwizard_container
     volumes:
     - ./target:/home/app/target
