@@ -555,6 +555,14 @@
             <artifactId>lpsolver</artifactId>
             <version>5.5.0.15</version>
         </dependency>
+        <!--Log alignment-->
+        <!-- https://mvnrepository.com/artifact/commons-lang/commons-lang -->
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
+
     </dependencies>
 
 

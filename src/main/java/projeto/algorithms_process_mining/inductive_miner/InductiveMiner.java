@@ -24,14 +24,17 @@ import java.util.Set;
 public class InductiveMiner implements ProcessMiningAlgorithm {
 
     @Getter
-    protected double threshold;
+    protected double paths;
+    protected double activities;
 
-    public InductiveMiner(double threshold) {
-        this.threshold = threshold;
+    public InductiveMiner(double paths,double activities) {
+        this.paths = paths;
+        this.activities = activities;
     }
 
     public InductiveMiner() {
-        this.threshold = 0.8;
+        this.paths = 0.8;
+        this.activities = 1;
     }
 
     public static ProcessTree miner(XLog xLog){

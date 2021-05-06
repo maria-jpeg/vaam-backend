@@ -237,5 +237,6 @@
     <orderEntry type="library" name="Maven: www.processmining.org:EfficientStorage:6.9.126" level="project" />
     <orderEntry type="library" name="Maven: www.processmining.org:PNetReplayer:6.9.179" level="project" />
     <orderEntry type="library" name="Maven: lpsolver:lpsolver:5.5.0.15" level="project" />
+    <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.6" level="project" />
   </component>
 </module>

@@ -1,5 +1,7 @@
 package projeto.algorithms_process_mining.inductive_miner;
 
+import com.google.common.collect.Multiset;
+import gnu.trove.map.TIntLongMap;
 import gnu.trove.map.TObjectIntMap;
 import org.checkerframework.checker.units.qual.A;
 import org.deckfour.xes.classification.XEventClass;
@@ -14,7 +16,10 @@ import org.processmining.framework.plugin.ProMCanceller;
 import org.processmining.plugins.InductiveMiner.MultiSet;
 import org.processmining.plugins.InductiveMiner.Pair;
 import org.processmining.plugins.InductiveMiner.Triple;
+import org.processmining.plugins.InductiveMiner.dfgOnly.log2logInfo.IMLog2IMLogInfoDefault;
 import org.processmining.plugins.InductiveMiner.efficienttree.EfficientTree;
+import org.processmining.plugins.InductiveMiner.mining.IMLogInfo;
+import org.processmining.plugins.InductiveMiner.mining.logs.LifeCycleClassifier;
 import org.processmining.plugins.InductiveMiner.plugins.IMProcessTree;
 import org.processmining.plugins.directlyfollowsgraph.DirectlyFollowsGraph;
 import org.processmining.plugins.directlyfollowsgraph.mining.DFMMiner;
@@ -24,50 +29,76 @@ import org.processmining.plugins.inductiveVisualMiner.InductiveVisualMinerState;
 import org.processmining.plugins.inductiveVisualMiner.alignedLogVisualisation.data.AlignedLogVisualisationData;
 import org.processmining.plugins.inductiveVisualMiner.alignedLogVisualisation.data.AlignedLogVisualisationDataImplFrequencies;
 import org.processmining.plugins.inductiveVisualMiner.alignment.*;
+import org.processmining.plugins.inductiveVisualMiner.chain.IvMCanceller;
 import org.processmining.plugins.inductiveVisualMiner.helperClasses.IvMEfficientTree;
 import org.processmining.plugins.inductiveVisualMiner.helperClasses.IvMModel;
 import org.processmining.plugins.inductiveVisualMiner.ivmlog.*;
+import org.processmining.plugins.inductiveVisualMiner.logFiltering.FilterLeastOccurringActivities;
 import org.processmining.plugins.inductiveVisualMiner.mode.ModePaths;
 import org.processmining.plugins.inductiveVisualMiner.performance.Performance;
 import org.processmining.plugins.inductiveVisualMiner.performance.XEventPerformanceClassifier;
 import org.processmining.plugins.inductiveVisualMiner.traceview.TraceViewEventColourMap;
+import org.processmining.plugins.inductiveVisualMiner.visualMinerWrapper.VisualMinerParameters;
+import org.processmining.plugins.inductiveVisualMiner.visualMinerWrapper.VisualMinerWrapper;
 import org.processmining.plugins.inductiveVisualMiner.visualMinerWrapper.miners.DfgMiner;
+import org.processmining.plugins.inductiveVisualMiner.visualMinerWrapper.miners.Miner;
 import org.processmining.plugins.inductiveVisualMiner.visualisation.DfmVisualisation;
 import org.processmining.plugins.inductiveVisualMiner.visualisation.ProcessTreeVisualisationInfo;
 import org.processmining.plugins.inductiveVisualMiner.visualisation.ProcessTreeVisualisationParameters;
+import org.processmining.plugins.InductiveMiner.mining.logs.IMLog;
+import org.processmining.plugins.inductiveminer2.logs.IMLog2XLog;
 import org.processmining.plugins.inductiveminer2.logs.IMLogImpl;
 import org.processmining.plugins.inductiveminer2.mining.MiningParametersAbstract;
 import org.processmining.plugins.inductiveminer2.variants.MiningParametersIM;
 import org.processmining.plugins.inductiveminer2.variants.MiningParametersIMLifeCycle;
 import projeto.algorithms_process_mining.FootprintMatrix;
+import projeto.algorithms_process_mining.FootprintStatistics;
 import projeto.core.Event;
 import projeto.data.XESHelper;
 
+import java.lang.reflect.Parameter;
+import java.sql.SQLOutput;
 import java.util.*;
 
 public class FootprintInductive extends FootprintMatrix {
 
     private InductiveMiner inductiveMiner;
 
-    private DirectlyFollowsGraph dfg;
+    //private DirectlyFollowsGraph dfg;
+    private IvMHelper ivm;
 
     public FootprintInductive(InductiveMiner algorithm, List<Event> events, LinkedHashSet<String> eventNames, boolean statistics) {
         super(algorithm, eventNames, statistics);
         this.inductiveMiner = algorithm;
 
-        this.dfg = getDfg(getEventLog(events));
+        //this.dfg = getDfg(getEventLog(events));
+        this.ivm = getIvMDFG(getEventLog(events));
         //super.eventNames.clear(); //reset de eventNames (Nomes das atividades) para coloca-las na ordem correta.
-        super.eventNames = new LinkedHashSet<>(Arrays.asList(dfg.getAllActivities()));
-
+        super.eventNames = new LinkedHashSet<>(Arrays.asList(ivm.getModel().getDfg().getAllNodeNames()));
+        super.eventNamesMapper = buildEventsMapper(super.eventNames);
         //Get start and end activities from dfg
-        for (Integer startActivity : dfg.getStartActivities()) {
-            super.startEvents.put(startActivity,(int) dfg.getStartActivities().getCardinalityOf(startActivity));
+        for (Integer startActivity : ivm.getModel().getDfg().getStartNodes().toArray()) {
+            super.startEvents.put(startActivity,(int) ivm.getActivityCardinality(startActivity));
         }
-        for (Integer endActivity : dfg.getEndActivities()) {
-            super.endEvents.put(endActivity,(int) dfg.getEndActivities().getCardinalityOf(endActivity));
+        for (Integer endActivity : ivm.getModel().getDfg().getEndNodes().toArray()) {
+            super.endEvents.put(endActivity,(int) ivm.getActivityCardinality(endActivity));
         }
+        //obrigar novo
+        super.footprintStatistics = new FootprintStatistics(this);
+        footprintStatistics.setFrequencyFromIvMHelper(ivm);
+    }
 
-        footprintStatistics.setFrequencyFromDfg(dfg);
+    public static Map<String, Integer> buildEventsMapper( Set<String> eventNames )
+    {
+        Map<String, Integer> eventNamesMapper = new HashMap<>();
+        int index = 0;
+        // assign each of the events an index in the matrix
+        for (String s : eventNames) {
+
+            //System.out.println( s + " " + index );
+            eventNamesMapper.put(s, index++);
+        }
+        return eventNamesMapper;
     }
 
     private XLog getEventLog(List<Event> events){
@@ -76,110 +107,98 @@ public class FootprintInductive extends FootprintMatrix {
         return log;
     }
 
-    private DirectlyFollowsGraph getDfg(XLog log){
-
-        DFMMiningParametersDefault defaultParams = new DFMMiningParametersDefault();//Params do inductive miner
-        defaultParams.setNoiseThreshold(inductiveMiner.getThreshold());
-        DirectlyFollowsGraph dfg = DFMMiner.mine(log,defaultParams,null); //Dfg obtido
-
-
-        //TESTE
-        DFMMiningParametersAbstract dfmMiningParameters = new org.processmining.directlyfollowsmodelminer.mining.variants.DFMMiningParametersDefault();
-        dfmMiningParameters.setNoiseThreshold(inductiveMiner.threshold);
-
-        IMLogImpl log2 = new org.processmining.plugins.inductiveminer2.logs.IMLogImpl(log, new org.processmining.directlyfollowsmodelminer.mining.variants.DFMMiningParametersDefault().getClassifier(),
-               new org.processmining.directlyfollowsmodelminer.mining.variants.DFMMiningParametersDefault().getLifeCycleClassifier());
-        DirectlyFollowsModel dfm = org.processmining.directlyfollowsmodelminer.mining.DFMMiner.mine(log, dfmMiningParameters, null);
-
-        PackageManager.Canceller canceller = new PackageManager.Canceller() {
-            @Override
-            public boolean isCancelled() {
-                return false;
-            }
-        };
-        MiningParametersAbstract miningParameters = new MiningParametersIM();
-        //miningParameters.setNoiseThreshold();
-        EfficientTree et = org.processmining.plugins.inductiveminer2.mining.InductiveMiner.mineEfficientTree(log2,miningParameters,canceller);
-        IvMModel model = new IvMModel(dfm);
-
-        /*
-        long[][] matrix = new long[dfm.getNumberOfNodes()][dfm.getNumberOfNodes()];
-        for (Long edge : dfm.getEdges()) {
-            int source = dfm.getEdgeSource(edge);
-            int target = dfm.getEdgeTarget(edge);
-            //dfm.
-            matrix[source][target] += 1;
-        }
-
-         */
-
-        IvMLogNotFiltered ivMLogNotFiltered = xLog2IvMLog(log,model);
-        //IvMLogFiltered ivMLogFiltered = new IvMLogFilteredImpl(ivMLogNotFiltered);
-        IvMLogInfo logInfo = new IvMLogInfo(ivMLogNotFiltered,model);
-        //IvMLogInfo logInfo = new IvMLogInfo();
-        DfmVisualisation visualisation = new DfmVisualisation();
-        //AlignedLogVisualisationDataImplFrequencies visualisationDataFreq = new AlignedLogVisualisationDataImplFrequencies(model,logInfo);
-
-        //ProcessTreeVisualisationParameters processTreeVisualisationParameters = new ProcessTreeVisualisationParameters();
-
-        //Pair<Long,Long> pair = visualisationDataFreq.getExtremeCardinalities();
-
-        //Triple<Dot, ProcessTreeVisualisationInfo, TraceViewEventColourMap> triple = visualisation.fancy(model,visualisationDataFreq,processTreeVisualisationParameters);
-
-        //this.state = this.createState(log);
-        InductiveVisualMinerConfigurationVaam config = new InductiveVisualMinerConfigurationVaam();
-        InductiveVisualMinerState state = config.createState(log);
-        state.setMiner(new DfgMiner());
-        state.setConfiguration(config);
-        //!!!
-        state.setPaths(1);
-        state.setActivitiesThreshold(1);
-        /*
-        Chain<InductiveVisualMinerState> chain = config.createChain(state, null, null,null,null,null);
-        Pair<Dot, Map<ChainLink<InductiveVisualMinerState, ?, ?>, DotNode>> dot1 = chain.toDot();
-        InductiveVisualMiner.InductiveVisualMinerLauncher ee = InductiveVisualMiner.InductiveVisualMinerLauncher.launcher(log);
-        ee.setMiner(new DfgMiner());
-
-
-        IvMEfficientTree ivMEfficientTree = new IvMEfficientTree(IMProcessTree.mineProcessTree(log));
-        ModePaths modePaths = new ModePaths();
-        //AlignedLogVisualisationData visualisationData = modePaths.getVisualisationData(model,null,logInfo,null,null);
-
-        MultiSet<Move> moves = logInfo.getActivities();
-        HashMap<String,Long> cardinalities = new HashMap<>();
-        for (Move move : moves) {
-            //Apenas as start? são todas.
-            if(move.getBottomLabel().equals(Performance.PerformanceTransition.valueOf("start").toString())){
-                String activityName = move.getLabel();
-                long cardinalidade = moves.getCardinalityOf(move);
-                cardinalities.put(activityName,cardinalidade);
-            }
-        }
-         */
-
-        /*ALIGNMENT*/
-        AlignmentComputerImpl alignmentComputer = new AlignmentComputerImpl();
+    private IvMHelper getIvMDFG(XLog log){
         ProMCanceller proMCanceller = new ProMCanceller() {
             @Override
             public boolean isCancelled() {
                 return false;
             }
         };
-        //???
-        XLogInfo xLogInfo = XLogInfoImpl.create(log);
+
+        //IvMModel
+        //so for 0 da null pointer
+        VisualMinerParameters visualMinerParameters = new VisualMinerParameters(inductiveMiner.paths);
+        DfgMiner miner = new DfgMiner();
+        IMLog log3 = new org.processmining.plugins.InductiveMiner.mining.logs.IMLogImpl(log,log.getClassifiers().get(0),new LifeCycleClassifier());
+        IMLogInfo log3Info = IMLog2IMLogInfoDefault.log2logInfo(log3);
+        IvMCanceller ivMCanceller = new IvMCanceller(proMCanceller);
+
+        FilterLeastOccurringActivities.filter(log3,log3Info, inductiveMiner.activities, null);
+        IvMModel model = miner.mine(log3,log3Info,visualMinerParameters,ivMCanceller);
+
+        /*ALIGNMENT*/
+        AlignmentComputerImpl alignmentComputer = new AlignmentComputerImpl();
+        Boolean teste = log.equals(log3.toXLog());
+        //porque levou com o filter das activities
+        XLog newLog = log3.toXLog();
+        //??? Align do xLog para ivmlog
+        XLogInfo xLogInfo = XLogInfoImpl.create(newLog);
         XEventClasses xEventClasses = xLogInfo.getEventClasses();
         IvMEventClasses ivMEventClasses = new IvMEventClasses(xEventClasses);
-        IvMEfficientTree ivMEfficientTree1 = new IvMEfficientTree(et);
+
         XEventPerformanceClassifier performanceClassifier = new XEventPerformanceClassifier(log.getClassifiers().get(0));
         IvMLogNotFiltered notFiltered = null;
         try {
-            notFiltered = AlignmentPerformance.alignDfg(alignmentComputer,model,performanceClassifier,log,ivMEventClasses,ivMEventClasses,proMCanceller);
+            notFiltered = AlignmentPerformance.alignDfg(alignmentComputer,model,performanceClassifier,newLog,ivMEventClasses,ivMEventClasses,proMCanceller);
+            if(notFiltered==null)
+                return null;
 
         }catch (Exception e){
             System.out.println("Could not align log: "+e);
         }
 
-        return dfg;
+        IvMLogInfo logInfo = new IvMLogInfo(notFiltered,model);
+        MultiSet<Move> moves = logInfo.getActivities();
+
+
+        //Contém os valores correspondentes no visual miner
+        HashMap<Integer,Long> cardinalitiesComplete = new HashMap<>();
+        HashMap<String,Long> cardinalitiesStart = new HashMap<>();
+        HashMap<String,Long> cardinalitiesEnqueue = new HashMap<>();
+        HashMap<String,Long> cardinalitiesOther = new HashMap<>();
+
+        for (Move move : moves) {
+            //Apenas as start? são todas.
+            String activityName = move.getLabel();
+            long cardinalidade = moves.getCardinalityOf(move);
+            if(move.getBottomLabel().equals(Performance.PerformanceTransition.valueOf("complete").toString())){
+                //PERIGO
+                int[] nodeNoModel = model.getDfg().getIndicesOfNodeName(activityName).toArray();
+                cardinalitiesComplete.put(nodeNoModel[0],cardinalidade);
+            }
+            if(move.getBottomLabel().equals(Performance.PerformanceTransition.valueOf("start").toString())){
+                cardinalitiesStart.put(activityName,cardinalidade);
+            }if(move.getBottomLabel().equals(Performance.PerformanceTransition.valueOf("enqueue").toString())){
+                cardinalitiesEnqueue.put(activityName,cardinalidade);
+            }if(move.getBottomLabel().equals(Performance.PerformanceTransition.valueOf("other").toString())){
+                cardinalitiesOther.put(activityName,cardinalidade);
+            }
+        }
+
+        HashMap<Pair<Integer,Integer>,Long> edgeCardinality = new HashMap<>();
+        HashMap<Pair<String,String>,Long> edgeCardinalityByName = new HashMap<>();
+        for (int i = 0; i < model.getDfg().getAllNodeNames().length; i++) {
+            for (int j = 0; j < model.getDfg().getAllNodeNames().length; j++) {
+                //Preencher os edges
+                //Novo Par com source e node
+                if (model.getDfg().containsEdge(i,j)){
+                    long weight = logInfo.getModelEdgeExecutions(i,j);
+                    if (weight>0){
+                        Pair<Integer,Integer> par = Pair.of(i,j);
+                        Pair<String,String> par2 = Pair.of(model.getActivityName(i),model.getActivityName(j));
+                        edgeCardinality.put(par,weight);
+                        edgeCardinalityByName.put(par2,weight);
+                    }
+                }
+            }
+        }
+
+        IvMHelper ivMHelper = new IvMHelper();
+        ivMHelper.setEdgeCardinality(edgeCardinality);
+        ivMHelper.setModel(model);
+        ivMHelper.setActivityCardinalitiesComplete(cardinalitiesComplete);
+
+        return ivMHelper;
     }
     //Não funciona preciso de fazer o alignment
     private IvMLogNotFiltered xLog2IvMLog(XLog log,IvMModel model){
@@ -224,6 +243,6 @@ public class FootprintInductive extends FootprintMatrix {
 
     @Override
     public boolean areEventsConnected(int a, int b) {
-        return dfg.getDirectlyFollowsGraph().containsEdge(a,b);
+        return ivm.getModel().getDfg().containsEdge(a,b);
     }
 }

@@ -6,6 +6,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.util.Precision;
 import org.processmining.plugins.directlyfollowsgraph.DirectlyFollowsGraph;
+import projeto.algorithms_process_mining.inductive_miner.IvMHelper;
 import projeto.api.dtos.DurationDTO;
 import projeto.api.dtos.workflow_network.NodeStats;
 import projeto.api.dtos.workflow_network.RelationMapDTO;
@@ -65,7 +66,7 @@ public class FootprintStatistics
         // WARNING !!!
         // Arrays.fill( taskDurations, new DescriptiveStatistics() );
     }
-
+    //Deprecated?
     public void setFrequencyFromDfg(DirectlyFollowsGraph dfg){
 
         for (int i = 0; i < numberOfEvents; i++)
@@ -73,6 +74,18 @@ public class FootprintStatistics
             for (int j = 0; j < numberOfEvents; j++)
             {
                 frequency[i][j] = (int)dfg.getDirectlyFollowsGraph().getEdgeWeight(i,j);
+            }
+        }
+    }
+    public  void setFrequencyFromIvMHelper(IvMHelper ivm){
+
+        for (int i = 0; i < numberOfEvents; i++)
+        {
+            for (int j = 0; j < numberOfEvents; j++)
+            {
+                if(ivm.getModel().getDfg().containsEdge(i,j)){
+                    frequency[i][j] = (int)ivm.getEdgeCardinality(i,j);
+                }
             }
         }
     }

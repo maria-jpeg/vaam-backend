@@ -136,16 +136,21 @@ public class WorkflowNetworkServ
     //@RolesAllowed({"Operador","Gestor","Administrador"})
     public Response getWorkflowNetworkInductiveMinerProcess(
             @PathParam("processId") long processId,
-            @ApiParam(value = "threshold value between 0 and 1 | used to consider relations in the footprint if  the heuristic value >= threshold")
-            @QueryParam("threshold")
-            @Min( value = 0, message = "- threshold must be between 0 and 1")
-            @Max( value = 1, message = "- threshold must be between 0 and 1")
-                    Float threshold )
+            @ApiParam(value = "paths value between 0 and 1 | used to consider relations in the footprint")
+            @QueryParam("paths")
+            @Min( value = 0, message = "- paths must be between 0 and 1")
+            @Max( value = 1, message = "- paths must be between 0 and 1") Float paths,
+            @QueryParam("activities")
+            @Min( value = 0, message = "- activities must be between 0 and 1")
+            @Max( value = 1, message = "- activities must be between 0 and 1") Float activities
+            )
     {
-        if( threshold == null )
-            threshold = 0.8F;
+        if( paths == null )
+            paths = 0.8F;
+        if( activities == null )
+            activities = 1F;
 
-        InductiveMiner algorithm = new InductiveMiner(threshold);
+        InductiveMiner algorithm = new InductiveMiner(paths,activities);
         return getWorkflowNetworkByProcessId( processId, algorithm );
 
     }
