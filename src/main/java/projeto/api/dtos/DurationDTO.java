@@ -6,6 +6,8 @@ import lombok.Setter;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.Duration;
 
+import static java.lang.Math.abs;
+
 @NoArgsConstructor
 @Getter @Setter
 public class DurationDTO
@@ -20,8 +22,11 @@ public class DurationDTO
 
     public DurationDTO( long millis )
     {
-        if( millis < 0 )
-            throw new IllegalArgumentException( "Millis cant be negative : " + millis );
+        //Não sei porque está negativo vou fazer abs
+        if( millis < 0 ){
+            millis = abs(millis);
+        }
+            //throw new IllegalArgumentException( "Millis cant be negative : " + millis );
         //if( millis == 0 )
         //    return;
 

@@ -387,11 +387,17 @@ public class ProcessBean extends BaseBean<Process, ProcessDTO>{
 
         HashMap<String, List<Event>> eventsListHashMap;
 
+        /* Condição antiga. Agora não existe parts
         if(findById(processId).getSubProcess() != null){ //é processo de molde
             eventsListHashMap = sortEventsByMouldCodeExtractEventNames( processEvents, eventsNames );
         }else{ //subprocesso
             eventsListHashMap = sortEventsByPartCodeExtractEventNames( processEvents, eventsNames );
         }
+         */
+
+        //if(findById(processId).getSubProcess() == null)  //é sempre null. Nunca é subprocess
+        eventsListHashMap = sortEventsByMouldCodeExtractEventNames(processEvents, eventsNames);
+
 
         return algorithm.discoverWorkflowNetwork(
                 new ArrayList<>( eventsListHashMap.values() ), eventsNames );
