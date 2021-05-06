@@ -76,8 +76,9 @@ public class XESHelper
             CSVConversionConfig conversionConfig = new CSVConversionConfig(csvFile, config);
             conversionConfig.autoDetect();
 
-            //conversionConfig.setCaseColumns(ImmutableList.of("case"));
-            conversionConfig.setCaseColumns(ImmutableList.of("process"));
+            //O case é o mould porque nos apenas vamos buscar um processo.
+            //conversionConfig.setCaseColumns(ImmutableList.of("process"));
+            conversionConfig.setCaseColumns(ImmutableList.of("mouldCode"));
             conversionConfig.setEventNameColumns(ImmutableList.of("activity"));
 
             conversionConfig.setStartTimeColumn("startDate");

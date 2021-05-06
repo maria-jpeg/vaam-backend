@@ -200,46 +200,6 @@ public class FootprintInductive extends FootprintMatrix {
 
         return ivMHelper;
     }
-    //Não funciona preciso de fazer o alignment
-    private IvMLogNotFiltered xLog2IvMLog(XLog log,IvMModel model){
-        IvMLogNotFilteredImpl ivMLogNotFiltered = new IvMLogNotFilteredImpl(log.size(),log.getAttributes());
-
-        int traceCounter = 0;
-        for (XTrace trace : log) {
-            IvMTrace ivMTrace = new IvMTraceImpl(trace.getAttributes().get("concept:name").toString(),trace.getAttributes(),trace.size());
-
-            int eventCounter =0;
-            for (XEvent event : trace) {
-                Performance.PerformanceTransition performanceTransition = Performance.PerformanceTransition.valueOf(event.getAttributes().get("lifecycle:transition").toString());
-                XEventClass xEventClass = new XEventClass(event.getID().toString(),eventCounter);
-
-                String activityName = event.getAttributes().get("concept:name").toString();
-                int[] nodeIndex = new int[1];
-                if (model.getDfg() != null){
-                    nodeIndex = model.getDfg().getIndicesOfNodeName(activityName).toArray();
-                }
-                else {
-                    TObjectIntMap<String> activity2Int = model.getTree().getActivity2int();
-                    for (int i = 0; i < activity2Int.size(); i++) {
-                        if (activity2Int.containsKey(activityName)){
-                            nodeIndex[0] = activity2Int.get(activityName);
-                        }
-                    }
-                }
-
-                // TODO source node? Pode causar problemas. Event performance class a mesma coisa
-                Move move = new Move(model,Move.Type.modelMove,-1,nodeIndex[0],xEventClass,null,performanceTransition,eventCounter);
-                XAttributeTimestamp timestamp = (XAttributeTimestamp) event.getAttributes().get("time:timestamp");
-                Long epochDate = timestamp.getValue().getTime();
-                IvMMove ivMMove = new IvMMove(model,move,epochDate,"RESOURCE???",event.getAttributes());
-                ivMTrace.add(ivMMove);
-                eventCounter++;
-            }
-            ivMLogNotFiltered.set(traceCounter,ivMTrace);
-            traceCounter++;
-        }
-        return ivMLogNotFiltered;
-    }
 
     @Override
     public boolean areEventsConnected(int a, int b) {
