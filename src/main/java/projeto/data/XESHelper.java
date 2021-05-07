@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.deckfour.xes.factory.XFactoryNaiveImpl;
 import org.deckfour.xes.model.XLog;
 import org.processmining.log.csv.CSVFileReferenceUnivocityImpl;
 import org.processmining.log.csv.ICSVReader;
@@ -84,7 +85,10 @@ public class XESHelper
             conversionConfig.setStartTimeColumn("startDate");
             conversionConfig.setCompletionTimeColumn("endDate");
             conversionConfig.setEmptyCellHandlingMode(CSVConversionConfig.CSVEmptyCellHandlingMode.SPARSE);
-            conversionConfig.setErrorHandlingMode(CSVConversionConfig.CSVErrorHandlingMode.ABORT_ON_ERROR);
+            conversionConfig.setErrorHandlingMode(CSVConversionConfig.CSVErrorHandlingMode.OMIT_TRACE_ON_ERROR);
+            conversionConfig.setFactory(new XFactoryNaiveImpl());
+            //Não tenho a certeza do true. Provavelmente retirar esta config
+            conversionConfig.setShouldAddStartEventAttributes(true);
             Map<String, CSVConversionConfig.CSVMapping> conversionMap = conversionConfig.getConversionMap();
 
 

@@ -141,6 +141,7 @@ public class WorkflowNetworkServ
             @Min( value = 0, message = "- paths must be between 0 and 1")
             @Max( value = 1, message = "- paths must be between 0 and 1") Float paths,
             @QueryParam("activities")
+            @ApiParam(value = "most frequent activities")
             @Min( value = 0, message = "- activities must be between 0 and 1")
             @Max( value = 1, message = "- activities must be between 0 and 1") Float activities
             )
