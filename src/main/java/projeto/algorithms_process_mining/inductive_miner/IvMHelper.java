@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 public class IvMHelper {
     private HashMap<Integer,Long> activityCardinalitiesComplete;
-    private HashMap<Pair<Integer,Integer>,Long> edgeCardinality;
+    private HashMap<Pair<Integer,Integer>,Integer> edgeCardinality;
     private IvMModel model;
     private List<Pair<Integer,Integer>> startActivities;
     private List<Pair<Integer,Integer>> endActivities;
