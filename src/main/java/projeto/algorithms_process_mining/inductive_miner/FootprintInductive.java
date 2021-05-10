@@ -55,6 +55,8 @@ import projeto.algorithms_process_mining.FootprintMatrix;
 import projeto.algorithms_process_mining.FootprintStatistics;
 import projeto.core.Event;
 import projeto.data.XESHelper;
+
+import javax.validation.constraints.NotNull;
 import java.util.*;
 
 public class FootprintInductive extends FootprintMatrix {
@@ -101,6 +103,7 @@ public class FootprintInductive extends FootprintMatrix {
         return log;
     }
 
+    @NotNull
     private Pair<IvMLogInfo,IvMModel> alignLog(XLog log){
         ProMCanceller proMCanceller = () -> false;
         IvMCanceller ivMCanceller = new IvMCanceller(proMCanceller);
@@ -253,7 +256,7 @@ public class FootprintInductive extends FootprintMatrix {
             if (source.getUnode() == -1){ //Quer dizer que é um empty-node?
                 sourceLabel = "empty-node#"+source.getId();
                 int index = allModelNodesName.indexOf(sourceLabel);
-                if (index!=-1){
+                if (index==-1){
                     index = allModelNodesId.size();
                     allModelNodesId.add(index);
                     allModelNodesName.add(sourceLabel);
@@ -263,7 +266,7 @@ public class FootprintInductive extends FootprintMatrix {
             if (target.getUnode() == -1){ //Quer dizer que é um empty-node?
                 targetLabel = "empty-node#"+source.getId();
                 int index = allModelNodesName.indexOf(targetLabel);
-                if (index!=-1){
+                if (index==-1){
                     index = allModelNodesId.size();
                     allModelNodesId.add(index);
                     allModelNodesName.add(targetLabel);
@@ -277,6 +280,27 @@ public class FootprintInductive extends FootprintMatrix {
             edgeCardinalityByName.put(Pair.of(sourceLabel,targetLabel),weight);
         }
 
+        HashMap<Pair<Integer,Integer>,Integer> deviationCardinality = new HashMap<>();
+        HashMap<Pair<String,String>,Integer> deviationCardinalityByName = new HashMap<>();
+        for (LocalDotEdge desvio : desvios) {
+            LocalDotNode source = desvio.getSource();
+            LocalDotNode target = desvio.getTarget();
+            int sourceIndex = source.getUnode();
+            int targetIndex = target.getUnode();
+            //Partir do presuposto que o no ja esta inserido em allModelNodesName (Pode conter bug)
+            if (source.getUnode() == -1){
+                sourceIndex = allModelNodesName.indexOf("empty-node#"+source.getId());
+            }
+            if (target.getUnode() == -1){
+                targetIndex = allModelNodesName.indexOf("empty-node#"+target.getId());
+            }
+            int weight = -1;
+            if (isInteger(desvio.getLabel()))
+                weight = Integer.parseInt(desvio.getLabel());
+            deviationCardinality.put(Pair.of(sourceIndex,targetIndex),weight);
+            deviationCardinalityByName.put(Pair.of(allModelNodesName.get(sourceIndex),allModelNodesName.get(targetIndex)),weight);
+        }
+
         //Contém os valores correspondentes no visual miner @Deprecated daqui para baixo
         HashMap<Integer,Long> nodeLabels = new HashMap<>();
         String[] activitiesComFreq = new String[model.getDfg().getAllNodeNames().length];
@@ -286,9 +310,6 @@ public class FootprintInductive extends FootprintMatrix {
             nodeLabels.put(i,freq);
             activitiesComFreq[i] = activityName+"@"+freq;
         }
-
-
-
 
         for (int i = 0; i < model.getDfg().getAllNodeNames().length; i++) {
             for (int j = 0; j < model.getDfg().getAllNodeNames().length; j++) {
