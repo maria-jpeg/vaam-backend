@@ -1,5 +1,6 @@
 package projeto.algorithms_process_mining.inductive_miner;
 
+import gnu.trove.map.hash.TIntObjectHashMap;
 import gnu.trove.set.TIntSet;
 import org.deckfour.xes.classification.XEventClass;
 import org.deckfour.xes.classification.XEventClasses;
@@ -18,23 +19,32 @@ import org.processmining.plugins.InductiveMiner.Pair;
 import org.processmining.plugins.InductiveMiner.dfgOnly.log2logInfo.IMLog2IMLogInfoDefault;
 import org.processmining.plugins.InductiveMiner.mining.IMLogInfo;
 import org.processmining.plugins.InductiveMiner.mining.logs.LifeCycleClassifier;
+import org.processmining.plugins.graphviz.dot.Dot;
 import org.processmining.plugins.inductiveVisualMiner.InductiveVisualMinerState;
 import org.processmining.plugins.inductiveVisualMiner.alignedLogVisualisation.data.AlignedLogVisualisationData;
 import org.processmining.plugins.inductiveVisualMiner.alignedLogVisualisation.data.AlignedLogVisualisationDataImplFrequencies;
 import org.processmining.plugins.inductiveVisualMiner.alignment.*;
+import org.processmining.plugins.inductiveVisualMiner.animation.*;
 import org.processmining.plugins.inductiveVisualMiner.chain.IvMCanceller;
 import org.processmining.plugins.inductiveVisualMiner.export.ExportAlignment;
 import org.processmining.plugins.inductiveVisualMiner.export.XDFMExtension;
 import org.processmining.plugins.inductiveVisualMiner.export.XModelAlignmentExtension;
+import org.processmining.plugins.inductiveVisualMiner.helperClasses.IteratorWithPosition;
 import org.processmining.plugins.inductiveVisualMiner.helperClasses.IvMModel;
+import org.processmining.plugins.inductiveVisualMiner.helperClasses.ShortestPathGraph;
 import org.processmining.plugins.inductiveVisualMiner.ivmlog.*;
 import org.processmining.plugins.inductiveVisualMiner.logFiltering.FilterLeastOccurringActivities;
+import org.processmining.plugins.inductiveVisualMiner.mode.ModePathsDeviations;
 import org.processmining.plugins.inductiveVisualMiner.performance.Performance;
 import org.processmining.plugins.inductiveVisualMiner.performance.XEventPerformanceClassifier;
 import org.processmining.plugins.inductiveVisualMiner.visualMinerWrapper.VisualMinerParameters;
 import org.processmining.plugins.inductiveVisualMiner.visualMinerWrapper.miners.DfgMiner;
 import org.processmining.plugins.InductiveMiner.mining.logs.IMLog;
 import org.processmining.plugins.InductiveMiner.mining.logs.IMLogImpl;
+import org.processmining.plugins.inductiveVisualMiner.visualisation.LocalDotNode;
+import org.processmining.plugins.inductiveVisualMiner.visualisation.ProcessTreeVisualisationHelper;
+import org.processmining.plugins.inductiveVisualMiner.visualisation.ProcessTreeVisualisationInfo;
+import org.processmining.plugins.inductiveVisualMiner.visualisation.ProcessTreeVisualisationParameters;
 import projeto.algorithms_process_mining.FootprintMatrix;
 import projeto.algorithms_process_mining.FootprintStatistics;
 import projeto.core.Event;
@@ -135,6 +145,40 @@ public class FootprintInductive extends FootprintMatrix {
         if(notFiltered==null)
             return null;
 
+        ProcessTreeVisualisationInfo info = new ProcessTreeVisualisationInfo();
+        Dot dot = new Dot();
+        TIntObjectHashMap<LocalDotNode> node2output = new TIntObjectHashMap<>(10, 0.5f, -1);
+        LocalDotNode source = new LocalDotNode(dot, info, LocalDotNode.NodeType.source, "", -1, null);
+        node2output.put(-1, source);
+        LocalDotNode sink = new LocalDotNode(dot, info, LocalDotNode.NodeType.sink, "", -1, source);
+        Scaler scaler = Scaler.fromLog(notFiltered,0D,0D,ivMCanceller);
+        info.setRoot(source, sink);
+        ShortestPathGraph graph = new ShortestPathGraph(info.getNodes(), info.getEdges());
+
+        List<DotToken> dotTokens = ComputeAnimation.computeDotTokensOfTrace(model,notFiltered.get(0),info,new ModePathsDeviations(),scaler,graph,ivMCanceller);
+        /*GraphVizTokens graphVizTokens = new GraphVizTokens();
+        final List<DotToken> tokens = new ArrayList<>();
+        IteratorWithPosition<IvMTrace> it = notFiltered.iterator();
+        while (it.hasNext()) {
+            IvMTrace ivmTrace = it.next();
+            Dot dot = new Dot();
+            dot.setDirection(Dot.GraphDirection.leftRight);
+            ProcessTreeVisualisationInfo info = new ProcessTreeVisualisationInfo();
+            TIntObjectHashMap<LocalDotNode> node2output = new TIntObjectHashMap<>(10, 0.5f, -1);
+            LocalDotNode source = new LocalDotNode(dot, info, LocalDotNode.NodeType.source, "", -1, null);
+            node2output.put(-1, source);
+            LocalDotNode sink = new LocalDotNode(dot, info, LocalDotNode.NodeType.sink, "", -1, source);
+            Scaler scaler = Scaler.fromLog(notFiltered,0D,0D,ivMCanceller);
+            info.setRoot(source, sink);
+            ShortestPathGraph graph = new ShortestPathGraph(info.getNodes(), info.getEdges());
+            tokens.add(IvMTrace2dotToken2.trace2token(model, ivmTrace, true, graph, info, scaler));
+
+            //make dot tokens
+            //final List<DotToken> dotTokens = computeDotTokensOfTrace(model, ivmTrace, info, colourMode, scaler, graph, canceller);
+        }*/
+
+
+
         IvMLogInfo logInfo = new IvMLogInfo(notFiltered,model);
         AlignedLogVisualisationDataImplFrequencies visualisationDataImplFrequencies = new AlignedLogVisualisationDataImplFrequencies(model,logInfo);
 
@@ -149,6 +193,13 @@ public class FootprintInductive extends FootprintMatrix {
             activitiesComFreq[i] = activityName+"@"+freq;
         }
 
+        /*ModePathsDeviations deviations = new ModePathsDeviations();
+        AlignedLogVisualisationData teste = deviations.getVisualisationData(model,null,logInfo,null,null);
+        Pair<Long,Long> p = teste.getExtremeCardinalities();
+        long minCardinality = p.getLeft();
+        long maxCardinality = p.getRight();
+        ProcessTreeVisualisationParameters parameters = new ProcessTreeVisualisationParameters();*/
+
         HashMap<Pair<Integer,Integer>,Long> edgeCardinality = new HashMap<>();
         HashMap<Pair<String,String>,Long> edgeCardinalityByName = new HashMap<>();
 
@@ -158,7 +209,9 @@ public class FootprintInductive extends FootprintMatrix {
                 //Novo Par com source e node
                 if (model.getDfg().containsEdge(i,j)){
                     Pair<String,Long> freq = visualisationDataImplFrequencies.getEdgeLabel(i,j,true);
-                    edgeCardinality.put(Pair.of(i,j),freq.getRight());
+                    /*long weight = logInfo.getModelEdgeExecutions(i,j);
+                    double fwesdajkn= parameters.getMoveEdgesWidth().size(weight, minCardinality, maxCardinality);
+                    edgeCardinality.put(Pair.of(i,j),freq.getRight());*/
                     edgeCardinalityByName.put(Pair.of(model.getActivityName(i),model.getActivityName(j)),freq.getRight());
                 }
             }
