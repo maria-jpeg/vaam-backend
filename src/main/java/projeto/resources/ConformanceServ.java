@@ -294,12 +294,14 @@ public class ConformanceServ
         try {
             FilterWrapper filter = new FilterWrapper( wrapper );
 
+            HashMap<String, List<Event>> mouldEvents = conformanceBean.getProcessBean().getEventsByMouldCodeFromFilter(processId, filter); //events of moulds (instances) by the filters
+
+            ConformanceNetworkPerformanceDTO notConformancesNetwork = conformanceBean.getNetworkModelPerformanceProcess(processId, mouldEvents, algorithm);
+
+            return Response.ok( notConformancesNetwork ).build();
+            /* VAAM - Logs não têm parts. nunca pode entrar ali
             if(conformanceBean.getProcessBean().findById(processId).getSubProcess() != null){ //é processo de molde
-                HashMap<String, List<Event>> mouldEvents = conformanceBean.getProcessBean().getEventsByMouldCodeFromFilter(processId, filter); //events of moulds (instances) by the filters
 
-                ConformanceNetworkPerformanceDTO notConformancesNetwork = conformanceBean.getNetworkModelPerformanceProcess(processId, mouldEvents, algorithm);
-
-                return Response.ok( notConformancesNetwork ).build();
 
             }else{ //subprocesso
                 HashMap<String, List<Event>> partEvents = conformanceBean.getProcessBean().getEventsByPartCodeFromFilter(processId, filter);
@@ -308,8 +310,7 @@ public class ConformanceServ
 
                 return Response.ok( notConformancesNetwork ).build();
             }
-
-
+            */
         }
         // Eg. invalid dates format
         catch ( IllegalArgumentException ex )
@@ -360,12 +361,16 @@ public class ConformanceServ
                             .entity( "nodes elements cant be duplicated! each node must be unique!" ) .build();
             }
 
+
+            HashMap<String, List<Event>> mouldEvents = conformanceBean.getProcessBean().getEventsByMouldCodeFromFilter(processId, filter); //events of moulds (instances) by the filters
+
+            CasePerformanceDTO eventsByMouldCodefromProcess = conformanceBean.getEventsByMouldPerformance( mouldEvents, uniqueEventNames );
+
+            return Response.ok( eventsByMouldCodefromProcess ).build();
+
+            /*VAAM - Logs não têm parts. nunca pode entrar ali
             if(conformanceBean.getProcessBean().findById(processId).getSubProcess() != null){ //é processo de molde
-                HashMap<String, List<Event>> mouldEvents = conformanceBean.getProcessBean().getEventsByMouldCodeFromFilter(processId, filter); //events of moulds (instances) by the filters
 
-                CasePerformanceDTO eventsByMouldCodefromProcess = conformanceBean.getEventsByMouldPerformance( mouldEvents, uniqueEventNames );
-
-                return Response.ok( eventsByMouldCodefromProcess ).build();
             }else{ //subprocesso
                 HashMap<String, List<Event>> partEvents = conformanceBean.getProcessBean().getEventsByPartCodeFromFilter(processId, filter);
 
@@ -373,8 +378,7 @@ public class ConformanceServ
 
                 return Response.ok( eventsByPartCodefromProcess ).build();
             }
-
-
+             */
         }
         // Eg. invalid dates format
         catch ( IllegalArgumentException ex )
@@ -428,18 +432,21 @@ public class ConformanceServ
 
             FiltersDTO filtersDTO = null;
             //moulds/parts
+
+            List<String> moulds = processBean.getMouldCodesfromProcessId(processId);
+            filtersDTO = new FiltersDTO(activityNames,resourceUsernames,moulds,false);
+
+            /*VAAM - Nao tem parts
             if(processBean.findById(processId).getSubProcess() != null){ //é processo de molde
-                List<String> moulds = processBean.getMouldCodesfromProcessId(processId);
-                filtersDTO = new FiltersDTO(activityNames,resourceUsernames,moulds,false);
+
             }else{ //subprocesso
                 List<String> parts = processBean.getPartCodesfromProcessId(processId);
                 filtersDTO = new FiltersDTO(activityNames,resourceUsernames,parts,true);
             }
-
+           */
             return Response.status(Response.Status.OK)
                     .entity(filtersDTO)
                     .build();
-
         }
         catch( EntityDoesNotExistException ex )
         {
