@@ -120,6 +120,14 @@ public class ConformanceBean
         LinkedHashSet<String> eventNames = new LinkedHashSet<>();
 
         //Extract Event Names
+        List<Event> eventsMoulds = processBean.getEventsFromMouldsfromProcessSet(processId, referenceEventsSortedHashMap.keySet());
+        eventNames.clear();
+        for( Event e : eventsMoulds )
+        {
+            eventNames.add( e.getActivity().getName() );
+        }
+
+        /*
         if(processBean.findById(processId).getSubProcess() != null){ //é processo de molde
             List<Event> eventsMoulds = processBean.getEventsFromMouldsfromProcessSet(processId, referenceEventsSortedHashMap.keySet());
             eventNames.clear();
@@ -135,6 +143,8 @@ public class ConformanceBean
                 eventNames.add( e.getActivity().getName() );
             }
         }
+
+         */
 //
         // Get Workflow Matrix
         FootprintMatrix footprint = algorithm.getFootprintStatistics( new ArrayList<>( referenceEventsSortedHashMap.values() ), eventNames );
@@ -150,13 +160,16 @@ public class ConformanceBean
         if( algorithm instanceof HeuristicMiner )
             deviations = findOutliers( (FootprintHeuristic)footprint );
 
+        /*
         if(processBean.findById(processId).getSubProcess() != null){ //é processo de molde
             return new ConformanceNetworkPerformanceDTO( footprint, taskDurations, transactionDurations, deviations, referenceEventsSortedHashMap.keySet(),false, partBean );
         }else{ //subprocesso
             //List<String> parts = processBean.getPartCodesfromProcessId( processId );
             return new ConformanceNetworkPerformanceDTO( footprint, taskDurations, transactionDurations, deviations, referenceEventsSortedHashMap.keySet(), true, partBean );
         }
+         */
 
+        return new ConformanceNetworkPerformanceDTO( footprint, taskDurations, transactionDurations, deviations, referenceEventsSortedHashMap.keySet(),false, partBean );
     }
 
     private DeviationFlow findOutliers(FootprintHeuristic footprint )
@@ -452,10 +465,12 @@ public class ConformanceBean
     /** Deviations of Process
      */
     public ConformanceNetworkDeviationsDTO getNotConformancesNetworkDeviationsProcess(long processId, long referenceModelProcessId ) throws EntityDoesNotExistException, MyException {
+        /*Todos os processos são de moldes
         if(processBean.findById(processId).getSubProcess() != null && processBean.findById(referenceModelProcessId).getSubProcess() == null ||
                 processBean.findById(processId).getSubProcess() == null && processBean.findById(referenceModelProcessId).getSubProcess() != null){
             throw new MyException("Os processos a comparar devem ser da mesma família: processos de molde OU subprocessos de peças");
         }
+         */
 
         // Extract events from processes
         List<Event> eventsProcess = processBean.getEventsByProcessID(processId);
@@ -467,6 +482,9 @@ public class ConformanceBean
         HashMap<String, List<Event>> referenceEventsSortedHashMap;
 
         // Sort events by mould/part code, and extract the events names
+        eventsSortedHashMap = processBean.sortEventsByMouldCodeExtractEventNames( eventsProcess, eventNames );
+        referenceEventsSortedHashMap = processBean.sortEventsByMouldCodeExtractEventNames( referenceEventsProcess, referenceEventNames );
+        /*
         if(processBean.findById(processId).getSubProcess() != null){ //é processo de molde
             eventsSortedHashMap = processBean.sortEventsByMouldCodeExtractEventNames( eventsProcess, eventNames );
             referenceEventsSortedHashMap = processBean.sortEventsByMouldCodeExtractEventNames( referenceEventsProcess, referenceEventNames );
@@ -474,6 +492,7 @@ public class ConformanceBean
             eventsSortedHashMap = processBean.sortEventsByPartCodeExtractEventNames( eventsProcess, eventNames );
             referenceEventsSortedHashMap = processBean.sortEventsByPartCodeExtractEventNames( referenceEventsProcess, referenceEventNames );
         }
+         */
 
         // Get workflow network model
         HeuristicMiner algorithm = new HeuristicMiner( 0.1F ); //VOU ALTERAR ESTE THRESHOLD, valor antigo: 0.925F

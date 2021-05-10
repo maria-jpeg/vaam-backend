@@ -147,15 +147,20 @@ public class ResourceServ
 
             ResourcesActivityDTO resourcePerformanceDTO;
 
-            if(processBean.findById(processId).getSubProcess() != null){ //processo de mould
-                HashMap<String, List<Event>> eventsByMouldCode = processBean.sortEventsByMouldCode(events);
+            HashMap<String, List<Event>> eventsByMouldCode = processBean.sortEventsByMouldCode(events);
 
-                resourcePerformanceDTO = resourceBean.getUsersPerformance( activityId, eventsByMouldCode, threshold, false );
+            resourcePerformanceDTO = resourceBean.getUsersPerformance( activityId, eventsByMouldCode, threshold, false );
+
+            /*
+            if(processBean.findById(processId).getSubProcess() != null){ //processo de mould
+
             }else{ //subprocesso de part
                 HashMap<String, List<Event>> eventsByPartCode = processBean.sortEventsByPartCode(events);
 
                 resourcePerformanceDTO = resourceBean.getUsersPerformance( activityId, eventsByPartCode, threshold, true );
             }
+
+             */
             return Response.ok( resourcePerformanceDTO ).build();
         }
         catch ( EntityDoesNotExistException ex )
@@ -193,15 +198,20 @@ public class ResourceServ
             ProcessBean processBean = resourceBean.getProcessBean();
             ResourcesActivityDTO resourcePerformanceDTO;
 
-            if(processBean.findById(processId).getSubProcess() != null){ //processo de mould
-                HashMap<String, List<Event>> eventsByMouldCode = processBean.getEventsByMouldCodeFromFilter(processId, filter);
+            HashMap<String, List<Event>> eventsByMouldCode = processBean.getEventsByMouldCodeFromFilter(processId, filter);
 
-                resourcePerformanceDTO = resourceBean.getUsersPerformance(activityId, eventsByMouldCode, threshold, false );
+            resourcePerformanceDTO = resourceBean.getUsersPerformance(activityId, eventsByMouldCode, threshold, false );
+
+            /* VAAM - Não ha parts
+            if(processBean.findById(processId).getSubProcess() != null){ //processo de mould
+
             }else{ //subprocesso de part
                 HashMap<String, List<Event>> eventsByPartCode = processBean.getEventsByPartCodeFromFilter(processId, filter);
 
                 resourcePerformanceDTO = resourceBean.getUsersPerformance(activityId, eventsByPartCode, threshold, true );
             }
+
+             */
 
             return Response.ok( resourcePerformanceDTO ).build();
 
@@ -266,16 +276,20 @@ public class ResourceServ
 
             ResourcesActivityDTO resourcePerformanceDTO;
 
-            if(processBean.findById(processId).getSubProcess() != null){ //processo de mould
-                HashMap<String, List<Event>> eventsByMouldCode = processBean.sortEventsByMouldCode(events);
+            HashMap<String, List<Event>> eventsByMouldCode = processBean.sortEventsByMouldCode(events);
 
-                //resourcePerformanceDTO = resourceBean.getResourcePerformanceProcess( activityId, eventsByMouldCode, threshold, false );
-                resourcePerformanceDTO = resourceBean.getSingleUserPerformance( activityId, username, eventsByMouldCode, threshold, false );
+            //resourcePerformanceDTO = resourceBean.getResourcePerformanceProcess( activityId, eventsByMouldCode, threshold, false );
+            resourcePerformanceDTO = resourceBean.getSingleUserPerformance( activityId, username, eventsByMouldCode, threshold, false );
+            /*
+            if(processBean.findById(processId).getSubProcess() != null){ //processo de mould
+
             }else{ //subprocesso de part
                 HashMap<String, List<Event>> eventsByPartCode = processBean.sortEventsByPartCode(events);
 
                 resourcePerformanceDTO = resourceBean.getSingleUserPerformance( activityId, username, eventsByPartCode, threshold, true );
             }
+
+             */
 
             return Response.ok( resourcePerformanceDTO ).build();
 
@@ -330,6 +344,10 @@ public class ResourceServ
             ProcessBean processBean = resourceBean.getProcessBean();
             ResourcesActivityDTO resourcePerformanceDTO;
 
+            HashMap<String, List<Event>> eventsByMouldCode = processBean.getEventsByMouldCodeFromFilter(processId, filter);
+
+            resourcePerformanceDTO = resourceBean.getSingleUserPerformance(activityId, username, eventsByMouldCode, threshold, false );
+            /*
             if(processBean.findById(processId).getSubProcess() != null){ //processo de mould
                 HashMap<String, List<Event>> eventsByMouldCode = processBean.getEventsByMouldCodeFromFilter(processId, filter);
 
@@ -339,6 +357,8 @@ public class ResourceServ
 
                 resourcePerformanceDTO = resourceBean.getSingleUserPerformance(activityId, username, eventsByPartCode, threshold, true );
             }
+
+            */
 
             return Response.ok( resourcePerformanceDTO ).build();
 
@@ -383,15 +403,19 @@ public class ResourceServ
 
             ActivityUsersDTO activityUsersDTO;
 
-            if(processBean.findById(processId).getSubProcess() != null){ //processo de mould
-                HashMap<String, List<Event>> eventsByMouldCode = processBean.sortEventsByMouldCode(events);
+            HashMap<String, List<Event>> eventsByMouldCode = processBean.sortEventsByMouldCode(events);
 
-                activityUsersDTO = resourceBean.getUsersWorkHoursActivity( activityId, eventsByMouldCode, false );
+            activityUsersDTO = resourceBean.getUsersWorkHoursActivity( activityId, eventsByMouldCode, false );
+            /*
+            if(processBean.findById(processId).getSubProcess() != null){ //processo de mould
+
             }else{ //subprocesso de part
                 HashMap<String, List<Event>> eventsByPartCode = processBean.sortEventsByPartCode(events);
 
                 activityUsersDTO = resourceBean.getUsersWorkHoursActivity( activityId, eventsByPartCode, true );
             }
+
+             */
 
             return Response.ok(activityUsersDTO).build();
 
@@ -422,15 +446,19 @@ public class ResourceServ
             ProcessBean processBean = resourceBean.getProcessBean();
             ActivityUsersDTO activityUsersDTO;
 
-            if(processBean.findById(processId).getSubProcess() != null){ //processo de mould
-                HashMap<String, List<Event>> eventsByMouldCode = processBean.getEventsByMouldCodeFromFilter(processId, filter);
+            HashMap<String, List<Event>> eventsByMouldCode = processBean.getEventsByMouldCodeFromFilter(processId, filter);
 
-                activityUsersDTO = resourceBean.getUsersWorkHoursActivity( activityId, eventsByMouldCode, false );
+            activityUsersDTO = resourceBean.getUsersWorkHoursActivity( activityId, eventsByMouldCode, false );
+            /*
+            if(processBean.findById(processId).getSubProcess() != null){ //processo de mould
+
             }else{ //subprocesso de part
                 HashMap<String, List<Event>> eventsByPartCode = processBean.getEventsByPartCodeFromFilter(processId, filter);
 
                 activityUsersDTO = resourceBean.getUsersWorkHoursActivity( activityId, eventsByPartCode, true );
             }
+
+             */
 
             return Response.ok(activityUsersDTO).build();
 
@@ -474,15 +502,19 @@ public class ResourceServ
 
             WorkstationUsersDTO workstationUsersDTO;
 
-            if(processBean.findById(processId).getSubProcess() != null){ //processo de mould
-                HashMap<String, List<Event>> eventsByMouldCode = processBean.sortEventsByMouldCode(events);
+            HashMap<String, List<Event>> eventsByMouldCode = processBean.sortEventsByMouldCode(events);
 
-                workstationUsersDTO = resourceBean.getUsersWorkHoursWorkstation( workstationId, eventsByMouldCode, false );
+            workstationUsersDTO = resourceBean.getUsersWorkHoursWorkstation( workstationId, eventsByMouldCode, false );
+            /*
+            if(processBean.findById(processId).getSubProcess() != null){ //processo de mould
+
             }else{ //subprocesso de part
                 HashMap<String, List<Event>> eventsByPartCode = processBean.sortEventsByPartCode(events);
 
                 workstationUsersDTO = resourceBean.getUsersWorkHoursWorkstation( workstationId, eventsByPartCode, true );
             }
+
+             */
 
             return Response.ok(workstationUsersDTO).build();
 
@@ -515,15 +547,19 @@ public class ResourceServ
             ProcessBean processBean = resourceBean.getProcessBean();
             WorkstationUsersDTO workstationUsersDTO;
 
-            if(processBean.findById(processId).getSubProcess() != null){ //processo de mould
-                HashMap<String, List<Event>> eventsByMouldCode = processBean.getEventsByMouldCodeFromFilter(processId, filter);
+            HashMap<String, List<Event>> eventsByMouldCode = processBean.getEventsByMouldCodeFromFilter(processId, filter);
 
-                workstationUsersDTO = resourceBean.getUsersWorkHoursWorkstation( workstationId, eventsByMouldCode, false );
+            workstationUsersDTO = resourceBean.getUsersWorkHoursWorkstation( workstationId, eventsByMouldCode, false );
+            /*
+            if(processBean.findById(processId).getSubProcess() != null){ //processo de mould
+
             }else{ //subprocesso de part
                 HashMap<String, List<Event>> eventsByPartCode = processBean.getEventsByPartCodeFromFilter(processId, filter);
 
                 workstationUsersDTO = resourceBean.getUsersWorkHoursWorkstation( workstationId, eventsByPartCode, true );
             }
+
+             */
 
             return Response.ok(workstationUsersDTO).build();
 
@@ -599,15 +635,18 @@ public class ResourceServ
 
             ActivityWorkstationsDTO activityWorkstationsDTO;
 
-            if(processBean.findById(processId).getSubProcess() != null){ //processo de mould
-                HashMap<String, List<Event>> eventsByMouldCode = processBean.sortEventsByMouldCode(events);
+            HashMap<String, List<Event>> eventsByMouldCode = processBean.sortEventsByMouldCode(events);
 
-                activityWorkstationsDTO = resourceBean.getWorkstationsOperationalHoursActivity( activityId, eventsByMouldCode, false );
+            activityWorkstationsDTO = resourceBean.getWorkstationsOperationalHoursActivity( activityId, eventsByMouldCode, false );
+            /*
+            if(processBean.findById(processId).getSubProcess() != null){ //processo de mould
+
             }else{ //subprocesso de part
                 HashMap<String, List<Event>> eventsByPartCode = processBean.sortEventsByPartCode(events);
 
                 activityWorkstationsDTO = resourceBean.getWorkstationsOperationalHoursActivity( activityId, eventsByPartCode, true );
             }
+             */
 
             return Response.ok(activityWorkstationsDTO).build();
         }
@@ -639,15 +678,19 @@ public class ResourceServ
             ProcessBean processBean = resourceBean.getProcessBean();
             ActivityWorkstationsDTO activityWorkstationsDTO;
 
-            if(processBean.findById(processId).getSubProcess() != null){ //processo de mould
-                HashMap<String, List<Event>> eventsByMouldCode = processBean.getEventsByMouldCodeFromFilter(processId, filter);
+            HashMap<String, List<Event>> eventsByMouldCode = processBean.getEventsByMouldCodeFromFilter(processId, filter);
 
-                activityWorkstationsDTO = resourceBean.getWorkstationsOperationalHoursActivity( activityId, eventsByMouldCode, false );
+            activityWorkstationsDTO = resourceBean.getWorkstationsOperationalHoursActivity( activityId, eventsByMouldCode, false );
+            /*
+            if(processBean.findById(processId).getSubProcess() != null){ //processo de mould
+
             }else{ //subprocesso de part
                 HashMap<String, List<Event>> eventsByPartCode = processBean.getEventsByPartCodeFromFilter(processId, filter);
 
                 activityWorkstationsDTO = resourceBean.getWorkstationsOperationalHoursActivity( activityId, eventsByPartCode, true );
             }
+
+             */
 
             return Response.ok(activityWorkstationsDTO).build();
 

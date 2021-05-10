@@ -194,15 +194,19 @@ public class ActivityServ
 
             List<ActivityTotalWorkHoursDTO> activitiesTotalWorkHours;
 
-            if(processBean.findById(processId).getSubProcess() != null){ //processo de mould
-                HashMap<String, List<Event>> eventsByMouldCode = processBean.sortEventsByMouldCode(events);
+            HashMap<String, List<Event>> eventsByMouldCode = processBean.sortEventsByMouldCode(events);
 
-                activitiesTotalWorkHours = activityBean.getTotalWorkHoursActivities( eventsByMouldCode );
+            activitiesTotalWorkHours = activityBean.getTotalWorkHoursActivities( eventsByMouldCode );
+            /*VAAM - não ha parts
+            if(processBean.findById(processId).getSubProcess() != null){ //processo de mould
+
             }else{ //subprocesso de part
                 HashMap<String, List<Event>> eventsByPartCode = processBean.sortEventsByPartCode(events);
 
                 activitiesTotalWorkHours = activityBean.getTotalWorkHoursActivities( eventsByPartCode );
             }
+
+             */
 
             return Response.ok(activitiesTotalWorkHours).build();
 
@@ -229,15 +233,18 @@ public class ActivityServ
 
             List<ActivityTotalWorkHoursDTO> activitiesTotalWorkHours;
 
-            if(processBean.findById(processId).getSubProcess() != null){ //processo de mould
-                HashMap<String, List<Event>> eventsByMouldCode = processBean.getEventsByMouldCodeFromFilter(processId, filter);
+            HashMap<String, List<Event>> eventsByMouldCode = processBean.getEventsByMouldCodeFromFilter(processId, filter);
 
-                activitiesTotalWorkHours = activityBean.getTotalWorkHoursActivities( eventsByMouldCode );
+            activitiesTotalWorkHours = activityBean.getTotalWorkHoursActivities( eventsByMouldCode );
+            /*VAAM - não ha parts
+            if(processBean.findById(processId).getSubProcess() != null){ //processo de mould
+
             }else{ //subprocesso de part
                 HashMap<String, List<Event>> eventsByPartCode = processBean.getEventsByPartCodeFromFilter(processId, filter);
 
                 activitiesTotalWorkHours = activityBean.getTotalWorkHoursActivities( eventsByPartCode );
             }
+            */
 
             return Response.ok(activitiesTotalWorkHours).build();
 
@@ -272,15 +279,19 @@ public class ActivityServ
             List<Event> events = processBean.getEventsByProcessID( processId );
             List<ActivityTotalOperationalHoursDTO> activitiesTotalOperationalHours;
 
-            if(processBean.findById(processId).getSubProcess() != null){ //processo de mould
-                HashMap<String, List<Event>> eventsByMouldCode = processBean.sortEventsByMouldCode(events);
+            HashMap<String, List<Event>> eventsByMouldCode = processBean.sortEventsByMouldCode(events);
 
-                activitiesTotalOperationalHours = activityBean.getTotalOperationalHoursActivity( eventsByMouldCode );
+            activitiesTotalOperationalHours = activityBean.getTotalOperationalHoursActivity( eventsByMouldCode );
+
+            /* VAAM -não ha parts
+            if(processBean.findById(processId).getSubProcess() != null){ //processo de mould
+
             }else{ //subprocesso de part
                 HashMap<String, List<Event>> eventsByPartCode = processBean.sortEventsByPartCode(events);
 
                 activitiesTotalOperationalHours = activityBean.getTotalOperationalHoursActivity( eventsByPartCode );
             }
+             */
 
             return Response.ok(activitiesTotalOperationalHours).build();
 
@@ -308,15 +319,19 @@ public class ActivityServ
 
             List<ActivityTotalOperationalHoursDTO> activitiesTotalOperationalHours;
 
-            if(processBean.findById(processId).getSubProcess() != null){ //processo de mould
-                HashMap<String, List<Event>> eventsByMouldCode = processBean.getEventsByMouldCodeFromFilter(processId, filter);
+            HashMap<String, List<Event>> eventsByMouldCode = processBean.getEventsByMouldCodeFromFilter(processId, filter);
 
-                activitiesTotalOperationalHours = activityBean.getTotalOperationalHoursActivity( eventsByMouldCode );
+            activitiesTotalOperationalHours = activityBean.getTotalOperationalHoursActivity( eventsByMouldCode );
+            /* VAAM - Não ha parts
+            if(processBean.findById(processId).getSubProcess() != null){ //processo de mould
+
             }else{ //subprocesso de part
                 HashMap<String, List<Event>> eventsByPartCode = processBean.getEventsByPartCodeFromFilter(processId, filter);
 
                 activitiesTotalOperationalHours = activityBean.getTotalOperationalHoursActivity( eventsByPartCode );
             }
+
+             */
 
             return Response.ok(activitiesTotalOperationalHours).build();
 
