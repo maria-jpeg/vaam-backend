@@ -14,15 +14,22 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Getter @Setter
-@NoArgsConstructor
 public class IvMHelper {
     private HashMap<Integer,Integer> activityCardinalitiesComplete;
     private HashMap<Pair<Integer,Integer>,Integer> edgeCardinality;
     private HashMap<Pair<Integer,Integer>,Integer> deviationCardinality;
-    private IvMModel model;
     private List<Pair<Integer,Integer>> startActivities;
     private List<Pair<Integer,Integer>> endActivities;
     private String[] activitiesComFreq;
+
+    public IvMHelper(){
+        activityCardinalitiesComplete = new HashMap<>();
+        edgeCardinality = new HashMap<>();
+        deviationCardinality = new HashMap<>();
+        startActivities = new LinkedList<>();
+        endActivities = new LinkedList<>();
+        activitiesComFreq = new String[0];
+    }
 
     public long getActivityCardinality(int node){
         return activityCardinalitiesComplete.get(node);

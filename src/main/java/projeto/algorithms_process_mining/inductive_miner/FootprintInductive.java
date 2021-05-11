@@ -43,18 +43,21 @@ public class FootprintInductive extends FootprintMatrix {
     public FootprintInductive(InductiveMiner algorithm, List<Event> events, LinkedHashSet<String> eventNames, boolean statistics) {
         super(algorithm, eventNames, statistics);
         this.inductiveMiner = algorithm;
-
-        Pair<IvMLogInfo,IvMModel> x = alignLog(getEventLog(events));
-        this.ivm = getDFM(x.getA(), x.getB(), inductiveMiner.showDeviations);
+        if (inductiveMiner.paths==0L){
+            this.ivm = new IvMHelper(); //Se os caminhos = 0 não preciso de calcular nada
+        }else {
+            Pair<IvMLogInfo,IvMModel> x = alignLog(getEventLog(events));
+            this.ivm = getDFM(x.getA(), x.getB(), inductiveMiner.showDeviations);
+        }
 
         super.eventNames = new LinkedHashSet<>(Arrays.asList(ivm.getActivitiesComFreq()));
         super.eventNamesMapper = buildEventsMapper(super.eventNames);
         //Get start and end activities from dfg
-        for (Integer startActivity : ivm.getModel().getDfg().getStartNodes().toArray()) {
-            super.startEvents.put(startActivity,(int) 1);//Hardcoded 1. Não sei que valor meter aqui.
+        for (Pair<Integer,Integer> startActivity : ivm.getStartActivities()) {
+            super.startEvents.put(startActivity.getA(), startActivity.getB());//Hardcoded 1. Não sei que valor meter aqui.
         }
-        for (Integer endActivity : ivm.getModel().getDfg().getEndNodes().toArray()) {
-            super.endEvents.put(endActivity,(int) 1);
+        for (Pair<Integer,Integer> endActivity : ivm.getEndActivities()) {
+            super.endEvents.put(endActivity.getA(),endActivity.getB());
         }
         //obrigar novo
         super.footprintStatistics = new FootprintStatistics(this);
@@ -78,6 +81,7 @@ public class FootprintInductive extends FootprintMatrix {
 
     @NotNull
     private Pair<IvMLogInfo,IvMModel> alignLog(XLog log){
+
         ProMCanceller proMCanceller = () -> false;
         IvMCanceller ivMCanceller = new IvMCanceller(proMCanceller);
         //IvMModel
@@ -88,6 +92,7 @@ public class FootprintInductive extends FootprintMatrix {
         //Filtrar por caminhos e actividades
         FilterLeastOccurringActivities.filter(imLog,imLogInfo, inductiveMiner.activities, null);
         VisualMinerParameters visualMinerParameters = new VisualMinerParameters(inductiveMiner.paths);
+
         IvMModel model = miner.mine(imLog,imLogInfo,visualMinerParameters,ivMCanceller);
 
         /*ALIGNMENT*/
@@ -297,9 +302,10 @@ public class FootprintInductive extends FootprintMatrix {
 
         IvMHelper ivMHelper = new IvMHelper();
         ivMHelper.setEdgeCardinality(edgeCardinality);
-        ivMHelper.setModel(model);
         ivMHelper.setActivityCardinalitiesComplete(nodeLabels);
         ivMHelper.setActivitiesComFreq(activitiesComFreq);
+        ivMHelper.setStartActivities(startActivities);
+        ivMHelper.setEndActivities(endActivities);
 
         return ivMHelper;
     }
