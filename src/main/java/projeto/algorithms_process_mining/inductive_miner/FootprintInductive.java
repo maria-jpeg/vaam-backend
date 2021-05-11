@@ -2,48 +2,23 @@ package projeto.algorithms_process_mining.inductive_miner;
 
 import gnu.trove.iterator.TIntIterator;
 import gnu.trove.map.TIntObjectMap;
-import gnu.trove.set.TIntSet;
-import org.deckfour.xes.classification.XEventClass;
 import org.deckfour.xes.classification.XEventClasses;
 import org.deckfour.xes.classification.XEventClassifier;
-import org.deckfour.xes.info.XLogInfo;
 import org.deckfour.xes.info.XLogInfoFactory;
-import org.deckfour.xes.info.impl.XLogInfoImpl;
 import org.deckfour.xes.model.*;
-import org.processmining.directlyfollowsmodelminer.mining.DFMMiner;
-import org.processmining.directlyfollowsmodelminer.mining.DFMMiningParameters;
-import org.processmining.directlyfollowsmodelminer.mining.DFMMiningParametersAbstract;
-import org.processmining.directlyfollowsmodelminer.model.DirectlyFollowsModel;
 import org.processmining.framework.plugin.ProMCanceller;
-import org.processmining.plugins.InductiveMiner.MultiSet;
 import org.processmining.plugins.InductiveMiner.Pair;
 import org.processmining.plugins.InductiveMiner.Triple;
 import org.processmining.plugins.InductiveMiner.dfgOnly.log2logInfo.IMLog2IMLogInfoDefault;
 import org.processmining.plugins.InductiveMiner.mining.IMLogInfo;
-import org.processmining.plugins.InductiveMiner.mining.logs.LifeCycleClassifier;
-import org.processmining.plugins.graphviz.colourMaps.ColourMapBlue;
 import org.processmining.plugins.graphviz.dot.Dot;
-import org.processmining.plugins.inductiveVisualMiner.InductiveVisualMinerState;
-import org.processmining.plugins.inductiveVisualMiner.alignedLogVisualisation.data.AlignedLogVisualisationData;
-import org.processmining.plugins.inductiveVisualMiner.alignedLogVisualisation.data.AlignedLogVisualisationDataImplEmpty;
 import org.processmining.plugins.inductiveVisualMiner.alignedLogVisualisation.data.AlignedLogVisualisationDataImplFrequencies;
 import org.processmining.plugins.inductiveVisualMiner.alignment.*;
-import org.processmining.plugins.inductiveVisualMiner.animation.ComputeAnimation;
-import org.processmining.plugins.inductiveVisualMiner.animation.DotToken;
-import org.processmining.plugins.inductiveVisualMiner.animation.IvMTrace2dotToken2;
-import org.processmining.plugins.inductiveVisualMiner.animation.Scaler;
 import org.processmining.plugins.inductiveVisualMiner.chain.IvMCanceller;
-import org.processmining.plugins.inductiveVisualMiner.export.ExportAlignment;
-import org.processmining.plugins.inductiveVisualMiner.export.XDFMExtension;
-import org.processmining.plugins.inductiveVisualMiner.export.XModelAlignmentExtension;
 import org.processmining.plugins.inductiveVisualMiner.helperClasses.IteratorWithPosition;
 import org.processmining.plugins.inductiveVisualMiner.helperClasses.IvMModel;
-import org.processmining.plugins.inductiveVisualMiner.helperClasses.ShortestPathGraph;
-import org.processmining.plugins.inductiveVisualMiner.helperClasses.sizeMaps.SizeMapLinear;
 import org.processmining.plugins.inductiveVisualMiner.ivmlog.*;
 import org.processmining.plugins.inductiveVisualMiner.logFiltering.FilterLeastOccurringActivities;
-import org.processmining.plugins.inductiveVisualMiner.mode.ModePaths;
-import org.processmining.plugins.inductiveVisualMiner.mode.ModePathsDeviations;
 import org.processmining.plugins.inductiveVisualMiner.performance.*;
 import org.processmining.plugins.inductiveVisualMiner.traceview.TraceViewEventColourMap;
 import org.processmining.plugins.inductiveVisualMiner.visualMinerWrapper.VisualMinerParameters;
@@ -63,7 +38,6 @@ public class FootprintInductive extends FootprintMatrix {
 
     private InductiveMiner inductiveMiner;
 
-    //private DirectlyFollowsGraph dfg;
     private IvMHelper ivm;
 
     public FootprintInductive(InductiveMiner algorithm, List<Event> events, LinkedHashSet<String> eventNames, boolean statistics) {
@@ -71,7 +45,7 @@ public class FootprintInductive extends FootprintMatrix {
         this.inductiveMiner = algorithm;
 
         Pair<IvMLogInfo,IvMModel> x = alignLog(getEventLog(events));
-        this.ivm = getDFM(x.getA(), x.getB(), true); //Por enquanto true
+        this.ivm = getDFM(x.getA(), x.getB(), inductiveMiner.showDeviations);
 
         super.eventNames = new LinkedHashSet<>(Arrays.asList(ivm.getActivitiesComFreq()));
         super.eventNamesMapper = buildEventsMapper(super.eventNames);
@@ -99,8 +73,7 @@ public class FootprintInductive extends FootprintMatrix {
 
     private XLog getEventLog(List<Event> events){
         String csvContent = XESHelper.eventsToCsv(events);//converter para csv
-        XLog log = XESHelper.eventsCsvToXes(csvContent);//Converter para xes
-        return log;
+        return XESHelper.eventsCsvToXes(csvContent);
     }
 
     @NotNull
@@ -116,8 +89,6 @@ public class FootprintInductive extends FootprintMatrix {
         FilterLeastOccurringActivities.filter(imLog,imLogInfo, inductiveMiner.activities, null);
         VisualMinerParameters visualMinerParameters = new VisualMinerParameters(inductiveMiner.paths);
         IvMModel model = miner.mine(imLog,imLogInfo,visualMinerParameters,ivMCanceller);
-
-
 
         /*ALIGNMENT*/
         AlignmentComputerImpl alignmentComputer = new AlignmentComputerImpl();
@@ -199,7 +170,7 @@ public class FootprintInductive extends FootprintMatrix {
                 if (isInteger(edge.getLabel()))
                    weight = Integer.parseInt(edge.getLabel());
                 //Se a node não existir no modelo quer dizer que é um nó vazio. Adicioná-lo à lista aux
-                if (startActivity.getUnode()==-1){
+                if (startActivity.getUnode()==-1 && showDeviations){
                     String label = "empty-node#"+startActivity.getId();
                     int index = allModelNodesName.indexOf(label);
                     if(index==-1){ //não existe
@@ -223,7 +194,7 @@ public class FootprintInductive extends FootprintMatrix {
                 int weight = -1;
                 if (isInteger(edge.getLabel()))
                     weight = Integer.parseInt(edge.getLabel());
-                if (endActivity.getUnode()==-1){
+                if (endActivity.getUnode()==-1 && showDeviations){
                     String label = "empty-node#"+endActivity.getId();
                     int index = allModelNodesName.indexOf(label);
                     if(index==-1){ //não existe
@@ -264,7 +235,7 @@ public class FootprintInductive extends FootprintMatrix {
                 sourceIndex = index;
             }
             if (target.getUnode() == -1){ //Quer dizer que é um empty-node?
-                targetLabel = "empty-node#"+source.getId();
+                targetLabel = "empty-node#"+target.getId();
                 int index = allModelNodesName.indexOf(targetLabel);
                 if (index==-1){
                     index = allModelNodesId.size();
@@ -299,37 +270,36 @@ public class FootprintInductive extends FootprintMatrix {
                 weight = Integer.parseInt(desvio.getLabel());
             deviationCardinality.put(Pair.of(sourceIndex,targetIndex),weight);
             deviationCardinalityByName.put(Pair.of(allModelNodesName.get(sourceIndex),allModelNodesName.get(targetIndex)),weight);
+
+            //Colocar também os desvios no edges??
+            edgeCardinality.put(Pair.of(sourceIndex,targetIndex),weight);
+            edgeCardinalityByName.put(Pair.of(allModelNodesName.get(sourceIndex),allModelNodesName.get(targetIndex)),weight);
         }
 
-        //Contém os valores correspondentes no visual miner @Deprecated daqui para baixo
-        HashMap<Integer,Long> nodeLabels = new HashMap<>();
-        String[] activitiesComFreq = new String[model.getDfg().getAllNodeNames().length];
-        for (int i = 0; i < model.getDfg().getAllNodeNames().length; i++) {
-            String activityName = model.getActivityName(i);
-            Long freq = visualisationDataImplFrequencies.getNodeLabel(i,true).getB();
-            nodeLabels.put(i,freq);
-            activitiesComFreq[i] = activityName+"@"+freq;
+        //Lista de activities
+        HashMap<Integer,Integer> nodeLabels = new HashMap<>();
+        String[] activitiesComFreq = new String[allModelNodesId.size()];
+        for (LocalDotNode activityNode : activityNodes) {
+            
+            String[] activityFreq = activityNode.getLabel().split("&#92;n");
+            int freq = -1;
+            if (isInteger(activityFreq[1]))
+                freq = Integer.parseInt(activityFreq[1]);
+            nodeLabels.put(activityNode.getUnode(),freq);
+            activitiesComFreq[activityNode.getUnode()] = activityFreq[0]+"@"+activityFreq[1];
         }
-
-        for (int i = 0; i < model.getDfg().getAllNodeNames().length; i++) {
-            for (int j = 0; j < model.getDfg().getAllNodeNames().length; j++) {
-                //Preencher os edges
-                //Novo Par com source e node
-                if (model.getDfg().containsEdge(i,j)){
-                    Pair<String,Long> freq = visualisationDataImplFrequencies.getEdgeLabel(i,j,true);
-                    edgeCardinality.put(Pair.of(i,j),freq.getRight().intValue());
-                    edgeCardinalityByName.put(Pair.of(model.getActivityName(i),model.getActivityName(j)),freq.getRight().intValue());
-                }
-            }
+        //Adicionar as que nao sao activities
+        for (int i = activityNodes.size(); i < allModelNodesId.size(); i++) {
+            nodeLabels.put(i,1); //Hardcoded 1 porque é um ponto sem ativiade
+            activitiesComFreq[i] = allModelNodesName.get(i);
         }
+        
 
         IvMHelper ivMHelper = new IvMHelper();
         ivMHelper.setEdgeCardinality(edgeCardinality);
         ivMHelper.setModel(model);
         ivMHelper.setActivityCardinalitiesComplete(nodeLabels);
         ivMHelper.setActivitiesComFreq(activitiesComFreq);
-
-        //IvMHelper ivMHelper = new IvMHelper();
 
         return ivMHelper;
     }
@@ -435,6 +405,6 @@ public class FootprintInductive extends FootprintMatrix {
 
     @Override
     public boolean areEventsConnected(int a, int b) {
-        return ivm.getModel().getDfg().containsEdge(a,b);
+        return ivm.containsEdge(a,b);
     }
 }

@@ -26,15 +26,18 @@ public class InductiveMiner implements ProcessMiningAlgorithm {
     @Getter
     protected double paths;
     protected double activities;
+    protected Boolean showDeviations;
 
-    public InductiveMiner(double paths,double activities) {
+    public InductiveMiner(double paths,double activities,boolean showDeviations) {
         this.paths = paths;
         this.activities = activities;
+        this.showDeviations = showDeviations;
     }
 
     public InductiveMiner() {
         this.paths = 0.8;
         this.activities = 1;
+        this.showDeviations = false;
     }
 
     public static ProcessTree miner(XLog xLog){

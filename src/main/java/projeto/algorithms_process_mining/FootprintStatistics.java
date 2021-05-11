@@ -83,7 +83,7 @@ public class FootprintStatistics
         {
             for (int j = 0; j < numberOfEvents; j++)
             {
-                if(ivm.getModel().getDfg().containsEdge(i,j)){
+                if(ivm.containsEdge(i,j)){
                     frequency[i][j] = (int)ivm.getEdgeCardinality(i,j);
                 }
             }

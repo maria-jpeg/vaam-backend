@@ -143,15 +143,19 @@ public class WorkflowNetworkServ
             @QueryParam("activities")
             @ApiParam(value = "most frequent activities")
             @Min( value = 0, message = "- activities must be between 0 and 1")
-            @Max( value = 1, message = "- activities must be between 0 and 1") Float activities
+            @Max( value = 1, message = "- activities must be between 0 and 1") Float activities,
+            @QueryParam("showDeviations")
+            @ApiParam(value = "Show deviations") Boolean showDeviations
             )
     {
         if( paths == null )
             paths = 0.8F;
         if( activities == null )
             activities = 1F;
+        if (showDeviations == null)
+            showDeviations = false;
 
-        InductiveMiner algorithm = new InductiveMiner(paths,activities);
+        InductiveMiner algorithm = new InductiveMiner(paths,activities,showDeviations);
         return getWorkflowNetworkByProcessId( processId, algorithm );
 
     }
