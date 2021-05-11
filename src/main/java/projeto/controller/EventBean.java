@@ -8,7 +8,6 @@ import org.processmining.plugins.inductiveVisualMiner.plugins.GraphvizProcessTre
 import org.processmining.processtree.ProcessTree;
 import projeto.algorithms_process_mining.inductive_miner.InductiveMiner;
 import projeto.api.dtos.entities.*;
-import projeto.api.dtos.inductiveminer.DotDTO;
 import projeto.controller.exceptions.EntityDoesNotExistException;
 import projeto.core.*;
 import projeto.core.Process;
@@ -91,19 +90,6 @@ public class EventBean extends BaseBean<Event, EventDTO> {
         }
 
         return eventDTOSFullUsers;
-    }
-
-    public DotDTO getEventTree() throws GraphvizProcessTree.NotYetImplementedException
-    {
-        List<Event> events = eventDAO.getAll();
-
-        String csvContent = XESHelper.eventsToCsv(events);
-        XLog log = XESHelper.eventsCsvToXes(csvContent);
-
-        ProcessTree tree = InductiveMiner.miner(log);
-        Dot dot = GraphvizProcessTree.convert(tree);
-        DotDTO dotDTO = new DotDTO(dot.getNodes(),dot.getEdges());
-        return dotDTO;
     }
 
     /*@Override

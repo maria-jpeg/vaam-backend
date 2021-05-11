@@ -2,6 +2,7 @@ package projeto.algorithms_process_mining.inductive_miner;
 
 import gnu.trove.iterator.TIntIterator;
 import gnu.trove.map.TIntObjectMap;
+import lombok.Getter;
 import org.deckfour.xes.classification.XEventClasses;
 import org.deckfour.xes.classification.XEventClassifier;
 import org.deckfour.xes.info.XLogInfoFactory;
@@ -37,24 +38,23 @@ import java.util.*;
 public class FootprintInductive extends FootprintMatrix {
 
     private InductiveMiner inductiveMiner;
-
-    private IvMHelper ivm;
+    @Getter
+    protected IvMHelper ivm;
 
     public FootprintInductive(InductiveMiner algorithm, List<Event> events, LinkedHashSet<String> eventNames, boolean statistics) {
         super(algorithm, eventNames, statistics);
         this.inductiveMiner = algorithm;
-        if (inductiveMiner.paths==0L){
-            this.ivm = new IvMHelper(); //Se os caminhos = 0 não preciso de calcular nada
-        }else {
-            Pair<IvMLogInfo,IvMModel> x = alignLog(getEventLog(events));
-            this.ivm = getDFM(x.getA(), x.getB(), inductiveMiner.showDeviations);
-        }
 
-        super.eventNames = new LinkedHashSet<>(Arrays.asList(ivm.getActivitiesComFreq()));
+        this.ivm = new IvMHelper(); //Se os caminhos = 0 não preciso de calcular nada
+
+        Pair<IvMLogInfo,IvMModel> x = alignLog(getEventLog(events));
+        this.ivm = getDFM(x.getA(), x.getB(), inductiveMiner.showDeviations);
+
+        super.eventNames = new LinkedHashSet<>(ivm.getNodeNames());
         super.eventNamesMapper = buildEventsMapper(super.eventNames);
         //Get start and end activities from dfg
         for (Pair<Integer,Integer> startActivity : ivm.getStartActivities()) {
-            super.startEvents.put(startActivity.getA(), startActivity.getB());//Hardcoded 1. Não sei que valor meter aqui.
+            super.startEvents.put(startActivity.getA(), startActivity.getB());
         }
         for (Pair<Integer,Integer> endActivity : ivm.getEndActivities()) {
             super.endEvents.put(endActivity.getA(),endActivity.getB());
@@ -188,7 +188,9 @@ public class FootprintInductive extends FootprintMatrix {
                         startActivities.add(Pair.of(index,weight));
                     }
                 } else {
-                    startActivities.add(Pair.of(startActivity.getUnode(),weight));
+                    //Provavelmente bug
+                    if (startActivity.getUnode()!= -1)
+                        startActivities.add(Pair.of(startActivity.getUnode(),weight));
                 }
                 //Remover as edges start e end
                 normalEdges.remove(edge);
@@ -212,7 +214,8 @@ public class FootprintInductive extends FootprintMatrix {
                         endActivities.add(Pair.of(index,weight));
                     }
                 } else {
-                    endActivities.add(Pair.of(endActivity.getUnode(),weight));
+                    if (endActivity.getUnode()!= -1)
+                        endActivities.add(Pair.of(endActivity.getUnode(),weight));
                 }
                 //Remover as edges start e end
                 normalEdges.remove(edge);
@@ -291,19 +294,20 @@ public class FootprintInductive extends FootprintMatrix {
             if (isInteger(activityFreq[1]))
                 freq = Integer.parseInt(activityFreq[1]);
             nodeLabels.put(activityNode.getUnode(),freq);
-            activitiesComFreq[activityNode.getUnode()] = activityFreq[0]+"@"+activityFreq[1];
+            //activitiesComFreq[activityNode.getUnode()] = activityFreq[0];
         }
         //Adicionar as que nao sao activities
         for (int i = activityNodes.size(); i < allModelNodesId.size(); i++) {
             nodeLabels.put(i,1); //Hardcoded 1 porque é um ponto sem ativiade
-            activitiesComFreq[i] = allModelNodesName.get(i);
+            //activitiesComFreq[i] = allModelNodesName.get(i);
         }
-        
+
 
         IvMHelper ivMHelper = new IvMHelper();
         ivMHelper.setEdgeCardinality(edgeCardinality);
         ivMHelper.setActivityCardinalitiesComplete(nodeLabels);
-        ivMHelper.setActivitiesComFreq(activitiesComFreq);
+        //ivMHelper.setActivitiesComFreq(activitiesComFreq);
+        ivMHelper.setNodeNames(allModelNodesName);
         ivMHelper.setStartActivities(startActivities);
         ivMHelper.setEndActivities(endActivities);
 

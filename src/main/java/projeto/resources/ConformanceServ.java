@@ -13,7 +13,6 @@ import projeto.api.dtos.conformance.CasePerformanceDTO;
 import projeto.api.dtos.conformance.FiltersDTO;
 import projeto.api.dtos.conformance.deviations.ConformanceNetworkDeviationsDTO;
 import projeto.api.dtos.conformance.performance.ConformanceNetworkPerformanceDTO;
-import projeto.api.dtos.inductiveminer.DotDTO;
 import projeto.controller.ConformanceBean;
 import projeto.controller.EventBean;
 import projeto.controller.ProcessBean;
@@ -452,23 +451,6 @@ public class ConformanceServ
         {
             return Response.status(Response.Status.NOT_FOUND) .type( MediaType.TEXT_PLAIN )
                     .entity( ex.getMessage() ) .build();
-        }
-    }
-
-    @ApiOperation( value = "Endpoint for testing")
-    @GET
-    @UnitOfWork
-    @Path("/InductiveMinerTest")
-    public Response getProcessTree( )
-    {
-        try{
-            DotDTO dotDTO = eventBean.getEventTree();
-
-            return Response.status(Response.Status.OK).entity(dotDTO).build();
-
-        }catch (GraphvizProcessTree.NotYetImplementedException e)
-        {
-            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
     }
 }

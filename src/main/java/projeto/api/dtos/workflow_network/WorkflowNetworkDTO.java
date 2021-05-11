@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import projeto.algorithms_process_mining.FootprintMatrix;
+import projeto.algorithms_process_mining.inductive_miner.FootprintInductive;
+import projeto.algorithms_process_mining.inductive_miner.InductiveMiner;
 
 @NoArgsConstructor
 @Getter @Setter
@@ -17,7 +19,12 @@ public class WorkflowNetworkDTO extends AbstractWorkflowNetworkStringNodeDTO< Re
 
         // Calculate statistics and fill relations
         // To avoid doing the for cycle 2 times
-        this.statistics = footprint.getFootprintStatistics().getStatisticsNetwork( this.relations );
+        //Vaam
+        if (footprint.getAlgorithm().getClass() == InductiveMiner.class){
+            this.statistics = footprint.getFootprintStatistics().getStatisticsNetwork( this.relations ,(FootprintInductive)footprint);
+        }else {
+            this.statistics = footprint.getFootprintStatistics().getStatisticsNetwork( this.relations );
+        }
 
     }
 

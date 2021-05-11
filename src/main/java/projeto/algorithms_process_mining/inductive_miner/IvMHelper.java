@@ -20,7 +20,9 @@ public class IvMHelper {
     private HashMap<Pair<Integer,Integer>,Integer> deviationCardinality;
     private List<Pair<Integer,Integer>> startActivities;
     private List<Pair<Integer,Integer>> endActivities;
-    private String[] activitiesComFreq;
+    private List<String> nodeNames;
+
+    //private String[] activitiesComFreq;
 
     public IvMHelper(){
         activityCardinalitiesComplete = new HashMap<>();
@@ -28,7 +30,8 @@ public class IvMHelper {
         deviationCardinality = new HashMap<>();
         startActivities = new LinkedList<>();
         endActivities = new LinkedList<>();
-        activitiesComFreq = new String[0];
+        nodeNames = new LinkedList<>();
+        //activitiesComFreq = new String[0];
     }
 
     public long getActivityCardinality(int node){

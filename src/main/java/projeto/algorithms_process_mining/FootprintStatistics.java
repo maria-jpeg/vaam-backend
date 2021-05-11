@@ -6,6 +6,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.util.Precision;
 import org.processmining.plugins.directlyfollowsgraph.DirectlyFollowsGraph;
+import projeto.algorithms_process_mining.inductive_miner.FootprintInductive;
 import projeto.algorithms_process_mining.inductive_miner.IvMHelper;
 import projeto.api.dtos.DurationDTO;
 import projeto.api.dtos.workflow_network.NodeStats;
@@ -194,6 +195,57 @@ public class FootprintStatistics
         }
 
         // return new StatisticsFlowNetworkDTO<>( statsNodesList, statsRelationsList );
+        return statisticsNetwork;
+    }
+
+    public StatisticsWorkflowNetworkDTO<NodeStats> getStatisticsNetwork(List<RelationMapDTO<Integer>> workflowNetworkRelations , FootprintInductive footprint){
+
+        IvMHelper ivm = footprint.getIvm();
+        StatisticsWorkflowNetworkDTO<NodeStats> statisticsNetwork = new StatisticsWorkflowNetworkDTO<>();
+        List<NodeStats> statsNodesList = statisticsNetwork.getNodes();
+        List<RelationMapDTO<NodeStats>> statsRelationsList = statisticsNetwork.getRelations();
+
+        List<Integer> auxRelationsList = new ArrayList<>();
+        List<NodeStats> auxNodeStatsList = new ArrayList<>();
+        for (int i = 0; i < numberOfEvents; i++) {
+            //auxRelationsList.clear();
+            //auxNodeStatsList.clear();
+            auxRelationsList = new ArrayList<>();
+            auxNodeStatsList = new ArrayList<>();
+            for (int j = 0; j < numberOfEvents; j++) {
+                if (footprint.areEventsConnected(i, j)) {
+                    //System.out.println( i + " " + j + " : " + frequency[i][j] );
+
+                    auxRelationsList.add(j);
+                    DescriptiveStatistics durations = transitionDurations[i][j];
+                    auxNodeStatsList.add(new NodeStats(
+                                    j,
+                                    frequency[i][j],
+                                    new DurationDTO((long) Precision.round(durations.getMean(), 0)),
+                                    new DurationDTO((long) Precision.round(durations.getPercentile(50), 0)),
+                                    new DurationDTO((long) Precision.round(durations.getMin(), 0)),
+                                    new DurationDTO((long) Precision.round(durations.getMax(), 0))
+                            )
+                    );
+
+                }
+            }
+            if (!auxRelationsList.isEmpty()) {
+                workflowNetworkRelations.add(new RelationMapDTO<>(i, auxRelationsList)); // new ArrayList<>()
+                statsRelationsList.add(new RelationMapDTO<>(i, auxNodeStatsList)); // new ArrayList<>()
+
+            }
+
+            statsNodesList.add(new NodeStats(
+                    i,
+                    ivm.getActivityCardinalitiesComplete().get(i),
+                    new DurationDTO(0),
+                    new DurationDTO(0),
+                    new DurationDTO(0),
+                    new DurationDTO(0)
+            ));
+
+        }
         return statisticsNetwork;
     }
 
