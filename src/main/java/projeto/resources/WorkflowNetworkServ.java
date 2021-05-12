@@ -8,6 +8,7 @@ import projeto.algorithms_process_mining.alpha_algorithm.AlphaAlgorithm;
 import projeto.algorithms_process_mining.heuristic_miner.HeuristicMiner;
 import projeto.algorithms_process_mining.inductive_miner.InductiveMiner;
 import projeto.api.dtos.workflow_network.WorkflowNetworkDTO;
+import projeto.api.dtos.workflow_network.WorkflowNetworkPathsAndDeviationsDTO;
 import projeto.controller.LogBean;
 import projeto.controller.ProcessBean;
 import projeto.controller.exceptions.EntityDoesNotExistException;
@@ -127,7 +128,7 @@ public class WorkflowNetworkServ
 
     }
 
-    @ApiOperation( value = "Get the workflow network with Inductive Miner of a process", response = WorkflowNetworkDTO.class)
+    @ApiOperation( value = "Get the workflow network with Inductive Miner of a process", response = WorkflowNetworkPathsAndDeviationsDTO.class)
     @ApiResponses(value = {@ApiResponse(code = 404, message = "Process not found") })
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -164,14 +165,15 @@ public class WorkflowNetworkServ
     private Response getWorkflowNetworkByProcessId( long processId, ProcessMiningAlgorithm algorithm )
     {
         try {
-            WorkflowNetworkDTO workflowNetwork;
             if (algorithm.getClass() == InductiveMiner.class){
-                workflowNetwork = processBean.getWorkFlowNetworkFromProcess( processId, (InductiveMiner) algorithm );
+                WorkflowNetworkPathsAndDeviationsDTO workflowNetwork = processBean.getWorkFlowNetworkFromProcess( processId, (InductiveMiner) algorithm );
+                return Response.ok( workflowNetwork ).build();
             }
             else{
-                workflowNetwork = processBean.getWorkFlowNetworkFromProcess( processId, algorithm );
+                WorkflowNetworkDTO workflowNetwork = processBean.getWorkFlowNetworkFromProcess( processId, algorithm );
+                return Response.ok( workflowNetwork ).build();
             }
-            return Response.ok( workflowNetwork ).build();
+
         }
         catch ( EntityDoesNotExistException ex)
         {

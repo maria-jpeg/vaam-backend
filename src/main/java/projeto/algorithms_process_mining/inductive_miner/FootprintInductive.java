@@ -284,8 +284,8 @@ public class FootprintInductive extends FootprintMatrix {
             deviationCardinalityByName.put(Pair.of(allModelNodesName.get(sourceIndex),allModelNodesName.get(targetIndex)),weight);
 
             //Colocar também os desvios no edges??
-            edgeCardinality.put(Pair.of(sourceIndex,targetIndex),weight);
-            edgeCardinalityByName.put(Pair.of(allModelNodesName.get(sourceIndex),allModelNodesName.get(targetIndex)),weight);
+            //edgeCardinality.put(Pair.of(sourceIndex,targetIndex),weight);
+            //edgeCardinalityByName.put(Pair.of(allModelNodesName.get(sourceIndex),allModelNodesName.get(targetIndex)),weight);
         }
 
         //Lista de activities
@@ -306,34 +306,55 @@ public class FootprintInductive extends FootprintMatrix {
             //activitiesComFreq[i] = allModelNodesName.get(i);
         }
 
+
+
         //Preencher relations
         List<NodeRelationDeviationsMap> relations = new LinkedList<>();
-        List<Relation> deviations = new LinkedList<>();
         for (Integer from : allModelNodesId) {
             NodeRelationDeviationsMap relationDeviationsMap = new NodeRelationDeviationsMap();
             List<NodeFrequencyDTO> listTo = new LinkedList<>();
-            relationDeviationsMap.setFrom(from);
-
+            relationDeviationsMap.setFrom(-1);
             for (Integer to : allModelNodesId) {
                 //Quer dizer que existe edge, logo existe relaçao
                 if (edgeCardinality.get(Pair.of(from,to)) != null){
+                    relationDeviationsMap.setFrom(from);
                     NodeFrequencyDTO nodeFrequencyDTO = new NodeFrequencyDTO();
                     nodeFrequencyDTO.setNode(to);
                     int frequency = edgeCardinality.get(Pair.of(from,to));
                     nodeFrequencyDTO.setFrequency(frequency);
                     listTo.add(nodeFrequencyDTO);
                 }
-                //verificar se é desvio
-                if (showDeviations && deviationCardinality.get(Pair.of(from,to)) != null){
-                    Relation relation = new Relation();
-                    relation.setFrom(from);
-                    relation.setTo(to);
-                    deviations.add(relation);
+            }
+            if (relationDeviationsMap.getFrom()!=-1){
+                relationDeviationsMap.setTo(listTo);
+                relations.add(relationDeviationsMap);
+            }
+        }
+
+        List<NodeRelationDeviationsMap> deviations = new LinkedList<>();
+        if (showDeviations){
+            for (Integer from : allModelNodesId) {
+                NodeRelationDeviationsMap relationDeviationsMap = new NodeRelationDeviationsMap();
+                List<NodeFrequencyDTO> listTo = new LinkedList<>();
+                relationDeviationsMap.setFrom(-1);
+                for (Integer to : allModelNodesId) {
+                    //Quer dizer que existe edge, logo existe relaçao
+                    if (deviationCardinality.get(Pair.of(from,to)) != null){
+                        relationDeviationsMap.setFrom(from);
+                        NodeFrequencyDTO nodeFrequencyDTO = new NodeFrequencyDTO();
+                        nodeFrequencyDTO.setNode(to);
+                        int frequency = deviationCardinality.get(Pair.of(from,to));
+                        nodeFrequencyDTO.setFrequency(frequency);
+                        listTo.add(nodeFrequencyDTO);
+                    }
+                }
+                if (relationDeviationsMap.getFrom()!=-1) {
+                    relationDeviationsMap.setTo(listTo);
+                    deviations.add(relationDeviationsMap);
                 }
             }
-            relationDeviationsMap.setTo(listTo);
-            relations.add(relationDeviationsMap);
         }
+
 
         IvMHelper ivMHelper = new IvMHelper();
         ivMHelper.setEdgeCardinality(edgeCardinality);

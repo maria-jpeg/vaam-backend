@@ -5,6 +5,7 @@ import projeto.algorithms_process_mining.ProcessMiningAlgorithm;
 import projeto.algorithms_process_mining.inductive_miner.InductiveMiner;
 import projeto.api.dtos.entities.ProcessDTO;
 import projeto.api.dtos.workflow_network.WorkflowNetworkDTO;
+import projeto.api.dtos.workflow_network.WorkflowNetworkPathsAndDeviationsDTO;
 import projeto.controller.exceptions.EntityDoesNotExistException;
 import projeto.controller.exceptions.EntityExistsException;
 import projeto.controller.exceptions.MyException;
@@ -405,7 +406,7 @@ public class ProcessBean extends BaseBean<Process, ProcessDTO>{
 
     }
 
-    public WorkflowNetworkDTO getWorkFlowNetworkFromProcess(long processId, InductiveMiner inductiveMiner ) throws EntityDoesNotExistException
+    public WorkflowNetworkPathsAndDeviationsDTO getWorkFlowNetworkFromProcess(long processId, InductiveMiner inductiveMiner ) throws EntityDoesNotExistException
     {
         List<Event> processEvents = processDAO.getEventsByProcessID( processId );
         LinkedHashSet<String> eventsNames = new LinkedHashSet<>();
@@ -414,9 +415,7 @@ public class ProcessBean extends BaseBean<Process, ProcessDTO>{
         }
         List<List<Event>> listOfListOfevents = new LinkedList<>();
         listOfListOfevents.add(processEvents);
-        return inductiveMiner.discoverWorkflowNetwork(listOfListOfevents, eventsNames );
-
-
+        return inductiveMiner.discoverWorkflowNetworkWithDeviations(processEvents, eventsNames );
     }
 
 

@@ -14,6 +14,7 @@ import projeto.algorithms_process_mining.FootprintMatrix;
 import projeto.algorithms_process_mining.ProcessMiningAlgorithm;
 import projeto.api.dtos.conformance.deviations.ConformanceNetworkDeviationsDTO;
 import projeto.api.dtos.workflow_network.WorkflowNetworkDTO;
+import projeto.api.dtos.workflow_network.WorkflowNetworkPathsAndDeviationsDTO;
 import projeto.core.Event;
 import projeto.data.XESHelper;
 
@@ -81,9 +82,9 @@ public class InductiveMiner implements ProcessMiningAlgorithm {
         return new WorkflowNetworkDTO(footprintInductive);
     }
     //Para IM
-    public ConformanceNetworkDeviationsDTO discoverWorkflowNetworkWithDeviations(List<Event> eventsList, LinkedHashSet<String> eventNamesList){
+    public WorkflowNetworkPathsAndDeviationsDTO discoverWorkflowNetworkWithDeviations(List<Event> eventsList, LinkedHashSet<String> eventNamesList){
         FootprintInductive footprintInductive = new FootprintInductive(this,eventsList,eventNamesList,true);
-        return new ConformanceNetworkDeviationsDTO(footprintInductive,footprintInductive.getIvm().getRelations(),footprintInductive.getIvm().getDeviations());
+        return new WorkflowNetworkPathsAndDeviationsDTO(footprintInductive);
     }
 
     @Override

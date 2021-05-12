@@ -24,7 +24,7 @@ public class IvMHelper {
     private List<Pair<Integer,Integer>> endActivities;
     private List<String> nodeNames;
     private List<NodeRelationDeviationsMap> relations;
-    private List<Relation> deviations;
+    private List<NodeRelationDeviationsMap> deviations;
 
     //private String[] activitiesComFreq;
 
