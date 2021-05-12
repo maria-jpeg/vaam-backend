@@ -29,9 +29,13 @@ import org.processmining.plugins.InductiveMiner.mining.logs.IMLogImpl;
 import org.processmining.plugins.inductiveVisualMiner.visualisation.*;
 import projeto.algorithms_process_mining.FootprintMatrix;
 import projeto.algorithms_process_mining.FootprintStatistics;
+import projeto.api.dtos.NodeFrequencyDTO;
+import projeto.api.dtos.conformance.deviations.NodeRelationDeviationsMap;
 import projeto.core.Event;
+import projeto.core.Relation;
 import projeto.data.XESHelper;
 
+import javax.swing.text.ParagraphView;
 import javax.validation.constraints.NotNull;
 import java.util.*;
 
@@ -302,14 +306,43 @@ public class FootprintInductive extends FootprintMatrix {
             //activitiesComFreq[i] = allModelNodesName.get(i);
         }
 
+        //Preencher relations
+        List<NodeRelationDeviationsMap> relations = new LinkedList<>();
+        List<Relation> deviations = new LinkedList<>();
+        for (Integer from : allModelNodesId) {
+            NodeRelationDeviationsMap relationDeviationsMap = new NodeRelationDeviationsMap();
+            List<NodeFrequencyDTO> listTo = new LinkedList<>();
+            relationDeviationsMap.setFrom(from);
+
+            for (Integer to : allModelNodesId) {
+                //Quer dizer que existe edge, logo existe relaçao
+                if (edgeCardinality.get(Pair.of(from,to)) != null){
+                    NodeFrequencyDTO nodeFrequencyDTO = new NodeFrequencyDTO();
+                    nodeFrequencyDTO.setNode(to);
+                    int frequency = edgeCardinality.get(Pair.of(from,to));
+                    nodeFrequencyDTO.setFrequency(frequency);
+                    listTo.add(nodeFrequencyDTO);
+                }
+                //verificar se é desvio
+                if (showDeviations && deviationCardinality.get(Pair.of(from,to)) != null){
+                    Relation relation = new Relation();
+                    relation.setFrom(from);
+                    relation.setTo(to);
+                    deviations.add(relation);
+                }
+            }
+            relationDeviationsMap.setTo(listTo);
+            relations.add(relationDeviationsMap);
+        }
 
         IvMHelper ivMHelper = new IvMHelper();
         ivMHelper.setEdgeCardinality(edgeCardinality);
         ivMHelper.setActivityCardinalitiesComplete(nodeLabels);
-        //ivMHelper.setActivitiesComFreq(activitiesComFreq);
         ivMHelper.setNodeNames(allModelNodesName);
         ivMHelper.setStartActivities(startActivities);
         ivMHelper.setEndActivities(endActivities);
+        ivMHelper.setRelations(relations);
+        ivMHelper.setDeviations(deviations);
 
         return ivMHelper;
     }

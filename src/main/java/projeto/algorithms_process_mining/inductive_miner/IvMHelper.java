@@ -6,7 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.processmining.plugins.InductiveMiner.Pair;
 import org.processmining.plugins.inductiveVisualMiner.helperClasses.IvMModel;
+import projeto.api.dtos.conformance.deviations.NodeRelationDeviationsMap;
 import projeto.controller.exceptions.ParsingException;
+import projeto.core.Relation;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,6 +23,8 @@ public class IvMHelper {
     private List<Pair<Integer,Integer>> startActivities;
     private List<Pair<Integer,Integer>> endActivities;
     private List<String> nodeNames;
+    private List<NodeRelationDeviationsMap> relations;
+    private List<Relation> deviations;
 
     //private String[] activitiesComFreq;
 
