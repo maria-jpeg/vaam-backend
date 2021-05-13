@@ -48,8 +48,10 @@ select 'user37','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae
 select 'user40','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3','Operador','user40','user40@gmail.pt',NULL UNION ALL
 select 'user87','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3','Operador','user87','user87@gmail.pt',NULL UNION ALL
 select 'user72','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3','Operador','user72','user72@gmail.pt',NULL UNION ALL
-select 'user85','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3','Operador','user85','user85@gmail.pt',NULL UNION ALL
-select 'user42','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3','Operador','user42','user42@gmail.pt',NULL UNION ALL
-select 'user80','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3','Operador','user80','user80@gmail.pt',NULL UNION ALL
-select 'user36','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3','Operador','user36','user36@gmail.pt',NULL UNION ALL
-select 'user48','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3','Operador','user48','user48@gmail.pt',NULL;
+/*running-example*/
+select 'pete','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3','Operador','Pete','pete@gmail.pt',NULL UNION ALL
+select 'sue','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3','Operador','Sue','sue@gmail.pt',NULL UNION ALL
+select 'mike','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3','Operador','Mike','mike@gmail.pt',NULL UNION ALL
+select 'sara','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3','Operador','Sara','sara@gmail.pt',NULL UNION ALL
+select 'sean','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3','Operador','Sean','sean@gmail.pt',NULL UNION ALL
+select 'ellen','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3','Operador','Ellen','ellen@gmail.pt',NULL;
