@@ -145,17 +145,26 @@ public class FootprintInductive extends FootprintMatrix {
         if(notFiltered==null)
             return null;
 
+
+        IteratorWithPosition<IvMTrace> it = notFiltered.iterator();
         ProcessTreeVisualisationInfo info = new ProcessTreeVisualisationInfo();
         Dot dot = new Dot();
         TIntObjectHashMap<LocalDotNode> node2output = new TIntObjectHashMap<>(10, 0.5f, -1);
         LocalDotNode source = new LocalDotNode(dot, info, LocalDotNode.NodeType.source, "", -1, null);
         node2output.put(-1, source);
         LocalDotNode sink = new LocalDotNode(dot, info, LocalDotNode.NodeType.sink, "", -1, source);
-        Scaler scaler = Scaler.fromLog(notFiltered,0D,0D,ivMCanceller);
+        Scaler scaler = Scaler.fromLog(notFiltered,2.0D,180.0D,ivMCanceller);
         info.setRoot(source, sink);
         ShortestPathGraph graph = new ShortestPathGraph(info.getNodes(), info.getEdges());
+        List<List<DotToken>> lists = new ArrayList<>();
+        while (it.hasNext()) {
+            IvMTrace ivmTrace = it.next();
 
-        List<DotToken> dotTokens = ComputeAnimation.computeDotTokensOfTrace(model,notFiltered.get(0),info,new ModePathsDeviations(),scaler,graph,ivMCanceller);
+            //make dot tokens
+            lists.add(ComputeAnimation.computeDotTokensOfTrace(model,notFiltered.get(0),info,new ModePathsDeviations(),scaler,graph,ivMCanceller));
+
+        }
+
         /*GraphVizTokens graphVizTokens = new GraphVizTokens();
         final List<DotToken> tokens = new ArrayList<>();
         IteratorWithPosition<IvMTrace> it = notFiltered.iterator();
@@ -177,11 +186,8 @@ public class FootprintInductive extends FootprintMatrix {
             //final List<DotToken> dotTokens = computeDotTokensOfTrace(model, ivmTrace, info, colourMode, scaler, graph, canceller);
         }*/
 
-
-
         IvMLogInfo logInfo = new IvMLogInfo(notFiltered,model);
         AlignedLogVisualisationDataImplFrequencies visualisationDataImplFrequencies = new AlignedLogVisualisationDataImplFrequencies(model,logInfo);
-
 
         //Contém os valores correspondentes no visual miner
         HashMap<Integer,Long> nodeLabels = new HashMap<>();
