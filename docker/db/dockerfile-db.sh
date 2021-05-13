@@ -22,6 +22,10 @@ if [ "$1" = '/opt/mssql/bin/sqlservr' ]; then
       /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/running-example-just-two-cases/3_PROCESSES.sql
       /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/running-example-just-two-cases/7_EVENTS.sql
       /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/running-example-just-two-cases/8_ACTIVITIES_USERS.sql
+      #running-example-non-conforming
+      /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/running-example-non-conforming/3_PROCESSES.sql
+      /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/running-example-non-conforming/7_EVENTS.sql
+      /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/running-example-non-conforming/8_ACTIVITIES_USERS.sql
       # Note that the container has been initialized so future starts won't wipe changes to the data
       touch /tmp/app-initialized
     }
