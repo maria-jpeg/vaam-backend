@@ -149,7 +149,13 @@ public class FootprintInductive extends FootprintMatrix {
         Set<LocalDotNode> allNodes = ptVisualizationInfo.getNodes();
         Set<LocalDotEdge> allEdges = ptVisualizationInfo.getEdges();
         //desvios?
-        Set<LocalDotEdge> desvios = ptVisualizationInfo.getAllLogMoveEdges();
+        Set<LocalDotEdge> desvios1 = ptVisualizationInfo.getAllLogMoveEdges();
+        Set<LocalDotEdge> desvios2 = ptVisualizationInfo.getAllModelMoveEdges();
+        Set<LocalDotEdge> desvios = new HashSet<>(desvios1);
+        if (desvios2.size()>0){
+            desvios.addAll(desvios2);
+        }
+
         //Todas - (desvios+startEdges+endEdges) (removidas mais à frente)
         Set<LocalDotEdge> normalEdges = new HashSet<>(allEdges);
         if (desvios.size()>0)
