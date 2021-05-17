@@ -27,6 +27,14 @@ if [ "$1" = '/opt/mssql/bin/sqlservr' ]; then
       /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/running-example-non-conforming/5_MOULDS.sql
       /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/running-example-non-conforming/7_EVENTS.sql
       /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/running-example-non-conforming/8_ACTIVITIES_USERS.sql
+      #log-real
+      /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/log-real/2_USERS.sql
+      /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/log-real/3_PROCESSES.sql
+      /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/log-real/4_ACTIVITIES.sql
+      /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/log-real/5_MOULDS.sql
+      /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/log-real/6_WORKSTATIONS.sql
+      /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/log-real/7_0_EVENTS.sql
+      /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/log-real/8_0_ACTIVITIES_USERS.sql
       # Note that the container has been initialized so future starts won't wipe changes to the data
       touch /tmp/app-initialized
     }
