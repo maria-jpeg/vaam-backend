@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import projeto.algorithms_process_mining.FootprintMatrix;
+import projeto.algorithms_process_mining.alpha_miner_prom.AlphaMinerProm;
 import projeto.algorithms_process_mining.inductive_miner.InductiveMiner;
 import projeto.api.dtos.NodeFrequencyDTO;
 
@@ -25,10 +26,10 @@ public abstract class AbstractWorkflowNetworkGenericNodeDTO< NT, RMT extends Rel
 
         // Get Start and End events
         //If it is inductive miner do something else
-        if (footprint.getAlgorithm().getClass() == InductiveMiner.class){
+        if (footprint.getAlgorithm().getClass() == InductiveMiner.class || footprint.getAlgorithm().getClass() == AlphaMinerProm.class){
             this.startEvents = buildStartFrequencies( footprint );
             this.endEvents = buildEndFrequencies( footprint );
-        }else{
+        }else{ //Isto era o que estava no pmviz. Nem sei como funciona :)
             this.startEvents = buildStartFrequencies( footprint );
             this.endEvents = buildStartEndFrequencies( footprint );
         }

@@ -11,6 +11,7 @@ import org.processmining.models.graphbased.directed.petrinet.elements.Place;
 import org.processmining.models.graphbased.directed.petrinet.elements.Transition;
 import org.processmining.models.semantics.petrinet.Marking;
 import projeto.algorithms_process_mining.FootprintMatrix;
+import projeto.algorithms_process_mining.FootprintStatistics;
 import projeto.api.dtos.NodeFrequencyDTO;
 import projeto.api.dtos.conformance.deviations.NodeRelationDeviationsMap;
 import projeto.core.Event;
@@ -39,6 +40,8 @@ public class FootprintAlphaProm extends FootprintMatrix {
         for (Integer endNode : endNodes) {
             super.endEvents.put(endNode,1);
         }
+
+        super.footprintStatistics = new FootprintStatistics(this);
     }
 
     private XLog getEventLog(List<Event> events){
