@@ -1,5 +1,7 @@
 package projeto.api.dtos;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import jdk.tools.jaotc.collect.jar.JarSourceProvider;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,10 +14,15 @@ import static java.lang.Math.abs;
 @Getter @Setter
 public class DurationDTO
 {
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private long days;
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private long hours;
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private long minutes;
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private long seconds;
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private long millis;
 
     public DurationDTO( Duration duration ) { this( duration.getMillis() ); }
