@@ -2,6 +2,7 @@ package projeto.controller;
 
 import org.joda.time.DateTime;
 import projeto.algorithms_process_mining.ProcessMiningAlgorithm;
+import projeto.algorithms_process_mining.alpha_miner_prom.AlphaMinerProm;
 import projeto.algorithms_process_mining.inductive_miner.InductiveMiner;
 import projeto.api.dtos.entities.ProcessDTO;
 import projeto.api.dtos.workflow_network.WorkflowNetworkDTO;
@@ -404,6 +405,18 @@ public class ProcessBean extends BaseBean<Process, ProcessDTO>{
                 new ArrayList<>( eventsListHashMap.values() ), eventsNames );
 
 
+    }
+
+    public WorkflowNetworkDTO getWorkFlowNetworkFromProcess(long processId, AlphaMinerProm algorithm ) throws EntityDoesNotExistException
+    {
+        List<Event> processEvents = processDAO.getEventsByProcessID( processId );
+        LinkedHashSet<String> eventsNames = new LinkedHashSet<>();
+        for (Event processEvent : processEvents) {
+            eventsNames.add(processEvent.getActivity().getName());
+        }
+        List<List<Event>> listOfListOfevents = new LinkedList<>();
+        listOfListOfevents.add(processEvents);
+        return algorithm.discoverWorkflowNetwork(listOfListOfevents, eventsNames );
     }
 
     public WorkflowNetworkPathsAndDeviationsDTO getWorkFlowNetworkFromProcess(long processId, InductiveMiner inductiveMiner ) throws EntityDoesNotExistException

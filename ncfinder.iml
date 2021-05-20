@@ -39,6 +39,9 @@
     <orderEntry type="library" name="PetriNets" level="project" />
     <orderEntry type="library" name="ProM-Models" level="project" />
     <orderEntry type="library" name="lpsolve55j" level="project" />
+    <orderEntry type="library" name="AlphaMiner" level="project" />
+    <orderEntry type="library" name="LogAbstractions" level="project" />
+    <orderEntry type="library" name="BasicUtils" level="project" />
     <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-core:2.0.2" level="project" />
     <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-util:2.0.2" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.10.2" level="project" />
@@ -238,5 +241,9 @@
     <orderEntry type="library" name="Maven: www.processmining.org:PNetReplayer:6.9.179" level="project" />
     <orderEntry type="library" name="Maven: lpsolver:lpsolver:5.5.0.15" level="project" />
     <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.6" level="project" />
+    <orderEntry type="library" name="Maven: www.processmining.org:AlphaMiner:6.9.78" level="project" />
+    <orderEntry type="library" name="Maven: www.processmining.org:BasicUtils:6.9.126" level="project" />
+    <orderEntry type="library" name="Maven: www.processmining.org:LogAbstractions:6.9.72" level="project" />
+    <orderEntry type="library" name="libs" level="project" />
   </component>
 </module>

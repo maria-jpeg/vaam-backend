@@ -562,9 +562,23 @@
             <artifactId>commons-lang</artifactId>
             <version>2.6</version>
         </dependency>
+        <!--ALPHA MINER PROM-->
+        <dependency>
+            <groupId>www.processmining.org</groupId>
+            <artifactId>AlphaMiner</artifactId>
+            <version>6.9.78</version>
+        </dependency>
+        <dependency>
+            <groupId>www.processmining.org</groupId>
+            <artifactId>BasicUtils</artifactId>
+            <version>6.9.126</version>
+        </dependency>
+        <dependency>
+            <groupId>www.processmining.org</groupId>
+            <artifactId>LogAbstractions</artifactId>
+            <version>6.9.72</version>
+        </dependency>
     </dependencies>
-
-
 
     <!--Repositorio local-->
     <repositories>
