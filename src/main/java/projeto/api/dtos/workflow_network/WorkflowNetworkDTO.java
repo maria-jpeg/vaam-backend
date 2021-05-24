@@ -20,12 +20,13 @@ public class WorkflowNetworkDTO extends AbstractWorkflowNetworkStringNodeDTO< Re
         // Calculate statistics and fill relations
         // To avoid doing the for cycle 2 times
         //Vaam
-        if (footprint.getAlgorithm().getClass() == InductiveMiner.class){
-            this.statistics = footprint.getFootprintStatistics().getStatisticsNetwork( this.relations ,(FootprintInductive)footprint);
-        }else {
-            this.statistics = footprint.getFootprintStatistics().getStatisticsNetwork( this.relations );
+        if (footprint.isStatistics()){
+            if (footprint.getAlgorithm().getClass() == InductiveMiner.class){
+                this.statistics = footprint.getFootprintStatistics().getStatisticsNetwork( this.relations ,(FootprintInductive)footprint);
+            }else {
+                this.statistics = footprint.getFootprintStatistics().getStatisticsNetwork( this.relations );
+            }
         }
-
     }
 
 

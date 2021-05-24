@@ -4,8 +4,19 @@ import com.google.common.collect.ImmutableList;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.deckfour.xes.classification.XEventAndClassifier;
+import org.deckfour.xes.classification.XEventAttributeClassifier;
+import org.deckfour.xes.classification.XEventClassifier;
+import org.deckfour.xes.extension.XExtension;
 import org.deckfour.xes.factory.XFactoryNaiveImpl;
+import org.deckfour.xes.info.XLogInfo;
+import org.deckfour.xes.info.impl.XLogInfoImpl;
+import org.deckfour.xes.model.XAttributable;
+import org.deckfour.xes.model.XAttribute;
+import org.deckfour.xes.model.XAttributeMap;
 import org.deckfour.xes.model.XLog;
+import org.deckfour.xes.model.impl.XAttributeImpl;
+import org.deckfour.xes.model.impl.XAttributeMapImpl;
 import org.processmining.log.csv.CSVFileReferenceUnivocityImpl;
 import org.processmining.log.csv.ICSVReader;
 import org.processmining.log.csv.config.CSVConfig;
@@ -42,7 +53,7 @@ public class XESHelper
     */
 
     public static String eventsToCsv(List<Event> events){
-        StringBuilder csvString = new StringBuilder("id,activity,process,mouldCode,partCode,startDate,endDate,duration,isEstimatedEnd,workstation\n");
+        StringBuilder csvString = new StringBuilder("id,activity,process,mouldCode,partCode,startDate,endDate,isEstimatedEnd,workstation\n");
         List<EventPOJO> eventPOJOSList = EventPOJO.eventListToPojoList(events);
         for (EventPOJO eventPOJO : eventPOJOSList) {
             csvString.append(eventPOJO.getId()).append(",");
@@ -52,7 +63,7 @@ public class XESHelper
             csvString.append(eventPOJO.getPart()).append(",");
             csvString.append(eventPOJO.getStartDate()).append(",");
             csvString.append(eventPOJO.getEndDate()).append(",");
-            csvString.append(eventPOJO.getDuration()).append(",");
+            //csvString.append(eventPOJO.getDuration()).append(",");
             csvString.append(eventPOJO.getIsEstimatedEnd()).append(",");
             csvString.append(eventPOJO.getWorkstation()).append("\n");
         }
@@ -82,8 +93,8 @@ public class XESHelper
             conversionConfig.setCaseColumns(ImmutableList.of("mouldCode"));
             conversionConfig.setEventNameColumns(ImmutableList.of("activity"));
 
-            conversionConfig.setStartTimeColumn("startDate");
-            conversionConfig.setCompletionTimeColumn("endDate");
+            conversionConfig.setStartTimeColumn("");
+            conversionConfig.setCompletionTimeColumn("");
             conversionConfig.setEmptyCellHandlingMode(CSVConversionConfig.CSVEmptyCellHandlingMode.SPARSE);
             conversionConfig.setErrorHandlingMode(CSVConversionConfig.CSVErrorHandlingMode.OMIT_TRACE_ON_ERROR);
             conversionConfig.setFactory(new XFactoryNaiveImpl());
@@ -91,14 +102,15 @@ public class XESHelper
             conversionConfig.setShouldAddStartEventAttributes(true);
             Map<String, CSVConversionConfig.CSVMapping> conversionMap = conversionConfig.getConversionMap();
 
-
+            /*
             CSVConversionConfig.CSVMapping mappingStartDate = conversionMap.get("startDate");
             mappingStartDate.setDataType(CSVConversionConfig.Datatype.TIME);
             mappingStartDate.setPattern("dd-MM-yyyy HH:mm:ss.SSS");
-
+            /*
             CSVConversionConfig.CSVMapping mappingEndDate = conversionMap.get("endDate");
             mappingEndDate.setDataType(CSVConversionConfig.Datatype.TIME);
             mappingEndDate.setPattern("dd-MM-yyyy HH:mm:ss.SSS");
+            */
 
             CSVConversion.ConversionResult<XLog> result = conversion.doConvertCSVToXES(new CSVConversion.NoOpProgressListenerImpl(), csvFile, config,
                     conversionConfig);
@@ -107,7 +119,28 @@ public class XESHelper
             tempFile.delete();
 
             XLog log = result.getResult();
+            /*
+            String[] keys = new String[1];
+            keys[0] = "Activity";
+            XEventClassifier defautlClassifier = new XEventAttributeClassifier("Activity",keys);
+            XLogInfo logInfo = new XLogInfoImpl(log, defautlClassifier,null);
 
+            XEventClassifier classifier1 = new XEventAttributeClassifier("activity classifier",keys);
+
+            log.setInfo(classifier1,logInfo);
+            /*
+            XExtension xExtension = new XExtension()
+
+            XAttribute attribute = new XAttributeImpl()
+
+            XAttributeMap map = new XAttributeMapImpl();
+
+            log.get
+            List<XAttribute> eventAttributes = log.getGlobalEventAttributes();
+
+            List<XAttribute> traceAttributes = log.getGlobalTraceAttributes();
+
+             */
             return log;
 
         }catch (Exception e){
@@ -241,7 +274,11 @@ class EventPOJO
     {
         this.id = Long.toString(event.getId());
         this.startDate = event.getStartDate().toString( "dd-MM-yyyy HH:mm:ss.SSS" );
-        this.endDate = event.getEndDate().toString( "dd-MM-yyyy HH:mm:ss.SSS" );
+        this.endDate = null;
+        if(event.getEndDate() != null){
+            this.endDate = event.getEndDate().toString( "dd-MM-yyyy HH:mm:ss.SSS" );
+        }
+
         this.duration = Long.toString(event.getDuration());
         this.mould = event.getMould().getCode();
         if (event.getPart() != null){

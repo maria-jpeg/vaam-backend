@@ -5,6 +5,7 @@ import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.*;
 import projeto.algorithms_process_mining.ProcessMiningAlgorithm;
 import projeto.algorithms_process_mining.alpha_algorithm.AlphaAlgorithm;
+import projeto.algorithms_process_mining.alpha_miner_prom.AlphaMinerProm;
 import projeto.algorithms_process_mining.heuristic_miner.HeuristicMiner;
 import projeto.algorithms_process_mining.inductive_miner.InductiveMiner;
 import projeto.api.dtos.workflow_network.WorkflowNetworkDTO;
@@ -161,12 +162,30 @@ public class WorkflowNetworkServ
 
     }
 
+    @ApiOperation( value = "Get the workflow network with Inductive Miner of a process", response = WorkflowNetworkPathsAndDeviationsDTO.class)
+    @ApiResponses(value = {@ApiResponse(code = 404, message = "Process not found") })
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @UnitOfWork
+    @Path( "alpha-miner-prom/processes/{processId}" )
+    //@RolesAllowed({"Operador","Gestor","Administrador"})
+    public Response getWorkflowNetworkAlphaMinerPromProcess(@PathParam("processId") long processId)
+    {
+        AlphaMinerProm algorithm = new AlphaMinerProm();
+        return getWorkflowNetworkByProcessId( processId, algorithm );
+
+    }
+
 
     private Response getWorkflowNetworkByProcessId( long processId, ProcessMiningAlgorithm algorithm )
     {
         try {
             if (algorithm.getClass() == InductiveMiner.class){
                 WorkflowNetworkPathsAndDeviationsDTO workflowNetwork = processBean.getWorkFlowNetworkFromProcess( processId, (InductiveMiner) algorithm );
+                return Response.ok( workflowNetwork ).build();
+            }
+            else if(algorithm.getClass() == AlphaMinerProm.class){
+                WorkflowNetworkDTO workflowNetwork = processBean.getWorkFlowNetworkFromProcess( processId, (AlphaMinerProm) algorithm );
                 return Response.ok( workflowNetwork ).build();
             }
             else{

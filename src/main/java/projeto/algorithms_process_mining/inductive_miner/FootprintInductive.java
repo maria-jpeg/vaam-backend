@@ -149,7 +149,13 @@ public class FootprintInductive extends FootprintMatrix {
         Set<LocalDotNode> allNodes = ptVisualizationInfo.getNodes();
         Set<LocalDotEdge> allEdges = ptVisualizationInfo.getEdges();
         //desvios?
-        Set<LocalDotEdge> desvios = ptVisualizationInfo.getAllLogMoveEdges();
+        Set<LocalDotEdge> desvios1 = ptVisualizationInfo.getAllLogMoveEdges();
+        Set<LocalDotEdge> desvios2 = ptVisualizationInfo.getAllModelMoveEdges();
+        Set<LocalDotEdge> desvios = new HashSet<>(desvios1);
+        if (desvios2.size()>0){
+            desvios.addAll(desvios2);
+        }
+
         //Todas - (desvios+startEdges+endEdges) (removidas mais à frente)
         Set<LocalDotEdge> normalEdges = new HashSet<>(allEdges);
         if (desvios.size()>0)
@@ -171,6 +177,7 @@ public class FootprintInductive extends FootprintMatrix {
         //get startActivities and end
         List<Pair<Integer,Integer>> startActivities = new LinkedList<>();
         List<Pair<Integer,Integer>> endActivities = new LinkedList<>();
+        int fromStartToEnd = 0;
         for (LocalDotEdge edge : allEdges) {
             //Start activities
             if(edge.getSource() == sourceNode){
@@ -198,6 +205,16 @@ public class FootprintInductive extends FootprintMatrix {
                 }
                 //Remover as edges start e end
                 normalEdges.remove(edge);
+
+                //From start to end
+                if(edge.getSource() == sourceNode && edge.getTarget() == sinkNode){
+
+                    weight = 0;
+                    if (isInteger(edge.getLabel()))
+                        weight = Integer.parseInt(edge.getLabel());
+
+                    fromStartToEnd = weight;
+                }
             }
             //end activities
             if (edge.getTarget() == sinkNode){
@@ -364,6 +381,7 @@ public class FootprintInductive extends FootprintMatrix {
         ivMHelper.setEndActivities(endActivities);
         ivMHelper.setRelations(relations);
         ivMHelper.setDeviations(deviations);
+        ivMHelper.setFromStartToEnd(fromStartToEnd);
 
         return ivMHelper;
     }
