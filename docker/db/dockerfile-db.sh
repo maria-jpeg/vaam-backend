@@ -57,21 +57,11 @@ if [ "$1" = '/opt/mssql/bin/sqlservr' ]; then
         /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/chapter8/teleclaims/7_EVENTS_2.sql
         /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/chapter8/teleclaims/7_EVENTS_3.sql
         /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/chapter8/teleclaims/7_EVENTS_4.sql
-        /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/chapter8/teleclaims/7_EVENTS_5.sql
-        /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/chapter8/teleclaims/7_EVENTS_6.sql
-        /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/chapter8/teleclaims/7_EVENTS_7.sql
-        /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/chapter8/teleclaims/7_EVENTS_8.sql
-        /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/chapter8/teleclaims/7_EVENTS_9.sql
         /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/chapter8/teleclaims/8_ACTIVITIES_USERS_0.sql
         /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/chapter8/teleclaims/8_ACTIVITIES_USERS_1.sql
         /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/chapter8/teleclaims/8_ACTIVITIES_USERS_2.sql
         /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/chapter8/teleclaims/8_ACTIVITIES_USERS_3.sql
         /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/chapter8/teleclaims/8_ACTIVITIES_USERS_4.sql
-        /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/chapter8/teleclaims/8_ACTIVITIES_USERS_5.sql
-        /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/chapter8/teleclaims/8_ACTIVITIES_USERS_6.sql
-        /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/chapter8/teleclaims/8_ACTIVITIES_USERS_7.sql
-        /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/chapter8/teleclaims/8_ACTIVITIES_USERS_8.sql
-        /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/chapter8/teleclaims/8_ACTIVITIES_USERS_9.sql
         #repairExample
         /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/chapter8/repairExample/2_USERS.sql
         /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d master -i data/chapter8/repairExample/3_PROCESSES.sql
