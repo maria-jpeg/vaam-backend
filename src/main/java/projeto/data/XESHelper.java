@@ -119,28 +119,62 @@ public class XESHelper
             tempFile.delete();
 
             XLog log = result.getResult();
-            /*
-            String[] keys = new String[1];
-            keys[0] = "Activity";
-            XEventClassifier defautlClassifier = new XEventAttributeClassifier("Activity",keys);
-            XLogInfo logInfo = new XLogInfoImpl(log, defautlClassifier,null);
+            return log;
 
-            XEventClassifier classifier1 = new XEventAttributeClassifier("activity classifier",keys);
+        }catch (Exception e){
+            System.out.println("Erro a escrever ficheiro: "+e);
+        }
+        return null;
+    }
+    public static XLog eventsCsvToXesWithDates(String csvString){
+        File tempFile;
+        CSVFileReferenceUnivocityImpl csvFile;
+        try{
+            //Escrever para ficheiro temp
+            tempFile = File.createTempFile("events-", ".csv");
 
-            log.setInfo(classifier1,logInfo);
-            /*
-            XExtension xExtension = new XExtension()
+            BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile.getPath(), true));
+            writer.append(csvString);
+            writer.close();
+            //Ler do ficheiro temp e converter
+            csvFile = new CSVFileReferenceUnivocityImpl(tempFile.toPath());
+            CSVConfig config = new CSVConfig(csvFile);
+            ICSVReader reader = csvFile.createReader(config);
+            CSVConversion conversion = new CSVConversion();
+            CSVConversionConfig conversionConfig = new CSVConversionConfig(csvFile, config);
+            conversionConfig.autoDetect();
 
-            XAttribute attribute = new XAttributeImpl()
+            //O case é o mould porque nos apenas vamos buscar um processo.
+            //conversionConfig.setCaseColumns(ImmutableList.of("process"));
+            conversionConfig.setCaseColumns(ImmutableList.of("mouldCode"));
+            conversionConfig.setEventNameColumns(ImmutableList.of("activity"));
 
-            XAttributeMap map = new XAttributeMapImpl();
+            conversionConfig.setStartTimeColumn("startDate");
+            conversionConfig.setCompletionTimeColumn("endDate");
+            conversionConfig.setEmptyCellHandlingMode(CSVConversionConfig.CSVEmptyCellHandlingMode.SPARSE);
+            conversionConfig.setErrorHandlingMode(CSVConversionConfig.CSVErrorHandlingMode.OMIT_TRACE_ON_ERROR);
+            conversionConfig.setFactory(new XFactoryNaiveImpl());
+            //Não tenho a certeza do true. Provavelmente retirar esta config
+            conversionConfig.setShouldAddStartEventAttributes(true);
+            Map<String, CSVConversionConfig.CSVMapping> conversionMap = conversionConfig.getConversionMap();
 
-            log.get
-            List<XAttribute> eventAttributes = log.getGlobalEventAttributes();
 
-            List<XAttribute> traceAttributes = log.getGlobalTraceAttributes();
+            CSVConversionConfig.CSVMapping mappingStartDate = conversionMap.get("startDate");
+            mappingStartDate.setDataType(CSVConversionConfig.Datatype.TIME);
+            mappingStartDate.setPattern("dd-MM-yyyy HH:mm:ss.SSS");
 
-             */
+            CSVConversionConfig.CSVMapping mappingEndDate = conversionMap.get("endDate");
+            mappingEndDate.setDataType(CSVConversionConfig.Datatype.TIME);
+            mappingEndDate.setPattern("dd-MM-yyyy HH:mm:ss.SSS");
+
+
+            CSVConversion.ConversionResult<XLog> result = conversion.doConvertCSVToXES(new CSVConversion.NoOpProgressListenerImpl(), csvFile, config,
+                    conversionConfig);
+
+
+            tempFile.delete();
+
+            XLog log = result.getResult();
             return log;
 
         }catch (Exception e){

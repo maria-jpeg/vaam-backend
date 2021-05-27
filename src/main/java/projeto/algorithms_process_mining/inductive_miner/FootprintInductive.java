@@ -80,7 +80,7 @@ public class FootprintInductive extends FootprintMatrix {
 
     private XLog getEventLog(List<Event> events){
         String csvContent = XESHelper.eventsToCsv(events);//converter para csv
-        return XESHelper.eventsCsvToXes(csvContent);
+        return XESHelper.eventsCsvToXesWithDates(csvContent);
     }
 
     @NotNull
