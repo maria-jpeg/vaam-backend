@@ -372,10 +372,10 @@ public class FootprintInductive extends FootprintMatrix {
             }
         }
 
-
         IvMHelper ivMHelper = new IvMHelper();
         ivMHelper.setEdgeCardinality(edgeCardinality);
         ivMHelper.setActivityCardinalitiesComplete(nodeLabels);
+        ivMHelper.setDeviationCardinality(deviationCardinality);
         ivMHelper.setNodeNames(allModelNodesName);
         ivMHelper.setStartActivities(startActivities);
         ivMHelper.setEndActivities(endActivities);

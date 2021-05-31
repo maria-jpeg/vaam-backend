@@ -19,11 +19,14 @@ public class WorkflowNetworkPathsAndDeviationsDTO extends WorkflowNetworkDTO {
     private List<NodeRelationDeviationsMap> relationDeviation;
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private int fromStartToEnd;
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private int numDeviations;
 
     public WorkflowNetworkPathsAndDeviationsDTO(FootprintInductive footprint) {
         super(footprint);
 
         this.relationDeviation = footprint.getIvm().getDeviations();
         this.fromStartToEnd = footprint.getIvm().getFromStartToEnd();
+        this.numDeviations = footprint.getIvm().getDeviationCardinality().size();
     }
 }
