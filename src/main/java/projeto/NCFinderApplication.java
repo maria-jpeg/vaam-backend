@@ -16,6 +16,7 @@ import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.glassfish.jersey.test.grizzly.GrizzlyWebTestContainerFactory;
+import org.knowm.sundial.SundialJobScheduler;
 import projeto.auth.RoleBasedAuthorizer;
 import projeto.auth.OAuthAuthenticator;
 import projeto.auth.JwtBean;
@@ -34,6 +35,7 @@ public class NCFinderApplication extends Application<NCFinderConfiguration> {
 
     public static void main(final String[] args) throws Exception {
        new NCFinderApplication().run( args) ;
+        SundialJobScheduler.startScheduler("projeto.core");
     }
 
 

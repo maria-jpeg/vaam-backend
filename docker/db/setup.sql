@@ -1,4 +1,7 @@
-create database ncfinderdb
+-- noinspection SqlDialectInspectionForFile
+
+create
+database ncfinderdb
 go
 USE [ncfinderdb]
 GO
@@ -56,10 +59,10 @@ create table ROLES
 
 create table TAGS
 (
-    rfid        varchar(100)                not null
+    rfid        varchar(100) not null
         constraint PK_TAGS
             primary key,
-    isAvailable bit                         not null,
+    isAvailable bit          not null,
     isUser      bit
         constraint DF_TAGS_isUser default 0 not null
 )
@@ -116,20 +119,20 @@ create table WORKSTATIONS
 
 create table ACTIVITIES_USERS
 (
-    username      varchar(200)                                         not null
+    username      varchar(200) not null
         constraint FK_ACTIVITIES_USERS_USERS
             references USERS,
-    activityId    bigint                                               not null
+    activityId    bigint       not null
         constraint FK_ACTIVITIES_USERS_ACTIVITIES
             references ACTIVITIES,
-    startDate     datetime2 --vaam -> datetime para datetime2
+    startDate     datetime2                                    --vaam -> datetime para datetime2
         constraint DF_ACTIVITIES_USERS_startDate default sysdatetime() not null,
     endDate       datetime2,
     workstationId bigint
         constraint ACTIVITIES_USERS_WORKSTATIONS_id_fk
             references WORKSTATIONS,
     constraint PK_ACTIVITIES_USERS
-        primary key (username, activityId, startDate,endDate) --vaam -> adicionei endDate aqui
+        primary key (username, activityId, startDate, endDate) --vaam -> adicionei endDate aqui
 )
     go
 
@@ -173,6 +176,7 @@ create table EVENTS
 )
     go
 
-create unique index WORKSTATIONS_id_uindex
+create
+unique index WORKSTATIONS_id_uindex
     on WORKSTATIONS (id)
 go

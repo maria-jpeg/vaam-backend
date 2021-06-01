@@ -42,6 +42,7 @@
     <orderEntry type="library" name="AlphaMiner" level="project" />
     <orderEntry type="library" name="LogAbstractions" level="project" />
     <orderEntry type="library" name="BasicUtils" level="project" />
+    <orderEntry type="library" name="libs" level="project" />
     <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-core:2.0.2" level="project" />
     <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-util:2.0.2" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.10.2" level="project" />
@@ -59,7 +60,6 @@
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.module:jackson-module-parameter-names:2.10.2" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.module:jackson-module-afterburner:2.10.2" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-joda:2.10.2" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.30" level="project" />
     <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-validation:2.0.2" level="project" />
     <orderEntry type="library" name="Maven: org.hibernate.validator:hibernate-validator:6.1.2.Final" level="project" />
     <orderEntry type="library" name="Maven: jakarta.validation:jakarta.validation-api:2.0.2" level="project" />
@@ -217,7 +217,7 @@
     <orderEntry type="library" name="Maven: com.sun.activation:jakarta.activation:2.0.0" level="project" />
     <orderEntry type="library" name="Maven: com.sun.xml.bind:jaxb-impl:3.0.0" level="project" />
     <orderEntry type="library" name="Maven: com.univocity:univocity-parsers:2.1.1" level="project" />
-    <orderEntry type="library" name="Maven: commons-io:commons-io:2.8.0" level="project" />
+    <orderEntry type="library" name="Maven: commons-io:commons-io:2.9.0" level="project" />
     <orderEntry type="library" name="Maven: com.googlecode.juniversalchardet:juniversalchardet:1.0.3" level="project" />
     <orderEntry type="library" name="Maven: com.ning:compress-lzf:1.1" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.util:java-merge-sort:1.0.2" level="project" />
@@ -244,6 +244,7 @@
     <orderEntry type="library" name="Maven: www.processmining.org:AlphaMiner:6.9.78" level="project" />
     <orderEntry type="library" name="Maven: www.processmining.org:BasicUtils:6.9.126" level="project" />
     <orderEntry type="library" name="Maven: www.processmining.org:LogAbstractions:6.9.72" level="project" />
-    <orderEntry type="library" name="libs" level="project" />
+    <orderEntry type="library" name="Maven: org.knowm:sundial:2.2.1" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.30" level="project" />
   </component>
 </module>
