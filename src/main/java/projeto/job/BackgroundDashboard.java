@@ -35,7 +35,7 @@ public class BackgroundDashboard extends Job {
 
         try {
             //Create connection
-            URL url = new URL("http://localhost:8080/api/dashboard/getAll");
+            URL url = new URL("http://localhost:8080/api/dashboard/generate");
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setRequestProperty("accept", "application/json");
