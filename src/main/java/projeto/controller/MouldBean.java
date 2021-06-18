@@ -38,4 +38,8 @@ public class MouldBean extends BaseBean<Mould, MouldDTO> {
         return mouldDAO.getAll();
     }
 
+    public int numberOfMoulds(){
+        return mouldDAO.getAll().size();
+    }
+
 }

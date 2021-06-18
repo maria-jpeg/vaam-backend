@@ -95,3 +95,7 @@ logging:
   # any properties specific to your JDBC driver:
   #properties:
     #hibernate.hbm2ddl.auto: create
+
+#VAAM
+sundial:
+  annotated-jobs-package-name: projeto.job

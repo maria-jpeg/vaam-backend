@@ -180,3 +180,18 @@ create
 unique index WORKSTATIONS_id_uindex
     on WORKSTATIONS (id)
 go
+
+create table DASHBOARD
+(
+    id            bigint identity
+        constraint PK_DASHBOARD
+            primary key,
+    date datetime2 default sysdatetime() not null,
+    value int,
+    unit varchar(50),
+    description varchar(250),
+    processId bigint
+        constraint DASHBOARD_PROCESSES_id_fk
+            references PROCESSES
+)
+go

@@ -16,7 +16,8 @@ import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.glassfish.jersey.test.grizzly.GrizzlyWebTestContainerFactory;
-import org.knowm.sundial.SundialJobScheduler;
+import org.knowm.dropwizard.sundial.SundialBundle;
+import org.knowm.dropwizard.sundial.SundialConfiguration;
 import projeto.auth.RoleBasedAuthorizer;
 import projeto.auth.OAuthAuthenticator;
 import projeto.auth.JwtBean;
@@ -35,7 +36,6 @@ public class NCFinderApplication extends Application<NCFinderConfiguration> {
 
     public static void main(final String[] args) throws Exception {
        new NCFinderApplication().run( args) ;
-        SundialJobScheduler.startScheduler("projeto.core");
     }
 
 
@@ -45,7 +45,7 @@ public class NCFinderApplication extends Application<NCFinderConfiguration> {
     }
 
     private final HibernateBundle<NCFinderConfiguration> hibernate = new HibernateBundle<NCFinderConfiguration>
-            ( Event.class, User.class, Role.class, Activity.class, Mould.class, Part.class, Process.class, Tag.class, ActivityUserEntry.class, Workstation.class ) {
+            ( Event.class, User.class, Role.class, Activity.class, Mould.class, Part.class, Process.class, Tag.class, ActivityUserEntry.class, Workstation.class, Dashboard.class ) {
         @Override
         public DataSourceFactory getDataSourceFactory(NCFinderConfiguration configuration) {
             return configuration.getDataSourceFactory();
@@ -59,6 +59,13 @@ public class NCFinderApplication extends Application<NCFinderConfiguration> {
         }
     };
 
+    private final SundialBundle<NCFinderConfiguration> sundialBundle = new SundialBundle<NCFinderConfiguration>() {
+        @Override
+        public SundialConfiguration getSundialConfiguration(NCFinderConfiguration ncFinderConfiguration) {
+            return ncFinderConfiguration.getSundialConfiguration();
+        }
+    };
+
     @Override
     public void initialize(final Bootstrap<NCFinderConfiguration> bootstrap) {
         // TODO: application initialization
@@ -67,6 +74,8 @@ public class NCFinderApplication extends Application<NCFinderConfiguration> {
         bootstrap.addBundle( hibernate );
         bootstrap.addBundle( swaggerBundle );
 
+        //VAAM
+        bootstrap.addBundle(sundialBundle);
     }
 
     @Override
@@ -89,13 +98,13 @@ public class NCFinderApplication extends Application<NCFinderConfiguration> {
         final MouldDAO mouldDAO = new MouldDAO( hibernate.getSessionFactory() );
         final PartDAO partDAO = new PartDAO( hibernate.getSessionFactory() );
         final TagDAO tagDAO = new TagDAO( hibernate.getSessionFactory() );
-
+        final DashboardDAO dashboardDAO = new DashboardDAO(hibernate.getSessionFactory());
 
         //Bean Declaration
         final UserBean userBean = new UnitOfWorkAwareProxyFactory( hibernate ).create( UserBean.class, UserDAO.class, userDAO);
         final JwtBean jwtBean = new JwtBean();
         final LogBean logBean = new LogBean( logDAO );
-        final ProcessBean processBean = new ProcessBean( processDAO );
+        final ProcessBean processBean = new UnitOfWorkAwareProxyFactory(hibernate).create(ProcessBean.class, ProcessDAO.class, processDAO);
         final ActivityBean activityBean = new ActivityBean(activityDAO);
         final MouldBean mouldBean = new MouldBean( mouldDAO );
         final PartBean partBean = new PartBean( partDAO, tagDAO );
@@ -105,6 +114,7 @@ public class NCFinderApplication extends Application<NCFinderConfiguration> {
         final RoleBean roleBean = new RoleBean( roleDAO );
         final TagBean tagBean = new TagBean( tagDAO );
         final ResourceBean resourceBean = new ResourceBean( logBean, processBean, activityBean, userBean, workstationBean, partBean );
+        final DashboardBean dashboardBean = new DashboardBean(dashboardDAO);
 
         //Serv Resources Declaration
         AuthenticationServ authenticationServ = new AuthenticationServ();
@@ -121,6 +131,7 @@ public class NCFinderApplication extends Application<NCFinderConfiguration> {
         PartServ partServ = new PartServ( partBean );
         TagServ tagServ = new TagServ( tagBean );
         WorkstationServ workstationServ = new WorkstationServ( workstationBean, activityBean );
+        DashboardServ dashboardServ = new DashboardServ(dashboardBean, processBean, mouldBean);
 
         environment.jersey().register(authenticationServ);
         environment.jersey().register(userServ);
@@ -136,7 +147,7 @@ public class NCFinderApplication extends Application<NCFinderConfiguration> {
         environment.jersey().register(partServ);
         environment.jersey().register(tagServ);
         environment.jersey().register(workstationServ);
-
+        environment.jersey().register(dashboardServ);
 
         //OAuth2 - Authentication and Authorization
         environment.jersey().register(new AuthDynamicFeature(

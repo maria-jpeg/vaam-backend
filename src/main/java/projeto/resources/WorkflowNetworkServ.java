@@ -135,7 +135,7 @@ public class WorkflowNetworkServ
     @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
     @Path( "inductive-miner/processes/{processId}" )
-    //@RolesAllowed({"Operador","Gestor","Administrador"})
+    @RolesAllowed({"Operador","Gestor","Administrador"})
     public Response getWorkflowNetworkInductiveMinerProcess(
             @PathParam("processId") long processId,
             @ApiParam(value = "paths value between 0 and 1 | used to consider relations in the footprint")
@@ -168,7 +168,7 @@ public class WorkflowNetworkServ
     @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
     @Path( "alpha-miner-prom/processes/{processId}" )
-    //@RolesAllowed({"Operador","Gestor","Administrador"})
+    @RolesAllowed({"Operador","Gestor","Administrador"})
     public Response getWorkflowNetworkAlphaMinerPromProcess(@PathParam("processId") long processId)
     {
         AlphaMinerProm algorithm = new AlphaMinerProm();

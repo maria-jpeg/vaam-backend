@@ -1,5 +1,6 @@
 package projeto.data;
 
+import io.dropwizard.hibernate.UnitOfWork;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.joda.time.DateTime;
@@ -126,6 +127,10 @@ public class ProcessDAO extends BaseDAO<Process, ProcessDTO> {
         }
 
         return query.getSingleResult();
+    }
+
+    public List<Process> getAll(){
+        return (List<Process>) currentSession().createNamedQuery("Process.all", Process.class).getResultList();
     }
 
     public List<Process> findName(String name){
