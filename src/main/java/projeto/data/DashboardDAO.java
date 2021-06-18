@@ -35,6 +35,7 @@ public class DashboardDAO extends BaseDAO<Dashboard, DashboardDTO> {
     public DashboardDTO toDTO(Dashboard entity) {
         if(entity.getProcess()==null){
             return new DashboardDTO(
+                    entity.getId(),
                     entity.getDate(),
                     entity.getValue(),
                     entity.getUnit(),
@@ -42,6 +43,7 @@ public class DashboardDAO extends BaseDAO<Dashboard, DashboardDTO> {
             );
         }
         return new DashboardDTO(
+                entity.getId(),
                 entity.getDate(),
                 entity.getValue(),
                 entity.getUnit(),

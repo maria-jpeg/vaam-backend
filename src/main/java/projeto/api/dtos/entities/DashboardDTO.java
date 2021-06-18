@@ -14,7 +14,7 @@ public class DashboardDTO implements DTO {
 
     private long id;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private DateTime date;
+    private String date;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private int value;
     @JsonInclude(JsonInclude.Include.NON_NULL)//Todo Mudar para enum
@@ -24,16 +24,18 @@ public class DashboardDTO implements DTO {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private ProcessDTO process;
 
-    public DashboardDTO(DateTime date, int value, String unit, String description, ProcessDTO process) {
-        this.date = date;
+    public DashboardDTO(long id,DateTime date, int value, String unit, String description, ProcessDTO process) {
+        this.id = id;
+        this.date = date.toString( "dd-MM-yyyy HH:mm:ss.SSS" );
         this.value = value;
         this.unit = unit;
         this.description = description;
         this.process = process;
     }
 
-    public DashboardDTO(DateTime date, int value, String unit, String description) {
-        this.date = date;
+    public DashboardDTO(long id,DateTime date, int value, String unit, String description) {
+        this.id = id;
+        this.date = date.toString( "dd-MM-yyyy HH:mm:ss.SSS" );
         this.value = value;
         this.unit = unit;
         this.description = description;
