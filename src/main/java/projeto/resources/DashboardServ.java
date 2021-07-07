@@ -60,6 +60,7 @@ public class DashboardServ {
     @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
     @Path("generate")
+    @RolesAllowed({"Job"})
     public Response getGenerateDashboard() throws EntityDoesNotExistException {
         dashboardBean.cleanTable();
         List<Process> processes = processBean.getAll();
