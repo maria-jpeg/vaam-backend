@@ -18,7 +18,8 @@ import java.util.concurrent.TimeUnit;
 * For testing
 * @SimpleTrigger(repeatInterval = 30, timeUnit = TimeUnit.SECONDS)
 */
-@CronTrigger(cron = "0 1 0 * * ?")
+//@CronTrigger(cron = "0 1 0 * * ?")
+@SimpleTrigger(repeatInterval = 30, timeUnit = TimeUnit.SECONDS)
 public class BackgroundDashboard extends Job {
 
 
