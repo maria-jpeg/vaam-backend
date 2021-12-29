@@ -23,7 +23,7 @@ public class ClassifyActivitiesSequence {
         tree.buildClassifier(dataset);
 
         //load dataset to predict
-        DataSource sourcePredict = new DataSource("C:\\SmartTracking\\vaam-backend\\src\\main\\java\\projeto\\weka\\datasets\\new_PRODUCAO_pedal_previous_next_activities.arff");
+        DataSource sourcePredict = new DataSource("C:\\SmartTracking\\vaam-backend\\src\\main\\java\\projeto\\weka\\datasets\\new_weka_dataset.arff");
         Instances datasetPredict = sourcePredict.getDataSet();
         datasetPredict.setClassIndex(datasetPredict.numAttributes() - 1);
 

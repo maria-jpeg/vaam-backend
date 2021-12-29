@@ -12,11 +12,11 @@ import java.io.File;
 public class AttributeFilter {
     public static void main (String[] args) throws Exception{
         //load dataset
-        DataSource source = new DataSource("C:\\SmartTracking\\vaam-backend\\src\\main\\java\\projeto\\weka\\datasets\\new_PRODUCAO_pedal_previous_next_activities.arff");
+        DataSource source = new DataSource("C:\\SmartTracking\\vaam-backend\\src\\main\\java\\projeto\\weka\\datasets\\new_WEKA_dataset.arff");
         Instances dataset = source.getDataSet();
 
         //use a simple filter to remove certain attributes
-        String[] opts = new String[]{"-R","4,6,7,13"};
+        String[] opts = new String[]{"-R","7,8,11"}; //molde_area, complexity, subcontrating, sub_process
         Remove remove = new Remove();
         remove.setOptions(opts);
         remove.setInputFormat(dataset);
