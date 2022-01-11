@@ -20,6 +20,7 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
 import java.util.List;
 
 @SwaggerDefinition(tags = { @Tag(name = "moulds", description = "Operations related to Moulds") })
@@ -123,15 +124,14 @@ public class MouldServ {
     @UnitOfWork
     @Path( "{mouldCode}/eventsUsersWorkstations" )
     @RolesAllowed({"Operador","Gestor","Administrador"})
-    public Response getEventsByMouldCodeWithUsersAndWorkstations (@PathParam("mouldCode") String mouldCode)
-    {
+    public Response getEventsByMouldCodeWithUsersAndWorkstations (@PathParam("mouldCode") String mouldCode) throws Exception {
         try
         {
             return Response.status(Response.Status.OK)
                     .entity(eventBean.getEventsByMouldCodeWithUsersAndWorkstations(mouldCode))
                     .build();
         }
-        catch (EntityDoesNotExistException ex)
+        catch (EntityDoesNotExistException | IOException ex)
         {
             return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
                     .entity(ex.getMessage()).build();

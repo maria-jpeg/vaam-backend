@@ -16,7 +16,7 @@ public class AttributeFilter {
         Instances dataset = source.getDataSet();
 
         //use a simple filter to remove certain attributes
-        String[] opts = new String[]{"-R","7,8,11"}; //molde_area, complexity, subcontrating, sub_process
+        String[] opts = new String[]{"-R","14,15", "-V"}; //ficar apenas com previous_activities e next_activities
         Remove remove = new Remove();
         remove.setOptions(opts);
         remove.setInputFormat(dataset);

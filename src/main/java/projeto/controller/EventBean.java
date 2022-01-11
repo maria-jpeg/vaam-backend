@@ -15,7 +15,12 @@ import projeto.data.ActivityDAO;
 import projeto.data.EventDAO;
 import projeto.data.XESHelper;
 import projeto.resources.EventServ;
+import projeto.weka.ClassifyActivitiesSequence;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -65,16 +70,23 @@ public class EventBean extends BaseBean<Event, EventDTO> {
 
         return events.stream().map(this::toFullDTO).collect(Collectors.toList());
     }
-    public List<EventDTO> getEventsByMouldCodeWithUsersAndWorkstations(String mouldCode) throws EntityDoesNotExistException
-    {
+    public List<EventDTO> getEventsByMouldCodeWithUsersAndWorkstations(String mouldCode) throws Exception {
         List<EventDTO> eventDTOSFullUsers = new LinkedList<>();
         List<Event> events = eventDAO.getEventByMouldCode(mouldCode);
+
+        //999,'desenho elétrodos',1004,'2016.02.10 13:18:23 +0000','2016.02.11 13:26:06 +0000',user43,ABS-PA,'K50Mue - Vorderradabdeckung Oben',119000,
+        // 'preliminares>estrutura>peças>estrutura>desenho elétrodos>preliminares>desenho elétrodos>estrutura>peças>cam>peças>cam>peças>trabalho interno>estrutura>cam>trabalho interno>erosão>cam>erosão>estrutura>peças>erosão>estrutura>desenho elétrodos>estrutura>desenho elétrodos',none
+
+        String previous_activities = "";
 
         for (Event e:events)
         {
             List<ActivityUserEntry> aue = activityDAO.getEntriesAssociatedToEventActivity(e.getActivity().getId(),e.getStartDate(),e.getEndDate());
             List<ActivityUserEntryDTO> aueDTO = aue.stream().map(this::activityUserEntryToDTO).collect(Collectors.toList());
             double avgDuration = eventDAO.getAverageEventDurationByActivity(e.getActivity().getId());
+
+            previous_activities = e.getActivity().getName() + ">";
+
             eventDTOSFullUsers.add(new EventDTO(
                     toActivityDTO(e.getActivity()),
                     toProcessDTO(e.getProcess()),
@@ -88,6 +100,19 @@ public class EventBean extends BaseBean<Event, EventDTO> {
                     aueDTO,
                     avgDuration));
         }
+
+        //aqui o codigo para acrescentar linha e o codigo de previsão
+
+//        FileWriter fw = new FileWriter("C:\\SmartTracking\\vaam-backend\\src\\main\\java\\projeto\\weka\\datasets\\weka_add_prediction_lines.arff",true);
+//        fw.write("\rpreliminares,none");
+//        fw.close();
+//
+//        ClassifyActivitiesSequence classifier = new ClassifyActivitiesSequence();
+//        classifier.predictActivitySequenceLastLine("weka_add_prediction_lines.arff");
+
+        //System.out.println(next_activities + "<!<!<!<!<!<!<!");
+
+        //de seguida o ciclo for() para percorrer cada uma das atividades previstas e acrescentar
 
         return eventDTOSFullUsers;
     }

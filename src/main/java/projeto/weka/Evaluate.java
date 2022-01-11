@@ -14,8 +14,11 @@ public class Evaluate {
         Instances dataset = source.getDataSet();
         dataset.setClassIndex(dataset.numAttributes() - 1);
 
-        J48 tree = new J48();
-        tree.buildClassifier(dataset);
+        NaiveBayes nb = new NaiveBayes();
+        nb.buildClassifier(dataset);
+
+        //J48 tree = new J48();
+        //tree.buildClassifier(dataset);
 
         Evaluation eval = new Evaluation(dataset);
         Random rand = new Random(1);
@@ -26,7 +29,7 @@ public class Evaluate {
         datasetTest.setClassIndex(datasetTest.numAttributes() - 1);
 
         //eval.evaluateModel(tree, datasetTest);
-        eval.crossValidateModel(tree, datasetTest,folds,rand);
+        eval.crossValidateModel(nb, datasetTest,folds,rand);
         System.out.println(eval.toSummaryString("Evaluation Results:\n", false));
 
         System.out.println("Correct% = " + eval.pctCorrect());
